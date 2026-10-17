@@ -84,3 +84,9 @@ body {
   outline: 2px solid var(--color-focus);
   outline-offset: 2px;
 }
+
+/* El foco programático al título de la pantalla no pinta anillo (07 §7.12 (11)):
+   el `h1` lleva `tabindex="-1"` y solo se enfoca al navegar entre pantallas. */
+[data-screen-title]:focus {
+  outline: none;
+}

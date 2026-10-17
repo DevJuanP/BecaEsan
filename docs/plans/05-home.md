@@ -33,7 +33,7 @@ La pantalla Home completa: saludo editable con su hoja de nombre, panel de confi
   3. Reemplazar los placeholders del Plan 01; la pantalla `quiz` sigue como placeholder hasta el Plan 06.
 - **Criterios:** `06 §6.2` (pantallas como estados), `07 §7.12` (11), RF-01.1.
 - **Verificación:** V0 + V2 (el foco y el título cambian correctamente al navegar).
-- **Estado:** [ ]
+- **Estado:** [x]
 
 ### T-5.2 — Saludo + lápiz + tooltip
 
@@ -149,3 +149,9 @@ _(append-only; las entradas de ejecución se añaden al final)_
 - **Pendiente `07 §7.16 (#3)` («Home» → «Inicio»):** afecta solo a T-7.4 (Plan 07); no toca este plan.
 
 ### Decisiones de ejecución
+
+- **T-5.1 · navegación temporal conservada hasta T-5.7:** la V2 de T-5.1 («el foco y el título cambian correctamente al navegar») exige poder cambiar de pantalla antes de que exista el CTA real. Se mantiene una `nav` temporal (marcada como tal en `App.svelte` y en el plan) que se retira en T-5.7, cuando «Iniciar quiz» y el botón «Home» del Plan 07 la reemplacen. Mismo criterio incremental que la galería del Plan 04; sin cambios de alcance.
+- **T-5.1 · estado como clase `$state` en módulo `.svelte.ts`:** `src/lib/state.svelte.ts` exporta la clase `EstadoApp` y una instancia única `estado` (fuente única de verdad de `06 §6.2`). `config` se inicializa con una copia mutable de `CONFIG_INICIAL` (el default del Plan 03 está congelado en profundidad) y `nombre` con `leerNombre()` (RF-01.1/§RF-02). El título inicial del documento se fija en el constructor, para que la primera carga no dependa de una navegación.
+- **T-5.1 · anillo del título de pantalla:** `07 §7.12` (11) pide foco al `h1` «sin anillo visible para este movimiento programático», en tensión con la regla «jamás `outline: none` sin reemplazo» de §7.12.2. Se añade a `src/app.css` la regla `[data-screen-title]:focus { outline: none }`, acotada al título de pantalla (`tabindex="-1"`, fuera del orden de tabulación); ningún control interactivo pierde su anillo.
+- **T-5.1 · V0 ejecutada:** `npm run check` → 0 errores y 0 avisos; `npm run build` → 114 módulos, CSS 3.69 kB gzip + JS 14.31 kB gzip (sin dependencias nuevas).
+- **T-5.1 · V2 ejecutada (por DOM, 360 px):** título inicial «Simulador · Home»; al pulsar la navegación temporal: «Simulador · Quiz» → «Simulador · Resultados» → «Simulador · Home», con `document.activeElement` = `h1[data-screen-title][tabindex="-1"]` en los tres casos (`outline-style: none`, `scrollY` 0) y consola sin errores.
