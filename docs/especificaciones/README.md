@@ -2,7 +2,7 @@
 
 Este directorio contiene la **especificación** de la aplicación web que funcionará como **simulador de la prueba de preselección** de la Beca BCP en ESAN. El material de práctica ya existe en [`docs/preguntas/`](../preguntas/README.md): 28 temáticas con 140 preguntas y sus claves.
 
-> **Estado:** especificación completa (01–07) y **planes de ejecución** publicados en [`docs/plans/`](../plans/README.md) (contrato de generación y ejecución en [`00-contrato.md`](../plans/00-contrato.md)). Fase actual: **implementación**.
+> **Estado:** especificación completa (01–07) y **planes de ejecución** publicados en [`docs/plans/`](../plans/README.md) (contrato de generación y ejecución en [`00-contrato.md`](../plans/00-contrato.md)). Fase actual: **v1 implementada y verificada** (2026-10-17; los 8 planes ✅, `01 §1.7` con sus cinco criterios de éxito cumplidos y E-01…E-10 verificados de punta a punta). **Deploy manual en Cloudflare Pages pendiente del usuario** (runbook en el [`README`](../../README.md) raíz); al publicarse, la URL se anotará aquí. Informe de cierre y mapa de candidatos de fase 2 en [`docs/plans/08-calidad-y-despliegue.md`](../plans/08-calidad-y-despliegue.md) §8.
 
 ## Documentos
 

@@ -1,6 +1,6 @@
 # Plan 08 — Calidad y despliegue
 
-> Estado: 🔄 En curso · Depende de: Planes 01–07 · Cubre: `01 §1.7` (criterios de éxito), RNF-01…RNF-09 (verificación final), E-01…E-10 (punta a punta), `06 §6.2` (presupuesto), `§6.6` (runbook de deploy), `07 §7.12`, `§7.13`, `§7.14`, `§7.15` · Estimación: M
+> Estado: ✅ Hecho · Depende de: Planes 01–07 · Cubre: `01 §1.7` (criterios de éxito), RNF-01…RNF-09 (verificación final), E-01…E-10 (punta a punta), `06 §6.2` (presupuesto), `§6.6` (runbook de deploy), `07 §7.12`, `§7.13`, `§7.14`, `§7.15` · Estimación: M
 
 ## 1. Objetivo
 
@@ -120,7 +120,7 @@ Cerrar la v1: auditar accesibilidad y calidad visual contra las especificaciones
   3. Listar candidatos de fase 2 **sin implementar** (`01 §1.5`, `06 §6.7`, `07 §7.16`): revisión con explicaciones, PWA/ofﬂine, persistencia de configuración (RF-11), tema oscuro, dominio propio.
 - **Criterios:** `00-contrato §6` (DoD del proyecto).
 - **Verificación:** matrices sin filas rojas; `01 §1.7` con sus 5 criterios marcados.
-- **Estado:** [ ]
+- **Estado:** [x]
 
 ## 6. Matriz de trazabilidad del plan
 
@@ -143,12 +143,12 @@ Cerrar la v1: auditar accesibilidad y calidad visual contra las especificaciones
 
 ## 7. Verificación final del plan
 
-- [ ] Auditoría a11y y checklist `07 §7.14` sin hallazgos críticos abiertos.
-- [ ] Presupuesto de `06 §6.2` cumplido, con los números finales registrados.
-- [ ] E-01…E-10 verificados de punta a punta en emulación móvil; el pase en dispositivos reales quedó documentado como pendiente del usuario.
-- [ ] Repositorio en GitHub con el historial completo y README raíz terminado (incluido el runbook del deploy manual).
-- [ ] App lista para el deploy manual: build limpio verificado y runbook probado en local; el deploy lo ejecuta el usuario.
-- [ ] `docs/plans/README.md` y el README de especificaciones reflejan el cierre.
+- [x] Auditoría a11y y checklist `07 §7.14` sin hallazgos críticos abiertos. _(T-8.1/T-8.2/T-8.3: 0 fallos AA, 0 objetivos < 44×44, 0 desbordes a 200 %, recorrido de teclado y hojas conformes; el único hallazgo abierto es el `aria-label` del saludo frente a WCAG 2.5.3 —peso 0 en Lighthouse y microcopy congelado de `07 §7.9.1`/`§7.11`—, registrado como excepción deliberada con recomendación en T-8.4 y en los candidatos de fase 2.)_
+- [x] Presupuesto de `06 §6.2` cumplido, con los números finales registrados. _(T-8.4: JS 50.76 KB gzip ≤ ~80 · CSS 8.16 KB gzip ≤ ~15 · 0 fuentes web · 0 imágenes raster · 3 peticiones · CLS 0 · FCP/LCP 464 ms en 4G + CPU 4×.)_
+- [x] E-01…E-10 verificados de punta a punta en emulación móvil; el pase en dispositivos reales quedó documentado como pendiente del usuario. _(T-8.5: matriz completa a 360 px sobre el build de producción + guía del pase manual en el informe de cierre.)_
+- [x] Repositorio en GitHub con el historial completo y README raíz terminado (incluido el runbook del deploy manual). _(T-8.6/T-8.7: remoto accesible, 81 commits en `main` con un commit por tarea —los del Plan 08 quedan locales hasta el push del orquestador—, README con el runbook verificado en clon limpio.)_
+- [x] App lista para el deploy manual: build limpio verificado y runbook probado en local; el deploy lo ejecuta el usuario. _(T-8.7: `npm ci` + `npm run build` desde clon limpio reproducen `dist/` sin pasos manuales; smoke test de las tres pantallas sobre `preview`.)_
+- [x] `docs/plans/README.md` y el README de especificaciones reflejan el cierre. _(T-8.8: 8/8 planes ✅, changelog de cierre y estado de la v1 con el deploy manual pendiente.)_
 
 ## 8. Registro de desvíos y decisiones
 
@@ -258,5 +258,38 @@ Cerrar la v1: auditar accesibilidad y calidad visual contra las especificaciones
 - **1 · Build de producción y preview:** `npm run build` en verde (183 módulos; `dist/index.html` 0.55 KB, `assets/index-CWpNQx4L.css` 8.16 KB gzip, `assets/index-DVl5tlzU.js` 50.76 KB gzip) y `npm run preview` sirviendo `dist/`. Smoke test de las tres pantallas sobre el build servido: Home (saludo con el nombre persistido + panel + CTA), Quiz (bloque 1 de 2, chip «Razonamiento Matemático», cronómetro 0:00) y Resultados (héroe 10, dos tarjetas de área, «Home» que vuelve al panel). Assets **con hash** (`index-*.js`/`index-*.css`), **0** peticiones de fuentes e imágenes, **0** mensajes de consola.
 - **2 · Simulación del flujo de Cloudflare desde un estado limpio:** `git clone` del repositorio local a un directorio temporal (`becaesan-clone-t87`) → el clon **no** trae `dist/`, `node_modules/` ni `src/data/questions.json` (los tres están en `.gitignore`); `npm ci` → 0 vulnerabilidades; `npm run build` → regenera el banco (28 temas · 140 preguntas · 127 KB) y `dist/` **con los mismos hashes** que el build local (build reproducible) y **sin ningún paso manual**. Conclusión: el pipeline que configurará Cloudflare funciona tal cual.
 - **3 · README raíz con el runbook manual de `06 §6.6`:** sección *Deploy* reescrita con los seis pasos listos para seguir — repositorio (`origin`), *Workers & Pages → Create → Pages → Connect to Git*, configuración exacta (rama `main`, build `npm run build`, output `dist`, `NODE_VERSION` = 22 si el panel no detecta Node ≥ 22), guardado y deploy automático por push, y la **lista de smoke test** en la URL publicada (HTTPS < 1 s, tres pantallas, aviso de recarga, assets con hash, sin fuentes ni imágenes). Se anota que el runbook quedó verificado en local desde el clon limpio.
-- **4 · Pendiente manual del usuario (informe de cierre):** ver la sección «Deploy manual (pendiente del usuario)» al final de este registro; no bloquea el cierre del plan (el DoD del proyecto, `00-contrato §6`, define la publicación como deploy manual del usuario con la app construida, verificada y el runbook preparado).
+- **4 · Pendiente manual del usuario (informe de cierre):** ver la sección «Informe de cierre» al final de este registro; no bloquea el cierre del plan (el DoD del proyecto, `00-contrato §6`, define la publicación como deploy manual del usuario con la app construida, verificada y el runbook preparado).
 - **V0:** `npm run check` → 0 errores/0 avisos; `npm run build` → CSS 8.16 KB gzip, JS 50.76 KB gzip; `npm run test` → 113 pruebas en verde.
+
+### T-8.8 — Cierre del proyecto
+
+- **Estado global:** los 8 planes quedan ✅ en `docs/plans/README.md` (fila del Plan 08 actualizada y entrada de cierre en el changelog). Matriz global sin filas rojas: RF 20/20 activos (+ RF-11 fuera de v1) · RN 11/11 · RNF 9/9 · E 10/10.
+- **README de especificaciones actualizado (solo su estado, `docs/especificaciones/README.md`):** pasa de «fase actual: implementación» a **v1 implementada y verificada**; se deja constancia de que el **deploy manual** en Cloudflare Pages queda pendiente del usuario y de que la URL se anotará al publicarse (ajuste honesto frente al texto del plan, que asumía el deploy ya hecho: la decisión del 2026-10-16 lo sacó de la orquestación). Se enlaza el informe de cierre y el mapa de fase 2.
+- **Criterios de éxito de `01 §1.7` (los cinco, marcados):** (1) ciclo completo nombre → configurar → resolver → resultados → repetir, recorrido entero en la emulación móvil de T-8.5 sin errores; (2) puntaje y porcentajes exactos según RN-07…RN-10, verificados en T-8.5 (425 = 85 × 5; −2 con la escala +5/+1/−3; porcentajes que suman 100 % en todas las corridas) y en Vitest; (3) aleatoriedad conforme a las reglas (T-8.5 E-01: 17 temas distintos de 17 y 85 preguntas distintas; E-02: las 5 del tema); (4) ninguna pantalla exige zoom ni scroll horizontal a 360 px (0 desbordes en todos los pasos de todos los casos, también con el texto al 200 %); (5) configuración por defecto lista para empezar (≈ 26 preguntas: «Completo · 13 temas · 26 preguntas»).
+- **Mapa de fase 2 (sin implementar):** ver la tabla de candidatos al final de este registro.
+- **V0:** `npm run check` → 0 errores/0 avisos; `npm run build` → CSS 8.16 KB gzip, JS 50.76 KB gzip; `npm run test` → 113 pruebas en verde.
+
+---
+
+### Informe de cierre (pendientes manuales del usuario)
+
+_(Cierre del plan, `08 T-8.5.3` y `T-8.7.4`.)_
+
+**1 · Deploy manual en Cloudflare Pages.** Runbook listo en el README raíz (`README.md` → *Deploy*), verificado en local desde un clon limpio. Lo ejecuta el usuario: conectar el repositorio en *Workers & Pages → Create → Pages → Connect to Git*, configurar `npm run build` / `dist` / Node ≥ 22, desplegar y correr el smoke test de la URL `*.pages.dev`. Al publicar, la URL definitiva se anotará en el README raíz y en el README de especificaciones.
+
+**2 · Pase en dispositivos reales.** Guía con pasos exactos en la entrada de T-8.5 (safe areas/notch, rotación, gesto de la hoja y del slider, aviso de salida, texto del sistema al 200 %, movimiento reducido, contraste a pleno sol). Lo ejecuta el usuario en iOS Safari y Android Chrome sobre la URL publicada.
+
+**3 · Juicio visual fino.** La verificación de este plan se hizo por DOM/medidas (sin capturas, por restricción del entorno): contraste calculado sobre colores computados, geometría, ARIA, red y consola. Queda al ojo humano la apreciación estética final del build publicado.
+
+### Candidatos de fase 2 (sin implementar)
+
+| Candidato | Fuente | Nota |
+|---|---|---|
+| Pantalla de revisión con clave y explicación por pregunta | `01 §1.5`, `06 §6.7`, `07 §7.16` #7 | La explicación ya se extrae en `questions.json`; reutilizará los tokens semánticos ya definidos. |
+| PWA instalable + offline (service worker) | `01 §1.5`, `06 §6.7` | No cambia el stack; pospuesto por decisión de producto. |
+| Persistencia de la configuración entre recargas (RF-11) | `01 §1.5`, `03 §3.5`, `06 §6.7` | La clave `beca-esan.config` está prevista desde `03 §3.5`. |
+| Tema oscuro | `01 §1.5`, `07 §3.6`, `§7.16` #5 | Los tokens son semánticos: basta un bloque `[data-theme="dark"]`; exige revalidar todos los contrastes. |
+| Historial de intentos y estadísticas de progreso | `01 §1.5` | Fuera de v1 por decisión de producto. |
+| Dominio propio | `06 §6.7`, `§7.16` #4 | Conectable gratis a Cloudflare Pages en cualquier momento. |
+| Fuente display opcional (Plus Jakarta Sans u otra) | `07 §7.16` #4, Anexo A | Exige actualizar el presupuesto de `06` (0 KB → ≤40 KB autoalojados). |
+| Revisión del `aria-label` del saludo para WCAG 2.5.3 | `07 §7.9.1`/`§7.11` (microcopy congelado) | Hallazgo de Lighthouse registrado en T-8.4: nombre accesible que incluya el texto visible (p. ej. «Hola, {nombre}. Pon aquí tu nombre»). |
