@@ -183,7 +183,9 @@ Reglas:
 | Modal sin responder | visible / oculta | Solo si hay preguntas en blanco. |
 | Resultados | por áreas incluidas | La escala usada siempre visible. |
 
-## 5.8 Lo que debe cubrir `07-design.md` (pendiente)
+## 5.8 Cubierto por `07-design.md`
+
+> El diseño visual está definido en [`07-design.md`](07-design.md). Esta sección queda como **lista de verificación** de lo cubierto:
 
 - Paleta y tokens (color de marca, fondo, superficies, estados, error, éxito).
 - Tipografía (familia, escala, pesos) y espaciado (grid y radios).

@@ -2,7 +2,7 @@
 
 Este directorio contiene la **especificación** de la aplicación web que funcionará como **simulador de la prueba de preselección** de la Beca BCP en ESAN. El material de práctica ya existe en [`docs/preguntas/`](../preguntas/README.md): 28 temáticas con 140 preguntas y sus claves.
 
-> **Estado:** especificación funcional y stack tecnológico definidos. Falta el diseño visual (`07-design.md`) y los planes de implementación. Todavía no existe código de la aplicación.
+> **Estado:** especificación completa (01–07: funcional, datos, flujos, pantallas, stack y **diseño visual**). Falta únicamente la **fase de implementación** (planes y código).
 
 ## Documentos
 
@@ -14,7 +14,7 @@ Este directorio contiene la **especificación** de la aplicación web que funcio
 | 04 | [Flujos](04-flujos.md) | Diagramas de navegación y de proceso: nombre, configuración, generación del quiz, quiz y resultados. |
 | 05 | [Pantallas y UI](05-pantallas-y-ui.md) | Estructura de cada pantalla, componentes y requisitos mobile-first. |
 | 06 | [Stack tecnológico](06-stack.md) | ✅ Definido: Svelte 5 + Vite + TypeScript + Tailwind 4 · deploy gratuito en Cloudflare Pages. |
-| — | `07-design.md` | ⏳ Pendiente: sistema visual (colores, tipografía, estilo de componentes). |
+| 07 | [Diseño (sistema visual)](07-design.md) | ✅ Definido: paleta y tokens (contrastes AA verificados), tipografía, slider segmentado, catálogo de componentes, movimiento, microcopy, accesibilidad y anexos CSS. |
 
 ## Decisiones clave ya tomadas
 
@@ -29,6 +29,7 @@ Registro rápido; el detalle vive en cada documento.
 7. **Mobile-first** es requisito transversal: cada pantalla y componente se diseña y valida primero en celular.
 8. Puntajes por defecto: **+5 correcta · 0 no respondida · −2 incorrecta**.
 9. **Stack:** Svelte 5 + Vite + TypeScript + Tailwind 4; SPA estática sin backend; deploy gratuito en Cloudflare Pages (detalle en `06-stack.md`).
+10. **Diseño:** concepto «instrumento de medición» (segmentos + burbujas A–E), estilo suizo, azul institucional para RM y naranja para RV, tipografía del sistema (0 KB), tema claro (oscuro en fase 2) — detalle en `07-design.md`.
 
 ## Convenciones de los documentos
 
