@@ -1,6 +1,6 @@
 # Plan 01 — Fundación
 
-> Estado: ⬜ Pendiente · Depende de: — · Cubre: RNF-01, RNF-02 (base), RNF-03, RNF-06 (base), RNF-07, `06 §6.1`–`§6.3`, `07 §7.19` (Anexo C), `07 §7.5.3`, `07 §7.12`, `07 §7.13` · Estimación: M
+> Estado: ✅ Hecho · Depende de: — · Cubre: RNF-01, RNF-02 (base), RNF-03, RNF-06 (base), RNF-07, `06 §6.1`–`§6.3`, `07 §7.19` (Anexo C), `07 §7.5.3`, `07 §7.12`, `07 §7.13` · Estimación: M
 
 ## 1. Objetivo
 
@@ -116,11 +116,16 @@ Dejar el repositorio y el proyecto listos para construir: control de versiones, 
 
 ## 7. Verificación final del plan
 
-- [ ] `git log --oneline` con un commit por tarea; `git status` limpio.
-- [ ] Los cuatro comandos en verde: `npm run check`, `npm run build`, `npm run test`, y `npm run preview` sirviendo `dist/`.
-- [ ] `dist/` sin fuentes web ni imágenes raster; primer render con 3 requests (HTML, JS, CSS) en Network.
-- [ ] En 360 px: sin scroll horizontal; en ≥768 px: columna centrada.
+- [x] `git log --oneline` con un commit por tarea; `git status` limpio.
+- [x] Los cuatro comandos en verde: `npm run check`, `npm run build`, `npm run test`, y `npm run preview` sirviendo `dist/`.
+- [x] `dist/` sin fuentes web ni imágenes raster; primer render con 3 requests (HTML, JS, CSS) en Network.
+- [x] En 360 px: sin scroll horizontal; en ≥768 px: columna centrada.
 
 ## 8. Registro de desvíos y decisiones
 
-_(vacío — se completa durante la ejecución)_
+| Fecha | Entrada |
+|---|---|
+| 2026-10-16 | T-1.1: el repo ya estaba inicializado con historial — se conservó; solo se añadieron `.gitignore`, `README.md` raíz y su commit. Sin cambio funcional. |
+| 2026-10-16 | T-1.4: el build minifica `#0063BD` a `#0063bd` en el CSS final (normalización del minificador, sin cambio visual). Verificación case-insensitive en verde. |
+| 2026-10-16 | T-1.5: V2 mínimo con Chrome headless sobre `npm run preview` (capturas a 360 px y 1280 px, revisadas visualmente: sin scroll horizontal; columna 640 px centrada). |
+| 2026-10-16 | Cierre: `impeccable context` + detector mecánico (`detect --json` sobre `App.svelte`, `app.css`, `index.html`) limpio (`[]`). Auditorías por pantalla quedan para los Planes 05–07. |

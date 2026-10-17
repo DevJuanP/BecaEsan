@@ -2,7 +2,7 @@
 
 Esta carpeta contiene los **planes de ejecución** que construyen la app definida en [`docs/especificaciones/`](../especificaciones/README.md) (01–07), en el orden `01 → 08`.
 
-> **Estado global:** 0 / 8 planes completados · **fase actual: implementación (por iniciar)** · Los planes se generaron el 2026-10-16 y están en revisión (⬜); al aprobarse pasan a la cola de ejecución.
+> **Estado global:** 1 / 8 planes completados · **fase actual: Plan 02 (Datos)** · Los planes se generaron el 2026-10-16; el Plan 01 se ejecutó y cerró el 2026-10-16.
 
 ## Cómo se usa esta carpeta
 
@@ -14,7 +14,7 @@ Esta carpeta contiene los **planes de ejecución** que construyen la app definid
 
 | # | Plan | Objetivo en una línea | Depende de | Estimación | Estado |
 |---|---|---|---|---|---|
-| 01 | [Fundación](01-fundacion.md) | Git, Vite + Svelte 5 + TS + Tailwind 4, tokens, shell, Vitest | — | M | ⬜ |
+| 01 | [Fundación](01-fundacion.md) | Git, Vite + Svelte 5 + TS + Tailwind 4, tokens, shell, Vitest | — | M | ✅ |
 | 02 | [Datos](02-datos.md) | Parser/validador `docs/preguntas/` → `questions.json`, con pruebas | 01 | M | ⬜ |
 | 03 | [Lógica del intento](03-logica-del-intento.md) | Muestreo, puntaje, porcentajes, validación, persistencia (Vitest) | 01, 02 | M | ⬜ |
 | 04 | [Componentes base](04-componentes-base.md) | Slider segmentado, stepper, botones, chips, hojas, opción A–E + galería dev | 01 | L | ⬜ |
@@ -120,3 +120,4 @@ Se resuelven en la **revisión de vigencia** previa a la ejecución de su plan (
 |---|---|
 | 2026-10-16 | Se crea el contrato (`00-contrato.md`) y los 8 planes de ejecución (01–08), con matriz global de trazabilidad. Estados: todos ⬜. |
 | 2026-10-16 | Control de cambios previo a la ejecución (decisión del usuario, `00-contrato §9`): el deploy a Cloudflare Pages es **manual del usuario** y queda fuera de la orquestación; T-8.7 pasa a «preparación del deploy manual», T-8.5 explicita emulación móvil + pase manual, y el DoD del contrato (`§6`) se ajusta en consecuencia. |
+| 2026-10-16 | Se ejecuta y cierra el Plan 01 (T-1.1–T-1.6, un commit por tarea): fundación verificada (`check`, `build`, `test`, `preview` en verde; V2 mínimo con capturas a 360/1280 px; detector `impeccable` limpio). |
