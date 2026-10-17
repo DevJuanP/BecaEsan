@@ -10,6 +10,7 @@
     | 'clock'
     | 'house'
     | 'chevron-left'
+    | 'chevron-down'
     | 'arrow-right'
     | 'check'
     | 'x'
@@ -55,6 +56,8 @@
     <path d="M10 19.25v-5.5h4v5.5" />
   {:else if name === 'chevron-left'}
     <path d="M14.5 5.75 8.25 12l6.25 6.25" />
+  {:else if name === 'chevron-down'}
+    <path d="m6.25 9.25 5.75 5.75 5.75-5.75" />
   {:else if name === 'arrow-right'}
     <path d="M4.75 12h14" />
     <path d="M13.25 6.25 19 12l-5.75 5.75" />

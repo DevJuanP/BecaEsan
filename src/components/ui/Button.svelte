@@ -20,6 +20,10 @@
     full?: boolean;
     /** Obligatorio en la variante `icono` (es su único nombre accesible). */
     ariaLabel?: string;
+    /** Estado de un botón que muestra u oculta contenido (disclosure). */
+    ariaExpanded?: boolean;
+    /** Id del contenido que muestra u oculta el botón. */
+    ariaControls?: string;
     onclick?: (event: MouseEvent) => void;
     children?: Snippet;
   }
@@ -33,6 +37,8 @@
     disabled = false,
     full = false,
     ariaLabel = undefined,
+    ariaExpanded = undefined,
+    ariaControls = undefined,
     onclick = undefined,
     children = undefined,
   }: Props = $props();
@@ -46,6 +52,8 @@
   data-variant={variant}
   data-size={size}
   aria-label={ariaLabel}
+  aria-expanded={ariaExpanded}
+  aria-controls={ariaControls}
   {onclick}
 >
   {#if variant === 'icono'}

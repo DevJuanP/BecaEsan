@@ -14,9 +14,11 @@
   interface Props {
     /** Texto compartido del tema (`03 §3.2`); nunca `null` al montarse. */
     texto: string;
+    /** Estado inicial del desplegable; en la revisión se abre cerrado. */
+    abiertoInicial?: boolean;
   }
 
-  let { texto }: Props = $props();
+  let { texto, abiertoInicial = true }: Props = $props();
 
   /** Párrafos del material (`03 §3.1`: saltos de línea internos) */
   const parrafos = $derived(
@@ -26,8 +28,10 @@
       .filter((parrafo) => parrafo !== ''),
   );
 
-  /** Estado del `<details>`, en sincronía con el toggle nativo. */
-  let abierto = $state(true);
+  /** Estado del `<details>`, en sincronía con el toggle nativo. Solo se toma
+   *  el valor inicial de la prop: después manda la interacción del usuario. */
+  // svelte-ignore state_referenced_locally
+  let abierto = $state(abiertoInicial);
 
   function alAlternar(evento: Event & { currentTarget: HTMLDetailsElement }): void {
     abierto = evento.currentTarget.open;

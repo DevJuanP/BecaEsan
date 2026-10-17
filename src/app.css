@@ -20,6 +20,8 @@
   --color-ok: #047857;        --color-ok-fill: #059669;
   --color-bad: #B91C1C;       --color-bad-fill: #DC2626;
   --color-neutral: #64748B;   --color-neutral-fill: #64748B;
+  /* Tintes suaves para la revisión de respuestas (`07 §7.9.16`) */
+  --color-ok-soft: #ECFDF5;   --color-bad-soft: #FEF2F2;
   --color-focus: #0063BD;
 
   /* Tipografía */
