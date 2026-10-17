@@ -59,7 +59,7 @@ Implementar el **dominio puro** de la app —sin UI— y probarlo a fondo: creac
   4. `duracionMs = terminadoEn − iniciadoEn`; áreas no incluidas quedan fuera (RN-11).
 - **Criterios:** RN-07…RN-11; `03 §3.3`.
 - **Verificación:** V1 (casos en T-3.6) + V0.
-- **Estado:** [ ]
+- **Estado:** [x]
 
 ### T-3.4 — `storage.ts` — persistencia del nombre
 
@@ -136,3 +136,9 @@ Contraste del plan contra `docs/especificaciones/` (02, 03, 06 y 07 §7.11/§7.1
 - **Orden con q < 5.** El subconjunto aleatorio queda en el orden resultante de la mezcla Fisher–Yates (no se reordena al orden del archivo); con q = 5 se mantiene el orden 1→5 del material, como manda RN-04.
 - **`id` del intento.** `03 §3.3` sugiere «p. ej. timestamp»: se usa `String(iniciadoEn)` (no se persiste en v1).
 - **Snapshot (RN-01).** Copias profundas de la configuración (incluido `puntos`), de los bloques y de cada pregunta/opción: mutar después la configuración o el banco no altera el intento; `respuestas` arranca con `null` por `pregunta.id`.
+
+### T-3.3 — duración y casos defensivos del cálculo
+
+- **`terminadoEn` nulo.** El plan fija `duracionMs = terminadoEn − iniciadoEn`; el tipo lo admite nulo (`03 §3.3`). Interpretación conservadora: si aún es `null` (no debería ocurrir al confirmar «Ver resultados», `02 §RF-16`/`RF-19`), la duración es `0`, y se acota a `≥ 0` por si el reloj salta hacia atrás. `scoring` sigue siendo puro (no consulta `Date.now()`).
+- **Respuesta ausente.** Un `id` sin entrada en `respuestas` (objeto incompleto) se clasifica como **no respondida**, igual que `null`.
+- **Orden de las áreas.** El de su primera aparición en `bloques` (RM y luego RV, `02 §RN-03`); `puntajeTotal` es la suma de esas áreas incluidas.
