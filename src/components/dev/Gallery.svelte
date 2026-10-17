@@ -49,6 +49,30 @@
       Superficie de verificación V2 del Plan 04 (`07 §7.9`, `§7.12`, `§7.14`). Solo desarrollo:
       se monta con <code>#dev</code> y no entra al bundle de producción.
     </p>
+
+    <nav class="gal__nav" aria-label="Secciones de la galería">
+      <a href="#botones">Botones</a>
+      <a href="#chips">Chips</a>
+      <a href="#progreso">Progreso</a>
+      <a href="#barra">Barra inferior</a>
+      <a href="#stepper">Stepper</a>
+      <a href="#slider">Slider</a>
+      <a href="#opciones">Opciones A–E</a>
+      <a href="#hoja">Hoja modal</a>
+      <a href="#tooltip">Tooltip</a>
+    </nav>
+
+    <div class="gal__how">
+      <p><strong>Cómo se verifica aquí:</strong></p>
+      <ul>
+        <li><em>Hover:</em> solo con ratón (media `(hover: hover) and (pointer: fine)`); en emulación táctil no existe.</li>
+        <li><em>Pressed:</em> mantener el clic; <em>focus:</em> recorrer con `Tab` (anillo de 2 px con 2 px de separación).</li>
+        <li><em>Teclado:</em> radios con flechas; slider con flechas, `Home`/`End` y `PageUp`/`PageDown`; hoja con `Tab` (atrapado), `Shift+Tab` y `Escape`.</li>
+        <li><em>Slider:</em> tap para saltar, arrastre 1:1 (con o sin ratón), burbuja durante el gesto y `Escape` que revierte.</li>
+        <li><em>`reduced-motion` / `reduced-transparency`:</em> DevTools → Rendering → *Emulate CSS media feature* (el automatismo no los emula).</li>
+        <li><em>Móvil:</em> 360 y 430 px sin scroll horizontal; objetivos ≥44×44 px con ≥8 px de separación.</li>
+      </ul>
+    </div>
   </header>
 
   <section class="gal__sec" id="botones">
@@ -392,6 +416,32 @@
 
   .gal__lede code {
     font-size: 0.875rem;
+  }
+
+  .gal__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    margin-top: 12px;
+  }
+
+  .gal__nav a {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-blue-700);
+  }
+
+  .gal__how {
+    margin-top: 12px;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--color-ink-2);
+  }
+
+  .gal__how ul {
+    margin: 6px 0 0;
+    padding-left: 18px;
+    list-style: disc;
   }
 
   .gal__sec {
