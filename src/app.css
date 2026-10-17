@@ -119,3 +119,18 @@ body {
 [data-screen-title]:focus {
   outline: none;
 }
+
+/* Superficies del navegador (07 §7.14): la selección de texto sale de la paleta
+   (tinta sobre azul-100) en vez del resaltado del sistema. */
+::selection {
+  background: var(--color-blue-100);
+  color: var(--color-ink);
+}
+
+/* Autofill no rompe la paleta (07 §7.14): Chrome pinta el campo de amarillo. */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--color-ink);
+  box-shadow: 0 0 0 100px var(--color-surface) inset;
+}

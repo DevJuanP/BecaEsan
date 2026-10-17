@@ -54,7 +54,7 @@
 {#if enGaleria}
   {#if Galeria}<Galeria />{/if}
 {:else}
-  <main class="app-reserve mx-auto w-full max-w-[640px] px-5 md:px-6">
+  <main class="app-reserve mx-auto w-full max-w-[640px] px-5 min-[430px]:px-6">
     {#if estado.pantalla === 'home'}
       <GreetingHeader nombre={estado.nombre} onAbrir={abrirHojaNombre} />
       <NameModal
@@ -85,7 +85,7 @@
       las pantallas de los Planes 06–07 (el botón «Home» de resultados, RF-21).
       Home no la muestra: su flujo real es el CTA «Iniciar quiz» (RF-09).
     -->
-    <nav aria-label="Navegación temporal" class="mx-auto flex w-full max-w-[640px] gap-2 px-5 md:px-6">
+    <nav aria-label="Navegación temporal" class="mx-auto flex w-full max-w-[640px] gap-2 px-5 min-[430px]:px-6">
       <button type="button" class="rounded-control border border-line-strong px-4 py-2" onclick={() => estado.irA('home')}>
         Home
       </button>

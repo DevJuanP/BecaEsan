@@ -61,13 +61,17 @@
     align-items: center;
     justify-content: center;
     min-width: 0;
-    height: 44px;
+    min-height: 44px;
+    padding: 4px 0;
     border-radius: 10px;
     color: var(--color-ink-2);
     font-size: 0.9375rem;
     font-weight: 500;
     line-height: 1.4;
     text-align: center;
+    /* Con texto del sistema al 200 % la etiqueta se ajusta en vez de desbordar
+       (`07 §7.12` (10)); a tamaño normal la opción mide los 44 px de `§7.9.2`. */
+    overflow-wrap: break-word;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
     transition:
@@ -103,6 +107,12 @@
   .modo__opcion:has(.modo__radio:focus-visible) {
     outline: 2px solid var(--color-focus);
     outline-offset: 2px;
+  }
+
+  /* La etiqueta puede encogerse y partirse con texto grande (`07 §7.12` (10)) */
+  .modo__texto {
+    min-width: 0;
+    overflow-wrap: break-word;
   }
 
   /* `reduced-motion`: el pressed no escala (`07 §7.7.4`) */
