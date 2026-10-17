@@ -66,6 +66,11 @@
 
 .tnum { font-variant-numeric: tabular-nums; }
 
+/* Alto real de la barra fija (`07 §7.9.6`): botón de 48 + padding 12×2 + borde superior */
+:root {
+  --bar-height: calc(var(--space-12) + 24px + 1px);
+}
+
 /* Tarjeta de sección (07 §7.9.5): superficie, borde de 1 px y radio 16.
    Padding 16 en móvil y 20 desde 430 px (07 §7.5.3). */
 .tarjeta {
@@ -89,9 +94,10 @@
   color: var(--color-ink);
 }
 
-/* Reserva de scroll ante barras fijas (07 §7.5.1/§7.5.3): 64 px + safe-area */
+/* Reserva de scroll ante barras fijas (07 §7.5.3, §7.9.6): alto de la barra + 16 px,
+   de modo que nada quede oculto tras ella. */
 .app-reserve {
-  padding-bottom: calc(var(--space-16) + env(safe-area-inset-bottom));
+  padding-bottom: calc(var(--bar-height) + var(--space-4) + env(safe-area-inset-bottom));
 }
 
 /* Base (07 §7.4.1, §7.5.3): fuente del sistema, tinta sobre fondo, sin zoom por doble-tap */

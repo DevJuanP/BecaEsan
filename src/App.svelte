@@ -3,7 +3,27 @@
   import ConfigPanel from './components/home/ConfigPanel.svelte';
   import GreetingHeader from './components/home/GreetingHeader.svelte';
   import NameModal from './components/home/NameModal.svelte';
-  import { estado, type Pantalla } from './lib/state.svelte';
+  import bancoJson from './data/questions.json';
+  import { crearIntento } from './lib/generator';
+  import { estado } from './lib/state.svelte';
+  import type { Tema } from './lib/types';
+
+  /**
+   * Banco de preguntas generado y validado en build (`06 §6.4`, `03 §3.2`): el
+   * script de construcción garantiza el contrato, así que se tipa como `Tema[]`.
+   */
+  const banco = bancoJson as unknown as Tema[];
+
+  /** Preguntas del intento en curso (resumen del placeholder del Plan 06). */
+  const totalPreguntas = $derived(
+    estado.intento?.bloques.reduce((total, bloque) => total + bloque.preguntas.length, 0) ?? 0,
+  );
+
+  /** «Iniciar quiz» (`02 §RF-09`): genera el intento y navega al quiz. */
+  function iniciarQuiz() {
+    estado.intento = crearIntento(estado.config, banco);
+    void estado.irA('quiz');
+  }
 
   /** Hoja de nombre (`02 §RF-01.3`): la abre el saludo o el lápiz (T-5.2). */
   let hojaNombreAbierta = $state(false);
@@ -29,22 +49,12 @@
   if (enGaleria) {
     import('./components/dev/Gallery.svelte').then((modulo) => (Galeria = modulo.default));
   }
-
-  /**
-   * Navegación temporal mientras no existe el CTA real (T-5.7): permite correr
-   * la V2 de T-5.1 (título del documento y foco al `h1`). Se retira en T-5.7.
-   */
-  const pantallasTemp: readonly { id: Pantalla; etiqueta: string }[] = [
-    { id: 'home', etiqueta: 'Home' },
-    { id: 'quiz', etiqueta: 'Quiz' },
-    { id: 'resultados', etiqueta: 'Resultados' },
-  ];
 </script>
 
 {#if enGaleria}
   {#if Galeria}<Galeria />{/if}
 {:else}
-  <main class="mx-auto w-full max-w-[640px] px-5 md:px-6">
+  <main class="app-reserve mx-auto w-full max-w-[640px] px-5 md:px-6">
     {#if estado.pantalla === 'home'}
       <GreetingHeader nombre={estado.nombre} onAbrir={abrirHojaNombre} />
       <NameModal
@@ -53,23 +63,32 @@
         onGuardar={(nombre) => estado.aplicarNombre(nombre)}
       />
       <div class="pt-6">
-        <ConfigPanel config={estado.config} />
+        <ConfigPanel config={estado.config} onIniciar={iniciarQuiz} />
       </div>
-      <p class="pt-4 text-ink-2">Puntajes, resumen y CTA (T-5.6 y T-5.7).</p>
     {:else if estado.pantalla === 'quiz'}
       <h1 class="pt-5 text-2xl font-bold" data-screen-title tabindex="-1">Quiz</h1>
       <p class="text-ink-2">Bloques del intento (Plan 06).</p>
+      {#if estado.intento}
+        <p class="pt-2 text-ink-2">
+          Intento generado: {estado.intento.bloques.length} bloques · {totalPreguntas} preguntas.
+        </p>
+      {/if}
     {:else}
       <h1 class="pt-5 text-2xl font-bold" data-screen-title tabindex="-1">Resultados</h1>
       <p class="text-ink-2">Puntaje y porcentajes (Plan 07).</p>
     {/if}
   </main>
 
-  <nav aria-label="Navegación temporal" class="app-reserve mx-auto flex w-full max-w-[640px] gap-2 px-5 md:px-6">
-    {#each pantallasTemp as pantalla (pantalla.id)}
-      <button type="button" class="rounded-control border border-line-strong px-4 py-2" onclick={() => estado.irA(pantalla.id)}>
-        {pantalla.etiqueta}
+  {#if estado.pantalla !== 'home'}
+    <!--
+      Navegación temporal de los placeholders de quiz y resultados: la sustituyen
+      las pantallas de los Planes 06–07 (el botón «Home» de resultados, RF-21).
+      Home no la muestra: su flujo real es el CTA «Iniciar quiz» (RF-09).
+    -->
+    <nav aria-label="Navegación temporal" class="mx-auto flex w-full max-w-[640px] gap-2 px-5 md:px-6">
+      <button type="button" class="rounded-control border border-line-strong px-4 py-2" onclick={() => estado.irA('home')}>
+        Home
       </button>
-    {/each}
-  </nav>
+    </nav>
+  {/if}
 {/if}

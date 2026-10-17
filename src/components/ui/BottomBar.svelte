@@ -11,10 +11,12 @@
    * equivalente + 16 px para no quedar oculto.
    */
   interface Props {
+    /** Línea sobre las acciones (p. ej. el motivo del CTA deshabilitado, `07 §7.9.14`). */
+    note?: Snippet;
     children: Snippet;
   }
 
-  let { children }: Props = $props();
+  let { note = undefined, children }: Props = $props();
 
   let scrolled = $state(window.scrollY > 0);
 </script>
@@ -23,7 +25,12 @@
 
 <div class="bar" class:is-scrolled={scrolled}>
   <div class="bar__inner">
-    {@render children()}
+    {#if note}
+      <div class="bar__note">{@render note()}</div>
+    {/if}
+    <div class="bar__row">
+      {@render children()}
+    </div>
   </div>
 </div>
 
@@ -64,22 +71,32 @@
 
   .bar__inner {
     display: flex;
-    gap: 12px;
+    flex-direction: column;
     max-width: 640px;
     margin: 0 auto;
     padding: 12px 20px calc(12px + env(safe-area-inset-bottom));
   }
 
-  .bar__inner > :global(*) {
+  /* La línea de motivo va sobre las acciones (`07 §7.9.14`) */
+  .bar__note {
+    display: block;
+  }
+
+  .bar__row {
+    display: flex;
+    gap: 12px;
+  }
+
+  .bar__row > :global(*) {
     flex: 0 0 auto;
     min-width: 0;
   }
 
-  .bar__inner > :global([data-variant='primario']) {
+  .bar__row > :global([data-variant='primario']) {
     flex: 2 1 0;
   }
 
-  .bar__inner > :global([data-variant='secundario']) {
+  .bar__row > :global([data-variant='secundario']) {
     flex: 1 1 0;
   }
 </style>
