@@ -3,10 +3,22 @@
  * `03 §3.3`). Módulo puro: sin DOM ni estado (`06 §6.1`).
  */
 
-import type { Area, Intento, Resultado, ResultadoArea } from './types';
+import type { Area, Intento, Letra, Pregunta, Resultado, ResultadoArea } from './types';
 
 /** Orden fijo de categorías para el desempate del mayor resto (RN-09). */
 const CATEGORIAS = ['aciertos', 'erroneas', 'noRespondidas'] as const;
+
+/** Clasificación de una respuesta según RN-07. */
+export type ClasificacionRespuesta = 'correcta' | 'incorrecta' | 'noRespondida';
+
+/**
+ * Clasifica una pregunta del intento (`02 §RN-07`): en blanco, correcta o
+ * incorrecta. La usan el cálculo de resultados y la revisión posterior.
+ */
+export function clasificarRespuesta(pregunta: Pregunta, respuesta: Letra | null): ClasificacionRespuesta {
+  if (respuesta === null) return 'noRespondida';
+  return respuesta === pregunta.correcta ? 'correcta' : 'incorrecta';
+}
 
 /**
  * Reparte tres porcentajes enteros que suman 100 con el método del mayor
@@ -76,9 +88,17 @@ export function calcularResultado(intento: Intento): Resultado {
     for (const pregunta of bloque.preguntas) {
       area.total += 1;
       const letra = bloque.respuestas[pregunta.id] ?? null;
-      if (letra === null) area.noRespondidas += 1;
-      else if (letra === pregunta.correcta) area.correctas += 1;
-      else area.incorrectas += 1;
+      switch (clasificarRespuesta(pregunta, letra)) {
+        case 'correcta':
+          area.correctas += 1;
+          break;
+        case 'incorrecta':
+          area.incorrectas += 1;
+          break;
+        case 'noRespondida':
+          area.noRespondidas += 1;
+          break;
+      }
     }
   }
 

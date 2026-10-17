@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { calcularResultado } from './scoring';
+import { calcularResultado, clasificarRespuesta } from './scoring';
 import type { Area, BloqueIntento, ConfigQuiz, Intento, Letra, Pregunta, Tema } from './types';
 
 const LETRAS: Letra[] = ['A', 'B', 'C', 'D', 'E'];
@@ -57,6 +57,15 @@ function responder(bloque: BloqueIntento, letras: (Letra | null)[]): void {
     bloque.respuestas[pregunta.id] = letras[indice] ?? null;
   });
 }
+
+describe('clasificarRespuesta — RN-07: clasificación', () => {
+  it('clasifica la letra elegida frente a la clave', () => {
+    const pregunta = crearPregunta('tema#q1', 1, 'C');
+    expect(clasificarRespuesta(pregunta, 'C')).toBe('correcta');
+    expect(clasificarRespuesta(pregunta, 'A')).toBe('incorrecta');
+    expect(clasificarRespuesta(pregunta, null)).toBe('noRespondida');
+  });
+});
 
 describe('calcularResultado — RN-07: clasificación', () => {
   it('clasifica correcta / incorrecta / no respondida', () => {
