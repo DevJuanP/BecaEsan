@@ -13,6 +13,7 @@
   import Slider from '../ui/Slider.svelte';
   import Sheet from '../ui/Sheet.svelte';
   import Stepper from '../ui/Stepper.svelte';
+  import Tooltip from '../ui/Tooltip.svelte';
 
   /** Valores de demostración de los steppers (defaults de `02 §RF-07`). */
   let correcta = $state(5);
@@ -339,6 +340,27 @@
       <Button onclick={() => (hojaDemo = false)}>Guardar</Button>
     {/snippet}
   </Sheet>
+
+  <section class="gal__sec" id="tooltip">
+    <h2 class="gal__h2">Tooltip</h2>
+    <p class="gal__src">
+      `07 §7.9.15` · solo `(hover: hover) and (pointer: fine)`: aparece a los 300 ms de hover o de foco,
+      se va con un fundido de 120 ms, va `aria-hidden` y no sostiene ninguna función (el disparador lleva
+      su `aria-label`). En táctil no existe.
+    </p>
+
+    <div class="gal__row">
+      <span class="gal__tag">Sobre el disparador (lápiz, como en `07 §7.9.1`)</span>
+      <div class="gal__items">
+        <Tooltip label="Pon aquí tu nombre">
+          <Button variant="icono" icon="pencil" ariaLabel="Pon aquí tu nombre" />
+        </Tooltip>
+        <Tooltip label="Pon aquí tu nombre">
+          <Button variant="secundario">Pasa el cursor o enfoca</Button>
+        </Tooltip>
+      </div>
+    </div>
+  </section>
 
   <div class="gal__spacer" aria-hidden="true"></div>
 </main>
