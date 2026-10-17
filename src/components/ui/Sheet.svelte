@@ -255,6 +255,8 @@
 
   .dialogo.is-dragging {
     transition: none;
+    -webkit-user-select: none;
+    user-select: none;
   }
 
   .dialogo.is-closing {
@@ -302,6 +304,7 @@
     font-weight: 700;
     line-height: 1.3;
     letter-spacing: -0.01em;
+    text-wrap: balance;
   }
 
   .cuerpo {

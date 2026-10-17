@@ -224,6 +224,12 @@
     touch-action: pan-y;
   }
 
+  /* El arrastre no debe seleccionar texto (web-interface-guidelines) */
+  .slider {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
   .slider__track.is-dense {
     gap: 4px;
   }

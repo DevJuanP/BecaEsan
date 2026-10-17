@@ -431,6 +431,10 @@
     color: var(--color-blue-700);
   }
 
+  .gal__nav a:hover {
+    text-decoration: underline;
+  }
+
   .gal__how {
     margin-top: 12px;
     font-size: 0.8125rem;
@@ -450,6 +454,7 @@
     border: 1px solid var(--color-line);
     border-radius: var(--radius-card);
     background: var(--color-surface);
+    scroll-margin-top: 12px;
   }
 
   @media (min-width: 430px) {

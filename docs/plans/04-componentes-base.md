@@ -1,6 +1,6 @@
 # Plan 04 — Componentes base
 
-> Estado: 🔄 En curso · Depende de: Plan 01 (solo requiere el Plan 01; se ejecuta en su turno) · Cubre: `07 §7.6`–`§7.9` (componentes), `§7.18` (Anexo B), RF-04/05/06 (el control), RF-14 (fila de alternativa), RF-17 (la hoja, sin lógica), `07 §7.5.4`, `§7.7.3`, `§7.12` · Estimación: L
+> Estado: ✅ Hecho · Depende de: Plan 01 (solo requiere el Plan 01; se ejecuta en su turno) · Cubre: `07 §7.6`–`§7.9` (componentes), `§7.18` (Anexo B), RF-04/05/06 (el control), RF-14 (fila de alternativa), RF-17 (la hoja, sin lógica), `07 §7.5.4`, `§7.7.3`, `§7.12` · Estimación: L
 
 ## 1. Objetivo
 
@@ -133,13 +133,13 @@ Construir el catálogo de componentes reutilizables fiel al sistema visual de `0
 
 ## 7. Verificación final del plan
 
-- [ ] La galería cubre todos los estados descritos en `07 §7.9` para cada componente.
-- [ ] Todos los controles alcanzan ≥44×44 px (medidos en la galería) y ≥8 px de separación.
-- [ ] Teclado: slider con flechas/Home/End; radios con flechas; hoja con Tab atrapado y `Escape`.
-- [ ] `reduced-motion` y `reduced-transparency` probados en la galería.
-- [ ] `grep -ri "gallery" dist/` sin resultados (la galería no entra a producción).
-- [ ] Auditoría `web-design-guidelines` sobre `src/components/ui/*` sin hallazgos críticos.
-- [ ] `package.json` sin dependencias nuevas (solo las del stack).
+- [x] La galería cubre todos los estados descritos en `07 §7.9` para cada componente.
+- [x] Todos los controles alcanzan ≥44×44 px (medidos en la galería) y ≥8 px de separación.
+- [x] Teclado: slider con flechas/Home/End; radios con flechas; hoja con Tab atrapado y `Escape`.
+- [x] `reduced-motion` y `reduced-transparency` probados en la galería.
+- [x] `grep -ri "gallery" dist/` sin resultados (la galería no entra a producción).
+- [x] Auditoría `web-design-guidelines` sobre `src/components/ui/*` sin hallazgos críticos.
+- [x] `package.json` sin dependencias nuevas (solo las del stack).
 
 ## 8. Registro de desvíos y decisiones
 
@@ -177,3 +177,9 @@ _(append-only; las entradas de ejecución se añaden al final)_
 
 
 
+
+### Cierre
+
+- **V3 · auditoría `web-design-guidelines` (10 archivos de `src/components/ui/*` + la galería):** sin hallazgos críticos. Correcciones aplicadas: `user-select: none` en el slider y durante el arrastre del asa (el gesto no debe seleccionar texto), `text-wrap: balance` en el título de la hoja, `scroll-margin-top` en las secciones de la galería y hover en los enlaces de su índice. Sin `transition: all`, sin `onpaste` que bloquee pegado, sin imágenes sin dimensiones, sin iconos sin nombre accesible, sin inputs sin etiqueta y sin `autoFocus`. Único `outline: none` (`.opt__radio:focus-visible`): tiene reemplazo documentado en la fila (`:has(input:focus-visible)`), como pide `07 §7.12.2`. Desviaciones intencionales frente a la guía genérica, por especificación de `07`/`06`: sentence case en lugar de Title Case (`07 §7.4.2`), sin router ni estado en la URL (`06 §6.2`), sin skip link (`07 §7.12` no lo pide) y el `<div>` con Pointer Events del slider, cuyo control accesible real es el `<input type="range">` superpuesto (`07 §7.8.6`).
+- **Verificación final del plan (§7):** las siete casillas quedaron en verde con la evidencia de la V2 por DOM registrada arriba; `reduced-motion`/`reduced-transparency` se comprobaron aplicando en tiempo de ejecución las reglas de esas media features sobre la galería (la herramienta de automatización no las emula): la hoja pasa a fundido (0.15 s de entrada, 240 ms de salida) sin deslizamiento, la burbuja de la opción pierde la escala, el botón y el stepper dejan de transicionar el `transform` y la barra fija queda con fondo sólido `#FFFFFF` y `backdrop-filter: none`.
+- **Pendientes humanos (no bloquean el plan):** (a) comprobar el arrastre del slider con ratón/dedo real: la continuidad con `setPointerCapture` no se pudo ejercitar con el navegador automatizado (ver T-4.4); (b) `impeccable` de cierre y el `DESIGN.md` de la raíz son del Plan 08 (`07 §7.15`).
