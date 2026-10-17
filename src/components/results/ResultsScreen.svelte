@@ -1,6 +1,8 @@
 <script lang="ts">
   import AreaCard from './AreaCard.svelte';
   import ScoreHero from './ScoreHero.svelte';
+  import Button from '../ui/Button.svelte';
+  import { etiquetaModo } from '../../lib/config';
   import { estado } from '../../lib/state.svelte';
 
   /**
@@ -13,6 +15,20 @@
    * recordatorio de la configuración (RF-20.4) y botón «Home» (RF-21).
    */
   const resultado = $derived(estado.resultado);
+
+  /**
+   * Recordatorio de la configuración del intento (`02 §RF-20.4`, `07 §7.11`):
+   * «{Modo} · {k} temas · {q} preguntas por tema», con la **instantánea** del
+   * intento (`03 §3.3`), no la configuración actual del panel.
+   */
+  const recordatorio = $derived.by(() => {
+    const config = estado.intento?.config ?? null;
+    if (config === null) return '';
+    const incluyeRM = config.modo !== 'solo-rv';
+    const incluyeRV = config.modo !== 'solo-rm';
+    const temas = (incluyeRM ? config.temasRM : 0) + (incluyeRV ? config.temasRV : 0);
+    return `${etiquetaModo(config.modo)} · ${temas} temas · ${config.preguntasPorTema} preguntas por tema`;
+  });
 </script>
 
 {#if resultado !== null}
@@ -37,6 +53,23 @@
       {#each resultado.areas as area, indice (area.area)}
         <AreaCard {area} {indice} />
       {/each}
+    </div>
+
+    <!-- Recordatorio de la configuración del intento (`02 §RF-20.4`) -->
+    <p class="res__recordatorio tnum">{recordatorio}</p>
+
+    <!-- «Home» (RF-21): vuelve al panel conservando nombre y configuración -->
+    <div class="res__home">
+      <Button
+        variant="primario"
+        size="bar"
+        icon="house"
+        iconPos="start"
+        full
+        onclick={() => void estado.cerrarResultados()}
+      >
+        Home
+      </Button>
     </div>
   </main>
 {/if}
@@ -97,5 +130,20 @@
       grid-template-columns: 1fr 1fr;
       gap: 20px;
     }
+  }
+
+  /* Recordatorio de configuración: 24 px tras las tarjetas (`07 §7.10.3` #4) */
+  .res__recordatorio {
+    margin-top: 24px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    line-height: 1.4;
+    color: var(--color-ink-3);
+    text-wrap: pretty;
+  }
+
+  /* Botón «Home»: ancho completo, al final del flujo (`07 §7.10.3` #5) */
+  .res__home {
+    margin-top: 20px;
   }
 </style>

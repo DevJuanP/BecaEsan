@@ -77,6 +77,17 @@ export class EstadoApp {
     const limpio = texto.trim();
     this.nombre = limpio === '' ? null : limpio.slice(0, MAX_NOMBRE);
   }
+
+  /**
+   * «Home» de resultados (`02 §RF-21`, `§RF-10`, `§RN-05`): descarta el intento
+   * visualizado y su resultado —el próximo «Iniciar quiz» genera uno nuevo— y
+   * vuelve al panel **conservando** nombre y configuración.
+   */
+  async cerrarResultados(): Promise<void> {
+    this.intento = null;
+    this.resultado = null;
+    await this.irA('home');
+  }
 }
 
 /** Instancia única que comparten todas las pantallas. */
