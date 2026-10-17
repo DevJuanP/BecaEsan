@@ -84,7 +84,7 @@ Implementar el **dominio puro** de la app —sin UI— y probarlo a fondo: creac
   3. `resumenConfig(config)`: «Completo · 13 temas · 26 preguntas» con la fórmula de RF-08 y los nombres de modo de `07 §7.11` («Solo Matemático», «Solo Verbal», «Completo»).
 - **Criterios:** RF-07, RF-08.
 - **Verificación:** V1 (incluye: modo solo-rm excluye temasRV del resumen, etc.) + V0.
-- **Estado:** [ ]
+- **Estado:** [x]
 
 ### T-3.6 — Pruebas de dominio completas (casos borde)
 
@@ -148,3 +148,9 @@ Contraste del plan contra `docs/especificaciones/` (02, 03, 06 y 07 §7.11/§7.1
 - **Truncado, no rechazo.** `guardarNombre` recorta a 30 caracteres en silencio; la validación con mensaje («Máximo 30 caracteres.») es de la hoja de nombre (Plan 05). Aquí 30 es la última barrera defensiva, coherente con `maxlength` del campo.
 - **Lectura tolerante.** `leerNombre` recorta espacios y devuelve `null` si el valor está vacío (E-08 en capa lógica), aunque el valor lo haya puesto otra vía; no trunca al leer.
 - **Sin almacenamiento.** El tercer parámetro admite `StorageLike | null` explícito (`null` = sin almacenamiento) además del inyectado para pruebas; las tres funciones son no-op silenciosas si falta o si cada operación lanza.
+
+### T-3.5 — alcance de la validación y plantilla del resumen
+
+- **`validarConfig` valida solo puntajes**, como pide la tarea: los sliders ya acotan k y q (`02 §RF-04`–`RF-06`) y `modo` es un conjunto cerrado. Un valor `NaN` (campo vacío o no numérico en la UI) cuenta como inválido, de modo que el botón «Iniciar quiz» quede deshabilitado con cualquier entrada no resoluble.
+- **Plantilla del resumen literal** (`07 §7.11`): «{Modo} · {k} temas · {q} preguntas» siempre en plural; con k = 1 el texto es «1 temas» porque el deck no define variante singular y Plan 08 audita cadenas exactas. Si el producto quiere singularización, exige cambio de microcopy en `07 §7.11` (contrato §9).
+- **API pequeña extra:** `etiquetaModo(modo)` se exporta (mismos nombres de modo del deck) para que el recordatorio de resultados del Plan 07 no duplique el mapa; `CONFIG_INICIAL` queda congelado en profundidad para que el default compartido no se mute.
