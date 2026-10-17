@@ -1,4 +1,5 @@
 <script lang="ts">
+  import AreaCard from './AreaCard.svelte';
   import ScoreHero from './ScoreHero.svelte';
   import { estado } from '../../lib/state.svelte';
 
@@ -29,6 +30,13 @@
         escala={resultado.escala}
         duracionMs={resultado.duracionMs}
       />
+    </div>
+
+    <!-- Solo áreas incluidas (RN-11); en ≥768 px, dos columnas (`07 §7.10.3`) -->
+    <div class="res__areas">
+      {#each resultado.areas as area, indice (area.area)}
+        <AreaCard {area} {indice} />
+      {/each}
     </div>
   </main>
 {/if}
@@ -73,5 +81,21 @@
   /* Puntaje héroe: 32 px tras el bloque de título (`07 §7.10.3` #2) */
   .res__heroe {
     margin-top: 32px;
+  }
+
+  /* Tarjetas de área: 16 px entre ellas (`07 §7.10.3` #3) */
+  .res__areas {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  /* Escritorio: una tarjeta por área en dos columnas, gap 20 (`07 §7.10.3`) */
+  @media (min-width: 768px) {
+    .res__areas {
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
   }
 </style>

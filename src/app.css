@@ -19,7 +19,8 @@
   /* Semánticos (resultados) */
   --color-ok: #047857;        --color-ok-fill: #059669;
   --color-bad: #B91C1C;       --color-bad-fill: #DC2626;
-  --color-neutral: #64748B;   --color-focus: #0063BD;
+  --color-neutral: #64748B;   --color-neutral-fill: #64748B;
+  --color-focus: #0063BD;
 
   /* Tipografía */
   --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
