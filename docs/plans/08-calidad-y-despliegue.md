@@ -83,7 +83,7 @@ Cerrar la v1: auditar accesibilidad y calidad visual contra las especificaciones
   3. Documentar el **pase manual en dispositivos reales** (safe areas/notch, rotación, gesto, `beforeunload`) con pasos exactos, para el informe de cierre.
 - **Criterios:** `02 §M6` (E-01…E-10); `01 §1.7` (1, 3, 4); RNF-01, RNF-04, RNF-08, RNF-09.
 - **Verificación:** matriz E-01…E-10 marcada en emulación móvil; hallazgos corregidos; guía del pase manual documentada.
-- **Estado:** [ ]
+- **Estado:** [x]
 
 ### T-8.6 — Repositorio en GitHub
 
@@ -215,3 +215,30 @@ Cerrar la v1: auditar accesibilidad y calidad visual contra las especificaciones
 - **Sin optimizaciones necesarias:** ninguna métrica excede el presupuesto, así que no se tocó código en esta tarea (el desglose Svelte+app ≈ 29 KB gzip confirma que el margen restante es amplio).
 - **Hallazgo de Lighthouse móvil (no aplicable / registrado):** `label-content-name-mismatch` (WCAG 2.5.3, *peso 0* en la categoría de accesibilidad, que puntúa **100**) en el botón del saludo: su texto visible «Hola» no está contenido en el `aria-label` «Pon aquí tu nombre». El `aria-label` es **microcopy congelado** de `07 §7.9.1`/`§7.11`; cambiarlo exige revisar la especificación (contrato §9), así que se mantiene y queda documentado como excepción deliberada con recomendación para una revisión futura de `07` (p. ej. nombre accesible «Hola, {nombre}. Pon aquí tu nombre»). Los otros fallos del informe son de SEO (`meta-description`, `robots.txt`) y de agentes (`llms.txt`): fuera de alcance por diseño — `06 §6.1`/`01 §1.5` declaran que la app no tiene URLs que compartir ni SEO que cuidar. Accesibilidad y buenas prácticas: **100/100**.
 - **V0:** `npm run check` → 0 errores/0 avisos; `npm run build` → CSS 8.16 KB gzip, JS 50.76 KB gzip; `npm run test` → 113 pruebas en verde; `npm run preview` sirviendo `dist/` con las tres pantallas.
+
+### T-8.5 — Prueba E-01…E-10 de punta a punta (emulación móvil + pase manual documentado)
+
+- **Método:** cada caso se ejecutó **completo** (configurar → resolver → resultados) sobre el build de producción (`npm run preview`, puerto 4175) con viewport móvil emulado 360×800 dpr 3 táctil, por DOM (`chrome-devtools` sin capturas), con las claves reales del banco leídas de `questions.json` para dirigir las respuestas. El banco se cargó desde el servidor de desarrollo solo como fuente de claves/verificación (no participa en la app servida).
+- **Matriz E-01…E-10 (emulación móvil):**
+  | Caso | Evidencia medida |
+  |---|---|
+  | **E-01** RM con k = 17 | Modo Matemático · 17 temas · 85 preguntas → **17 bloques**, los **17 temas distintos** en orden aleatorio y **85 preguntas distintas** (todo el banco de RM), 5 por bloque; todas correctas → «85 de 85 · 100 %», puntaje **425** = 85 × 5, «Escala: +5 · 0 · −2»; solo tarjeta de RM (RN-11). |
+  | **E-02** q = 5 | RM=1 + RV=1, q=5 → cada bloque monta **las 5 preguntas completas de su tema** (ids distintos y del mismo tema); 5 de 5 en ambas áreas; total 50 = 10 × 5. |
+  | **E-03** mínimo (k = 1, q = 1) | Completo · 2 temas · 2 preguntas → 2 bloques de 1 pregunta; RM correcta (100/0/0 → +5) y RV incorrecta (0/100/0 → **−2**); total **3**; porcentajes suman 100 % por área. |
+  | **E-04** quiz en blanco | «Ver resultados» abre la hoja «Tienes 2 preguntas sin responder» con detalle «RM: 1 · RV: 1» y las dos acciones; al confirmar: puntaje = T × pnr = **0**, «No respondidas 1 de 1 · 100 %», aciertos y erróneas 0 %. |
+  | **E-05** escala 0/0/0 | Puntos 0/0/0 aceptados (CTA habilitado); corrida 1 correcta + 1 incorrecta + 1 en blanco → total **0** y por área **0**, «Escala: 0 · 0 · 0», porcentajes calculados igual (50/50/0 y 0/0/100). |
+  | **E-06** comprensión de lectura con q < 5 | Verbal · 11 temas · q=1: el bloque «Comprensión de lectura» muestra el panel `<details>` abierto con el toggle «Ocultar texto» (`aria-expanded="true"`) y **solo 1 pregunta**; el texto renderizado coincide **carácter a carácter** con `textoComun` del banco (941 caracteres). |
+  | **E-07** atrás + editar | 3 bloques: bloque 1 respondido **incorrectamente** (A, clave C) → avanzar → «Atrás» ×2: el bloque 1 **conserva** la selección previa (A) → se corrige a C → resultados: **2 de 3 correctas** (la respuesta editada es la que cuenta), 1 no respondida, puntaje 10 = 2 × 5. |
+  | **E-08** nombre vacío/espacios | Guardar «   » → saludo «Hola», **clave eliminada** de `localStorage` (`null`), sin errores; guardar «Ana» → «Hola, Ana» y `localStorage` «Ana»; tras **recargar**, el saludo y el almacén se conservan (RNF-04). |
+  | **E-09** puntajes negativos | Escala +5 · **+1** · **−3**: un bloque en blanco (+1) y uno incorrecto (−3) → total **−2** (menos tipográfico U+2212) y puntaje del área −2; la escala muestra signos explícitos. |
+  | **E-10** símbolos (π, ≈, ×, ², S/) | Corrida E-01 con **las 85 preguntas de RM**: **665 textos** (enunciados + opciones, con las repeticiones de los rebloques) comparados contra el banco → **0 diferencias**; 31 bloques contenían símbolos matemáticos (`S/`, `²`, `³`, `π`, `≈`, `≤`, `≥`, `°`). |
+- **Transversales automatizables (verificados):** `scrollWidth` = `clientWidth` = 360 en **todos** los pasos de todos los casos (sin scroll horizontal); **exactamente 3 peticiones** al cargar (documento + JS + CSS) y **0** de fuentes o imágenes; nombre persistente tras recarga; **consola sin ningún mensaje** en toda la sesión; RNF-09 confirmado: a mitad del intento el evento `beforeunload` se cancela (el navegador pide confirmación — se observaron los avisos reales al navegar con el intento en curso) y fuera del intento no.
+- **Pase manual en dispositivos reales (pendiente del usuario, no ejecutado aquí):** pasos exactos para el informe de cierre.
+  1. **iOS Safari (iPhone con notch) y Android Chrome**, sobre la URL publicada `*.pages.dev`, en vertical: comprobar que el saludo «Hola» no queda bajo la barra de estado/notch (`env(safe-area-inset-top)`) y que la barra fija inferior deja aire sobre el gesto inferior (`env(safe-area-inset-bottom)`).
+  2. **Rotación:** girar a horizontal en Home (CTA «Iniciar quiz» accesible y con aire), en el quiz (cabecera sticky + botonera visibles, sin scroll horizontal) y en resultados (botón «Home»).
+  3. **Gesto:** en la hoja de nombre, arrastrar el asa hacia abajo (debe cerrarse con la animación) y tocar el velo (debe cerrar); en el slider, arrastrar con el dedo (la burbuja sigue 1:1 y el valor hace snap) y tocar una posición (tap-to-jump); comprobar que el doble toque **no** hace zoom.
+  4. **Aviso de salida (RNF-09):** a mitad del quiz, recargar la página y cerrar la pestaña → el navegador debe pedir confirmación (iOS Safari puede no mostrarlo en algunos casos: es el comportamiento «si el navegador lo permite» de `01 §RNF-09`).
+  5. **Texto del sistema grande:** Ajustes → Accesibilidad → tamaño de texto al máximo equivalente al 200 %; recorrer las tres pantallas (el layout debe envolver, sin recortes ni scroll horizontal).
+  6. **Movimiento reducido:** Ajustes → Accesibilidad → «Reducir movimiento» y (Android) «Quitar animaciones»; comprobar que la transición de bloque queda en fundido y que las barras de resultados aparecen en su valor final.
+  7. **Contraste y tacto reales:** recorrer con el dedo el panel, el quiz y los resultados comprobando legibilidad a pleno sol y que los objetivos de 44 px se sienten cómodos (juicio humano que no se puede automatizar).
+- **V0:** `npm run check` → 0 errores/0 avisos; `npm run build` → CSS 8.16 KB gzip, JS 50.76 KB gzip; `npm run test` → 113 pruebas en verde.
