@@ -4,11 +4,12 @@
   import { fly } from 'svelte/transition';
   import { calcularResultado } from '../../lib/scoring';
   import { estado } from '../../lib/state.svelte';
+  import ConfirmModal from './ConfirmModal.svelte';
   import QuestionCard from './QuestionCard.svelte';
   import QuizHeader from './QuizHeader.svelte';
   import QuizNav from './QuizNav.svelte';
   import SharedText from './SharedText.svelte';
-  import type { Letra } from '../../lib/types';
+  import type { Area, Letra } from '../../lib/types';
 
   /**
    * Pantalla del quiz (`05 §5.4`, `07 §7.10.2`): monta **un bloque a la vez**
@@ -58,15 +59,61 @@
     window.scrollTo(0, 0);
   }
 
-  /** «Ver resultados» en el último bloque (`02 §RF-17`); la confirmación de
-   *  preguntas en blanco la añade T-6.6. */
+  /** «Ver resultados» (`02 §RF-17`): con blancos abre la confirmación; sin
+   *  blancos pasa directo a resultados. */
   function verResultados(): void {
+    if (estado.intento === null) return;
+    if (blancos.total > 0) {
+      hojaConfirmacion = true;
+      return;
+    }
+    confirmarResultados();
+  }
+
+  /** Cierre del intento (`02 §RF-17`, `§RF-19`): detiene el cronómetro
+   *  (`terminadoEn`), calcula el resultado y navega a la pantalla de resultados. */
+  function confirmarResultados(): void {
     const actual = estado.intento;
     if (actual === null) return;
+    hojaConfirmacion = false;
     actual.terminadoEn = Date.now();
     estado.resultado = calcularResultado(actual);
     void estado.irA('resultados');
   }
+
+  /** Visibilidad de la hoja de confirmación (`05 §5.5`). */
+  let hojaConfirmacion = $state(false);
+
+  /** Etiquetas cortas del detalle de la confirmación (`07 §7.11`). */
+  const ETIQUETA_AREA: Record<Area, string> = { matematico: 'RM', verbal: 'RV' };
+
+  /** Blancos del intento, globales y por área (`02 §RF-17`). */
+  const blancos = $derived.by(() => {
+    const actual = estado.intento;
+    const porArea: Record<Area, number> = { matematico: 0, verbal: 0 };
+    const areas: Area[] = [];
+    let total = 0;
+    if (actual !== null) {
+      for (const bloque of actual.bloques) {
+        if (!areas.includes(bloque.area)) areas.push(bloque.area);
+        for (const pregunta of bloque.preguntas) {
+          if ((bloque.respuestas[pregunta.id] ?? null) !== null) continue;
+          total += 1;
+          porArea[bloque.area] += 1;
+        }
+      }
+    }
+    return { total, porArea, areas };
+  });
+
+  /** Detalle «RM: a · RV: b» con solo las áreas activas con blancos (`07 §7.11`). */
+  const detalleBlancos = $derived(
+    blancos.areas
+      .map((area) => ({ etiqueta: ETIQUETA_AREA[area], cantidad: blancos.porArea[area] }))
+      .filter(({ cantidad }) => cantidad > 0)
+      .map(({ etiqueta, cantidad }) => `${etiqueta}: ${cantidad}`)
+      .join(' · '),
+  );
 
   /** Transición de bloque (`07 §7.7.3`): ±24 px + fade 260 ms; con
    *  `reduced-motion`, solo fade de 150 ms (`07 §7.7.4`). */
@@ -138,6 +185,15 @@
       onAtras={() => irA(intento.indiceActual - 1)}
       onContinuar={() => irA(intento.indiceActual + 1)}
       onVerResultados={verResultados}
+    />
+
+    <!-- Hoja de confirmación (`02 §RF-17`): dentro del contenedor con
+         `data-area` para que su acción primaria use el acento del área actual -->
+    <ConfirmModal
+      bind:open={hojaConfirmacion}
+      blancos={blancos.total}
+      detalle={detalleBlancos}
+      onConfirmar={confirmarResultados}
     />
   </div>
 {/if}
