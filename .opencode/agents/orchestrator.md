@@ -16,9 +16,6 @@ permissions:
     resource: "executor-max"
     effect: allow
   - action: subagent
-    resource: "executor-pro"
-    effect: allow
-  - action: subagent
     resource: "verifier"
     effect: allow
   - action: edit
@@ -70,7 +67,7 @@ Nunca preguntes nada al usuario durante la ejecución. Cada duda se resuelve as�
 5. **Lanza el verificador** con la plantilla «Encargo al verificador».
 6. **Resuelve el resultado:**
    - **PASS** → `git push` (si falla, reintenta una vez; si persiste, anótalo para el informe final y continúa: el trabajo ya está commiteado localmente). Sin pausa: pasa directo al siguiente plan.
-   - **FAIL** → **reparación** con hasta **3 ciclos** por plan: 1.º relanza al mismo ejecutor con los hallazgos; 2.º usa la variante superior de la escalada; 3.º `executor-pro` con tu análisis más preciso y la instrucción concreta. Tras 3 ciclos sin PASS: marca el plan ⏸ con informe detallado en su §8 y **detente** (los planes siguientes dependen en cadena): redacta el informe final explicando el punto exacto de falla.
+   - **FAIL** → **reparación** con hasta **3 ciclos** por plan: 1.º relanza al mismo ejecutor con los hallazgos; 2.º relanza con `executor-max`; 3.º `executor-max` de nuevo, con tu análisis más preciso, los hallazgos acumulados y la instrucción concreta. Tras 3 ciclos sin PASS: marca el plan ⏸ con informe detallado en su §8 y **detente** (los planes siguientes dependen en cadena): redacta el informe final explicando el punto exacto de falla.
    - **BLOQUEADO** → resuelve la duda con la política de decisiones, redacta la instrucción concreta y relanza al ejecutor (cuenta como ciclo de reparación).
    - Subagente que no arranca o termina sin reporte: reintenta una vez; si persiste, cuenta como fallo de reparación.
 7. Continúa con el siguiente plan (paso 1) sin pausas. Tu turno solo termina con el **informe final** (o con el bloqueo irreparable del paso 6).
@@ -82,7 +79,7 @@ Nunca preguntes nada al usuario durante la ejecución. Cada duda se resuelve as�
 | 01 Fundación · 02 Datos · 05 Home · 07 Resultados | `executor-high` |
 | 03 Lógica del intento · 04 Componentes base · 06 Quiz · 08 Calidad y despliegue | `executor-max` |
 
-Escalada de reparación: `executor-high` → `executor-max` → `executor-pro`.
+Escalada de reparación: `executor-high` → `executor-max`. No hay más ejecutores: el presupuesto de modelos es **DeepSeek V4.1 Flash** (`high`/`max`) y **Muse Spark 1.3** (orquestación y verificación).
 
 # Encargo al ejecutor (plantilla)
 
@@ -114,6 +111,7 @@ Veredicto (≤15 líneas): PASS o FAIL; si FAIL, hallazgos ordenados por severid
 - Tu única edición permitida es `docs/plans/**` (registros, estados, tabla de decisiones); si editas, commitea con `docs(plans): ...`.
 - El estado vive en el repo, no en tu memoria: si te interrumpen (reinicio, compactación), retoma leyendo `docs/plans/README.md`, los registros §8 y `git log`.
 - Instrucciones del usuario: si dejó alguna al lanzarte, obedécela por encima del loop por defecto (p. ej. detenerse tras cierto plan), pero sin volver a preguntarle.
+- **Deploy y dispositivos reales = manuales del usuario.** Ni tú ni los ejecutores ejecutan el deploy a Cloudflare Pages ni el pase final en dispositivos reales: el Plan 08 solo los **prepara y documenta** (T-8.7, T-8.5). Nunca intentes el deploy (ni por panel ni por CLI).
 - Nunca termines tu turno antes del informe final: no hay pausas intermedias.
 
 # Informe final (tu única salida al usuario)
@@ -121,6 +119,6 @@ Veredicto (≤15 líneas): PASS o FAIL; si FAIL, hallazgos ordenados por severid
 Tras cerrar el Plan 08 (o ante un bloqueo irreparable), entrega el informe final:
 1. Estado de los 8 planes (✅/⏸) con commits por plan y resultado del verificador.
 2. **Decisiones autónomas tomadas** (resumen, con referencia al §8 de cada plan).
-3. **Pendientes humanos** con pasos exactos: pruebas en dispositivos reales (T-8.5) y conexión a Cloudflare Pages (T-8.7), más cualquier otro ítem que los planes no hayan podido completar.
+3. **Pendientes humanos** con pasos exactos: **deploy manual en Cloudflare Pages** (T-8.7 dejó el runbook listo) y **pase en dispositivos reales** (T-8.5), más cualquier otro ítem que los planes no hayan podido completar.
 4. Presupuesto de rendimiento medido (T-8.4) y cobertura de la matriz global (criterios de éxito de `01 §1.7`).
 5. Qué conviene que revises primero.
