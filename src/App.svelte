@@ -1,6 +1,10 @@
 <script lang="ts">
   import type { Component } from 'svelte';
+  import GreetingHeader from './components/home/GreetingHeader.svelte';
   import { estado, type Pantalla } from './lib/state.svelte';
+
+  /** Hoja de nombre (`02 §RF-01.3`): la abre el saludo o el lápiz (T-5.2). */
+  let hojaNombreAbierta = $state(false);
 
   /**
    * Galería de componentes (Plan 04 · T-4.8): solo desarrollo y con `#dev`.
@@ -31,8 +35,8 @@
 {:else}
   <main class="mx-auto w-full max-w-[640px] px-5 md:px-6">
     {#if estado.pantalla === 'home'}
-      <h1 class="pt-5 text-2xl font-bold" data-screen-title tabindex="-1">Home</h1>
-      <p class="text-ink-2">Saludo y panel de configuración (T-5.2 a T-5.7).</p>
+      <GreetingHeader nombre={estado.nombre} onAbrir={() => (hojaNombreAbierta = true)} />
+      <p class="pt-4 text-ink-2">Saludo y panel de configuración (T-5.3 a T-5.7).</p>
     {:else if estado.pantalla === 'quiz'}
       <h1 class="pt-5 text-2xl font-bold" data-screen-title tabindex="-1">Quiz</h1>
       <p class="text-ink-2">Bloques del intento (Plan 06).</p>
