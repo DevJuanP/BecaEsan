@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatDuracion, formatoEntero, parsearEntero } from './format';
+import { formatDuracion, formatoConSigno, formatoEntero, parsearEntero } from './format';
 
 describe('formatDuracion (RF-16)', () => {
   it('0 ms → "0:00"', () => {
@@ -23,6 +23,26 @@ describe('formatoEntero (E-09)', () => {
   it('−2 → "−2" con menos tipográfico U+2212', () => {
     expect(formatoEntero(-2)).toBe('−2');
     expect(formatoEntero(-2).charCodeAt(0)).toBe(0x2212);
+  });
+});
+
+describe('formatoConSigno (RF-20.1, E-09)', () => {
+  it('positivos con signo + explícito', () => {
+    expect(formatoConSigno(5)).toBe('+5');
+    expect(formatoConSigno(999)).toBe('+999');
+  });
+
+  it('el cero no lleva signo', () => {
+    expect(formatoConSigno(0)).toBe('0');
+  });
+
+  it('negativos con menos tipográfico U+2212', () => {
+    expect(formatoConSigno(-2)).toBe('−2');
+    expect(formatoConSigno(-2).charCodeAt(0)).toBe(0x2212);
+  });
+
+  it('compone la escala visible «+5 · 0 · −2»', () => {
+    expect([5, 0, -2].map(formatoConSigno).join(' · ')).toBe('+5 · 0 · −2');
   });
 });
 

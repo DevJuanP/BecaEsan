@@ -1,4 +1,5 @@
 <script lang="ts">
+  import ScoreHero from './ScoreHero.svelte';
   import { estado } from '../../lib/state.svelte';
 
   /**
@@ -21,6 +22,14 @@
     {#if estado.nombre !== null}
       <p class="res__saludo">¡Buen trabajo, {estado.nombre}!</p>
     {/if}
+
+    <div class="res__heroe">
+      <ScoreHero
+        puntajeTotal={resultado.puntajeTotal}
+        escala={resultado.escala}
+        duracionMs={resultado.duracionMs}
+      />
+    </div>
   </main>
 {/if}
 
@@ -59,5 +68,10 @@
     line-height: 1.5;
     color: var(--color-ink-2);
     text-wrap: pretty;
+  }
+
+  /* Puntaje héroe: 32 px tras el bloque de título (`07 §7.10.3` #2) */
+  .res__heroe {
+    margin-top: 32px;
   }
 </style>

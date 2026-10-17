@@ -42,7 +42,7 @@ La pantalla de resultados completa: puntaje total héroe con la escala usada y e
   3. Aparición única: fade + `scale(0.98→1)` 260 ms; con `reduced-motion`: sin transformación.
 - **Criterios:** RF-20.1, RF-20.3, E-05, E-09; `07 §7.9.13`, `§7.7.3`.
 - **Verificación:** V0 + V2 (puntaje positivo, 0 y negativo; escala 0/0/0; tiempo < 1 h y ≥ 1 h).
-- **Estado:** [ ]
+- **Estado:** [x]
 
 ### T-7.3 — Tarjetas por área
 
@@ -126,3 +126,10 @@ _(append-only; las entradas de ejecución se añaden al final)_
 - **Reserva de scroll:** esta pantalla no tiene barra fija (`07 §7.10.3` no la lista), así que no usa `.app-reserve`; aplica la reserva final de 48 px + `env(safe-area-inset-bottom)` con padding lateral 20/24.
 - **V0:** `npm run check` → 0 errores/0 avisos; `npm run build` → 177 módulos (CSS 7.52 KB gzip, JS 49.67 KB gzip). `svelte-autofixer` sobre `ResultsScreen.svelte`: sin hallazgos.
 - **V2 (por DOM, viewport emulado 360×800 dpr 3, táctil):** flujo real «Home → nombre → config → quiz → resultados» con 2 casos: (a) con nombre → `<h1>` «Resultados», saludo «¡Buen trabajo, Juan!», foco en el `<h1>`, `document.title` «Simulador · Resultados»; (b) sin nombre → sin saludo. En ambos: `main.res` = 360 px, `scrollWidth` = `clientWidth` = 360 (sin scroll horizontal), consola limpia (solo los mensajes `[vite]` de desarrollo). Nota: el emulador de viewport de Chrome es la vía para 360 px (la ventana real no baja de ~500 px en Windows).
+
+### T-7.2 — Puntaje héroe, escala y tiempo
+
+- **Formato con signo explícito:** la escala de `07 §7.9.13`/`§7.4.3` («+5 · 0 · −2») necesita un signo `+` que `formatoEntero` no emite; se añade `formatoConSigno` a `src/lib/format.ts` (módulo puro ya existente, V1) con 4 pruebas nuevas en `format.test.ts` (positivos, cero sin signo, negativos con U+2212 y la composición de la escala). Sin dependencias nuevas.
+- **Animación única:** el héroe se anima con un `@keyframes` de CSS (fade + `scale(0.98→1)`, `var(--dur-4)` = 260 ms, `fill-mode: both`), no con transiciones de Svelte: el elemento se crea una sola vez por navegación a la pantalla, así que la animación no puede repetirse en re-render; con `prefers-reduced-motion: reduce` la regla queda en `animation: none` y el elemento se pinta en su estado natural (valor final).
+- **V0:** `npm run check` → 0 errores/0 avisos; `npm run build` → CSS 7.71 KB gzip, JS 49.93 KB gzip; `npm run test` → 110 pruebas en verde (4 nuevas); `svelte-autofixer` sobre `ScoreHero.svelte` y `ResultsScreen.svelte`: sin hallazgos.
+- **V2 (por DOM, viewport 360×800):** 5 casos medidos: (a) positivo (pc=5/pnr=+1/pi=−2, T=2, en blanco) → número «2», escala «Escala: +5 · +1 · −2»; (b) cero (pnr=0) → «0» y «Escala: +5 · 0 · −2»; (c) negativo (pnr=−3) → «−6» (U+2212) y «Escala: +5 · −3 · −2»; (d) escala 0/0/0 → «0» y «Escala: 0 · 0 · 0» (E-05); (e) tiempo ≥ 1 h (desfase de `Date.now` en la página) → «Tiempo 1:01:01» en formato `h:mm:ss`; el caso (a) muestra «Tiempo 0:00» (`m:ss`). Además: etiqueta «Puntaje total» 13 px/600/`ink-3`; número 46.8 px (=`clamp(2.75rem,13vw,3.5rem)` a 360 px)/800/`tabular-nums`; metadatos 13 px `ink-2` con `column-gap: 16px` y `flex-wrap: wrap`; icono de reloj 16 px `aria-hidden`; `getAnimations()` → una sola animación `heroe-aparece` de 260 ms en estado `finished`, y tras cancelarla el estado natural es `opacity: 1`/`transform: none` (camino `reduced-motion`); `scrollWidth` = `clientWidth` = 360; consola limpia.

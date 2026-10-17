@@ -27,6 +27,16 @@ export function formatoEntero(n: number): string {
   return entero < 0 ? `${MENOS}${Math.abs(entero)}` : String(entero);
 }
 
+/**
+ * Formatea un entero con **signo explícito** para la escala visible de
+ * resultados (`02 §RF-20.1`, `07 §7.9.13`, `§7.4.3`): «+5», «0», «−2».
+ * El cero nunca lleva signo (E-09).
+ */
+export function formatoConSigno(n: number): string {
+  const entero = Math.trunc(n);
+  return entero > 0 ? `+${entero}` : formatoEntero(entero);
+}
+
 /** Rango permitido de los puntajes configurables (`02 §RF-07`): −999…999. */
 export const LIMITE_ENTERO = 999;
 
