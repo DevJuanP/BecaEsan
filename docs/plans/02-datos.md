@@ -31,7 +31,7 @@ Construir `scripts/build-questions.mjs` (Node, **sin dependencias**) que extraig
 - **Pasos:** declarar `Area`, `Letra`, `Opcion`, `Pregunta` y `Tema` **exactamente** como `03 §3.2` (misma forma y nombres), con comentarios breves de los campos.
 - **Criterios:** `03 §3.2`.
 - **Verificación:** V0 (`npm run check`).
-- **Estado:** [ ]
+- **Estado:** [x]
 
 ### T-2.2 — Parser `scripts/build-questions.mjs`
 
