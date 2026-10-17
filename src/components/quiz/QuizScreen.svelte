@@ -84,6 +84,18 @@
   /** Visibilidad de la hoja de confirmación (`05 §5.5`). */
   let hojaConfirmacion = $state(false);
 
+  /**
+   * Aviso al salir a mitad del intento (`02 §RF-18`, RNF-09): mientras esta
+   * pantalla está montada, recargar o cerrar la pestaña dispara el diálogo
+   * nativo del navegador. El listener se retira al desmontar la pantalla (al
+   * pasar a resultados o volver a Home): solo está activo durante el quiz.
+   */
+  function alSalir(evento: BeforeUnloadEvent): void {
+    evento.preventDefault();
+    // Compatibilidad con navegadores que aún exigen `returnValue` no vacío.
+    evento.returnValue = '';
+  }
+
   /** Etiquetas cortas del detalle de la confirmación (`07 §7.11`). */
   const ETIQUETA_AREA: Record<Area, string> = { matematico: 'RM', verbal: 'RV' };
 
@@ -119,7 +131,22 @@
    *  `reduced-motion`, solo fade de 150 ms (`07 §7.7.4`). */
   const duracionBloque = $derived(prefersReducedMotion.current ? 150 : 260);
   const desplazamientoBloque = $derived(prefersReducedMotion.current ? 0 : 24);
+
+  /**
+   * Salida del bloque: `fly` hacia el lado opuesto y, desde el primer frame, el
+   * bloque que se va deja de recibir toques (durante el cruce convive con el
+   * entrante en la misma celda del escenario).
+   */
+  function salirBloque(
+    nodo: Element,
+    params: { x: number; duration: number; easing: (t: number) => number },
+  ) {
+    (nodo as HTMLElement).style.pointerEvents = 'none';
+    return fly(nodo, params);
+  }
 </script>
+
+<svelte:window onbeforeunload={alSalir} />
 
 {#if intento !== null && bloque !== null}
   <!-- El acento contextual del quiz sigue al bloque actual (`02 §RN-03`,
@@ -149,7 +176,7 @@
               duration: duracionBloque,
               easing: cubicInOut,
             }}
-            out:fly={{
+            out:salirBloque={{
               x: -desplazamientoBloque * direccion,
               duration: duracionBloque,
               easing: cubicInOut,
