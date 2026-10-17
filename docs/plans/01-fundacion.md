@@ -35,7 +35,7 @@ Dejar el repositorio y el proyecto listos para construir: control de versiones, 
   4. Primer commit (p. ej. `chore: inicializa repositorio`).
 - **Criterios:** `06 §6.3` (estructura raíz).
 - **Verificación:** `git status` limpio tras el commit; `git log --oneline` con ≥ 1 commit.
-- **Estado:** [ ]
+- **Estado:** [x]
 
 ### T-1.2 — Andamiaje Vite + Svelte 5 + TypeScript
 
@@ -47,7 +47,7 @@ Dejar el repositorio y el proyecto listos para construir: control de versiones, 
   3. Scripts base: `dev`, `build`, `preview`, `check` (`svelte-check`); `test` se añade en T-1.6.
 - **Criterios:** `06 §6.1` (Svelte 5 + Vite + TS), `06 §6.3` (estructura y comandos).
 - **Verificación:** V0: `npm run check` y `npm run build` en verde; `npm run dev` levanta.
-- **Estado:** [ ]
+- **Estado:** [x]
 
 ### T-1.3 — Tailwind CSS 4
 
@@ -59,7 +59,7 @@ Dejar el repositorio y el proyecto listos para construir: control de versiones, 
   3. Eliminar CSS del demo.
 - **Criterios:** `06 §6.1` (Tailwind 4 + CSS propio puntual).
 - **Verificación:** V0 + comprobación de una utilidad cualquiera en `npm run dev` (el CSS se genera).
-- **Estado:** [ ]
+- **Estado:** [x]
 
 ### T-1.4 — Tokens de diseño
 
