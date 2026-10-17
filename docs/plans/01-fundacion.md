@@ -71,7 +71,7 @@ Dejar el repositorio y el proyecto listos para construir: control de versiones, 
   3. Foco visible global (`07 §7.12`): `:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }`.
 - **Criterios:** `07 §7.3.2`, `§7.4`, `§7.5.2`, `§7.7.2`, `§7.12`; `06 §6.2` (0 fuentes web).
 - **Verificación:** V0; las utilidades `bg-surface`, `text-ink-2` y `rounded-card` generan CSS; el CSS final contiene `#0063BD`.
-- **Estado:** [ ]
+- **Estado:** [x]
 
 ### T-1.5 — Shell de la app
 
