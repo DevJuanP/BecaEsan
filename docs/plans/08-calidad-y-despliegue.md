@@ -1,6 +1,6 @@
 # Plan 08 — Calidad y despliegue
 
-> Estado: ⬜ Pendiente · Depende de: Planes 01–07 · Cubre: `01 §1.7` (criterios de éxito), RNF-01…RNF-09 (verificación final), E-01…E-10 (punta a punta), `06 §6.2` (presupuesto), `§6.6` (runbook de deploy), `07 §7.12`, `§7.13`, `§7.14`, `§7.15` · Estimación: M
+> Estado: 🔄 En curso · Depende de: Planes 01–07 · Cubre: `01 §1.7` (criterios de éxito), RNF-01…RNF-09 (verificación final), E-01…E-10 (punta a punta), `06 §6.2` (presupuesto), `§6.6` (runbook de deploy), `07 §7.12`, `§7.13`, `§7.14`, `§7.15` · Estimación: M
 
 ## 1. Objetivo
 
@@ -18,9 +18,9 @@ Cerrar la v1: auditar accesibilidad y calidad visual contra las especificaciones
 
 ## 4. Precondiciones
 
-- Planes 01–07 ✅ y sus verificaciones finales en verde.
-- Cuenta de GitHub del usuario disponible (T-8.6). La cuenta de Cloudflare y los dispositivos reales solo se necesitan para los pendientes manuales del usuario (T-8.7 y T-8.5), no para ejecutar el plan.
-- Decisiones de `07 §7.16 (#1)–(#3)` resueltas o explícitamente pospuestas (anotar en el registro).
+- Planes 01–07 ✅ (cerrados entre el 2026-10-16 y el 2026-10-17) y sus verificaciones finales en verde.
+- Cuenta de GitHub del usuario disponible (T-8.6): el repositorio **ya existe** (`origin` = `https://github.com/DevJuanP/BecaEsan.git`) y los push los gestiona el orquestador; T-8.6 se limita a verificar el remoto y completar el README raíz (detalle en §8). La cuenta de Cloudflare y los dispositivos reales solo se necesitan para los pendientes manuales del usuario (T-8.7 y T-8.5), no para ejecutar el plan.
+- Decisiones de `07 §7.16 (#1)–(#3)`: **resueltas** el 2026-10-16/17 (tabla de `docs/plans/README.md`): (#1) rige `07 §7.8` + Anexo B; (#2) autofocus del nombre solo con `(pointer: fine)`; (#3) se mantiene «Home». Sin efecto pendiente sobre este plan.
 
 ## 5. Tareas
 
@@ -153,3 +153,12 @@ Cerrar la v1: auditar accesibilidad y calidad visual contra las especificaciones
 ## 8. Registro de desvíos y decisiones
 
 - **2026-10-16 · Decisión del usuario (pre-ejecución, `00-contrato §9`):** el deploy a Cloudflare Pages es **manual del usuario** y queda fuera de la ejecución de la orquestación; T-8.7 pasa a «preparación del deploy manual» y T-8.5 explicita el reparto emulación móvil (orquestación) vs. pase manual (usuario). Ajustados: §1, §2, §4, T-8.5, T-8.6, T-8.7, §6, §7. Registrado también en el changelog de `docs/plans/README.md`.
+
+### Revisión de vigencia (2026-10-17, previa a la ejecución)
+
+- **Confrontación con las especificaciones** (`01 §1.7`, `§1.8`; `06 §6.2`, `§6.6`, `§6.7`; `07 §7.12`, `§7.13`, `§7.14`, `§7.15`, `§7.16`; `02 §M6` (E-01…E-10); `03 §3.6`; `00-contrato §5`, `§6`): las secciones citadas por la matriz siguen correspondiendo a T-8.1…T-8.8 y no hay requisitos derogados. Todo lo que el plan necesita ya existe en el repo (app completa de los Planes 01–07, `dist/` reproducible desde `npm run build`, repositorio GitHub con historial por tarea). Vigencia confirmada **sin cambios de tareas ni de matriz**.
+- **Precondiciones de §4 verificadas:** Planes 01–07 ✅ en `docs/plans/README.md`; `npm run check` → 0 errores/0 avisos; `npm run build` → 183 módulos (CSS 8.11 KB gzip, JS 50.76 KB gzip); `npm run test` → 113 pruebas en verde.
+- **Decisiones `07 §7.16` (#1)–(#3):** resueltas (tabla de `README.md`): (#1) rige `07 §7.8` + Anexo B; (#2) autofocus del nombre solo con `(pointer: fine)`; (#3) «Home» se mantiene. Ninguna condiciona tareas de este plan.
+- **T-8.6 (ajuste de vigencia, sin cambio de tareas):** el repositorio de GitHub **ya existe** y `origin` ya está configurado; el push lo gestiona el orquestador. El paso 1 («crear el repositorio») y el push del paso 2 ya están satisfechos; la tarea se limita a verificar `git remote -v`/accesibilidad y completar el README raíz (paso 3).
+- **T-8.4 y T-8.5 (método de verificación, restricción de entorno):** el ejecutor no puede recibir imágenes, así que la medición de UI/E2E se hace con `chrome-devtools` **por salidas de texto** (DOM, `evaluate`, consola, red) y no con capturas; el presupuesto se mide sobre los tamaños de build y las métricas de red/DOM de `preview` (no hay Lighthouse instalado ni dependencias fuera del stack de `06 §6.1`), documentando el método. El juicio puramente visual (contraste renderizado con ojo humano, «feel» del gesto) y el pase en dispositivos reales quedan como pendientes humanos documentados.
+- **Informe de cierre:** T-8.7.4 exige «registrar en el informe de cierre el pendiente manual»; no existe un archivo de informe previo, así que el informe vive en el §8 de este plan (secciones «Pase manual en dispositivos reales» y «Deploy manual») más el README raíz.
