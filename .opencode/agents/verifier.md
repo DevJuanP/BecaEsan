@@ -1,7 +1,7 @@
 ---
 description: Auditoría independiente del cierre de un plan de docs/plans (solo lectura; veredicto PASS/FAIL con evidencia). Uso exclusivo del orchestrator
 mode: subagent
-model: opencode-go/muse-spark-1.3-contributor#xhigh
+model: opencode-go/deepseek-v4.1-flash#max
 permissions:
   - action: "*"
     resource: "*"

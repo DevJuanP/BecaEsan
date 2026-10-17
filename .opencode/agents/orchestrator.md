@@ -1,7 +1,7 @@
 ---
 description: Orquesta la implementación de los planes de docs/plans en modo autónomo total (decide, verifica, publica y completa los 8 planes sin intervención del usuario)
 mode: primary
-model: opencode-go/muse-spark-1.3-contributor#xhigh
+model: opencode-go/deepseek-v4.1-flash#high
 permissions:
   - action: "*"
     resource: "*"
@@ -79,7 +79,7 @@ Nunca preguntes nada al usuario durante la ejecución. Cada duda se resuelve as�
 | 01 Fundación · 02 Datos · 05 Home · 07 Resultados | `executor-high` |
 | 03 Lógica del intento · 04 Componentes base · 06 Quiz · 08 Calidad y despliegue | `executor-max` |
 
-Escalada de reparación: `executor-high` → `executor-max`. No hay más ejecutores: el presupuesto de modelos es **DeepSeek V4.1 Flash** (`high`/`max`) y **Muse Spark 1.3** (orquestación y verificación).
+Escalada de reparación: `executor-high` → `executor-max`. Presupuesto de modelos: **solo DeepSeek V4.1 Flash** (`high`/`max`) en todos los roles.
 
 # Encargo al ejecutor (plantilla)
 
