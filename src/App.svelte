@@ -4,6 +4,7 @@
   import GreetingHeader from './components/home/GreetingHeader.svelte';
   import NameModal from './components/home/NameModal.svelte';
   import QuizScreen from './components/quiz/QuizScreen.svelte';
+  import ResultsScreen from './components/results/ResultsScreen.svelte';
   import bancoJson from './data/questions.json';
   import { crearIntento } from './lib/generator';
   import { estado } from './lib/state.svelte';
@@ -65,19 +66,6 @@
   <!-- El quiz trae su propio `<main>`: la cabecera sticky (T-6.2) es full-bleed -->
   <QuizScreen />
 {:else}
-  <main class="app-reserve mx-auto w-full max-w-[640px] px-5 min-[430px]:px-6">
-    <h1 class="pt-5 text-2xl font-bold" data-screen-title tabindex="-1">Resultados</h1>
-    <p class="text-ink-2">Puntaje y porcentajes (Plan 07).</p>
-  </main>
-
-  <!--
-    Navegación temporal del placeholder de resultados: la sustituye el botón
-    «Home» de la pantalla de resultados (RF-21, Plan 07). El quiz ya no la usa:
-    su salida real es «Ver resultados» (RF-17).
-  -->
-  <nav aria-label="Navegación temporal" class="mx-auto flex w-full max-w-[640px] gap-2 px-5 min-[430px]:px-6">
-    <button type="button" class="rounded-control border border-line-strong px-4 py-2" onclick={() => estado.irA('home')}>
-      Home
-    </button>
-  </nav>
+  <!-- Los resultados traen su propio `<main>` (`07 §7.10.3`, T-7.1) -->
+  <ResultsScreen />
 {/if}

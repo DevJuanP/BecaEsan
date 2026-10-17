@@ -30,7 +30,7 @@ La pantalla de resultados completa: puntaje total héroe con la escala usada y e
 - **Pasos:** recibir `resultado` e `intento` del estado; título «Resultados» (`title-2`) y saludo «¡Buen trabajo, {nombre}!» solo si existe nombre; orden vertical de `07 §7.10.3`.
 - **Criterios:** RF-19, RF-20.5; `05 §5.6`.
 - **Verificación:** V0 + V2 (con y sin nombre).
-- **Estado:** [ ]
+- **Estado:** [x]
 
 ### T-7.2 — Puntaje héroe, escala y tiempo
 
@@ -119,3 +119,10 @@ _(append-only; las entradas de ejecución se añaden al final)_
 - **`App.svelte` (pegamento):** el plan lista los componentes a crear; el montaje obliga a sustituir en `App.svelte` el placeholder de resultados (y su navegación temporal) por `<ResultsScreen />`. Cambio de pegamento, sin alcance nuevo; se registra en la entrada de T-7.1.
 - **Convención de identificadores:** el plan cita el contrato §10 («identificadores de código en inglés»), pero los Planes 01–06 consolidaron identificadores en español (`estado.pantalla`, `irA`, `calcularResultado`, `aplicarNombre`…). Se mantiene la convención existente del repo por consistencia (cambio mínimo, reversible).
 - **Verificación V2 de este plan (nota de entorno):** el ejecutor de este turno no puede recibir imágenes; toda la V2 se hace con `chrome-devtools` **por salidas de texto** (DOM, `evaluate`, `snapshot`, consola): dimensiones, `scrollWidth` vs `clientWidth` a 360 px, atributos ARIA, valores y foco. El juicio puramente visual queda documentado como pendiente humano en el §7 si no es verificable por DOM.
+
+### T-7.1 — Pantalla y datos
+
+- **`App.svelte` (pegamento):** se sustituye el placeholder de resultados y su `<nav>` temporal por `<ResultsScreen />` (el componente trae su propio `<main>`). La pantalla se lee del estado compartido (`estado.resultado`, `estado.nombre`), como `QuizScreen`; no recibe props.
+- **Reserva de scroll:** esta pantalla no tiene barra fija (`07 §7.10.3` no la lista), así que no usa `.app-reserve`; aplica la reserva final de 48 px + `env(safe-area-inset-bottom)` con padding lateral 20/24.
+- **V0:** `npm run check` → 0 errores/0 avisos; `npm run build` → 177 módulos (CSS 7.52 KB gzip, JS 49.67 KB gzip). `svelte-autofixer` sobre `ResultsScreen.svelte`: sin hallazgos.
+- **V2 (por DOM, viewport emulado 360×800 dpr 3, táctil):** flujo real «Home → nombre → config → quiz → resultados» con 2 casos: (a) con nombre → `<h1>` «Resultados», saludo «¡Buen trabajo, Juan!», foco en el `<h1>`, `document.title` «Simulador · Resultados»; (b) sin nombre → sin saludo. En ambos: `main.res` = 360 px, `scrollWidth` = `clientWidth` = 360 (sin scroll horizontal), consola limpia (solo los mensajes `[vite]` de desarrollo). Nota: el emulador de viewport de Chrome es la vía para 360 px (la ventana real no baja de ~500 px en Windows).
