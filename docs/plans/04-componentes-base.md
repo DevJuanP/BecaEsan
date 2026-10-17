@@ -1,6 +1,6 @@
 # Plan 04 — Componentes base
 
-> Estado: ⬜ Pendiente · Depende de: Plan 01 (solo requiere el Plan 01; se ejecuta en su turno) · Cubre: `07 §7.6`–`§7.9` (componentes), `§7.18` (Anexo B), RF-04/05/06 (el control), RF-14 (fila de alternativa), RF-17 (la hoja, sin lógica), `07 §7.5.4`, `§7.7.3`, `§7.12` · Estimación: L
+> Estado: 🔄 En curso · Depende de: Plan 01 (solo requiere el Plan 01; se ejecuta en su turno) · Cubre: `07 §7.6`–`§7.9` (componentes), `§7.18` (Anexo B), RF-04/05/06 (el control), RF-14 (fila de alternativa), RF-17 (la hoja, sin lógica), `07 §7.5.4`, `§7.7.3`, `§7.12` · Estimación: L
 
 ## 1. Objetivo
 
@@ -143,4 +143,16 @@ Construir el catálogo de componentes reutilizables fiel al sistema visual de `0
 
 ## 8. Registro de desvíos y decisiones
 
-_(vacío — se completa durante la ejecución)_
+_(append-only; las entradas de ejecución se añaden al final)_
+
+### Revisión de vigencia (2026-10-16, previa a la ejecución)
+
+- **Decisión pendiente `07 §7.16 (#1)` — captura/CSS del CodePen del slider: resuelta por el orquestador.** No existe captura ni CSS en el repo; la capa visual del slider (T-4.4) se rige por `07 §7.8` + `§7.18` (Anexo B) como especificación vinculante. No hay cambios de tareas ni de matriz; la fila 1 de la tabla de decisiones de `docs/plans/README.md` ya refleja la resolución (commit `f06863f`).
+- **`07 §7.9.4` enumera cuatro variantes de botón (primario, secundario, fantasma e **icono**); el encabezado de T-4.1 lista tres.** La variante icono (44×44, icono 20, hover `surface-2`) la consumen T-4.2/T-4.6/T-4.7 (X de cierre, lápiz) y está en la especificación: se implementa la tabla completa de `07 §7.9.4`. No es requisito nuevo ni cambio de alcance.
+- **`07 §7.6` exige diez iconos en el catálogo** (pencil, clock, house, chevron-left, arrow-right, check, x, minus, plus, text-align-left) **copiados en línea como SVG**. Se crea `src/components/ui/Icon.svelte` como pieza compartida de `src/components/ui/*` (alcance del plan) para no duplicar los SVG entre componentes; siempre `aria-hidden` y `currentColor`, con `name` tipado.
+- **Criterios sin cambios**: `07 §7.5`–`§7.9`, `§7.12`–`§7.14`, `§7.18`, `04` y `06 §6.1`–`§6.2` se confrontaron contra las tareas y la matriz; RF-04/05/06, RF-07, RF-14, RF-17, RF-01.2, RNF-02 y RNF-06 siguen correspondiendo a T-4.1…T-4.8 como declara la matriz.
+
+### Decisiones de ejecución
+
+_(se añaden al completar cada tarea)_
+
