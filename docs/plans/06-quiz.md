@@ -1,6 +1,6 @@
 # Plan 06 — Quiz
 
-> Estado: ⬜ Pendiente · Depende de: Planes 03, 04, 05 · Cubre: RF-12…RF-18, RN-03 (cambio visual de área), RN-06, RNF-01, RNF-02, RNF-05, RNF-06, RNF-09, E-01, E-02, E-03, E-06, E-07, `05 §5.4`–`§5.5`, `07 §7.9.8`–`§7.9.10`, `§7.10.2` · Estimación: L
+> Estado: 🔄 En curso · Depende de: Planes 03, 04, 05 · Cubre: RF-12…RF-18, RN-03 (cambio visual de área), RN-06, RNF-01, RNF-02, RNF-05, RNF-06, RNF-09, E-01, E-02, E-03, E-06, E-07, `05 §5.4`–`§5.5`, `07 §7.9.8`–`§7.9.10`, `§7.10.2` · Estimación: L
 
 ## 1. Objetivo
 
@@ -141,4 +141,13 @@ La pantalla de quiz completa: bloques por temática con sus preguntas y alternat
 
 ## 8. Registro de desvíos y decisiones
 
-_(vacío — se completa durante la ejecución)_
+_(append-only; las entradas de ejecución se añaden al final)_
+
+### Revisión de vigencia (2026-10-17, previa a la ejecución)
+
+- **Confrontación con las especificaciones** (`02 §RF-12`–`§RF-18`, `§RN-03`, `§RN-06`, `§M6` (E-01, E-02, E-03, E-06, E-07); `03 §3.3` (Intento/BloqueIntento); `04 §4.5`–`§4.6` (flujo del quiz y del cálculo); `05 §5.4`–`§5.5`, `§5.7`; `07 §7.7.3`, `§7.9.8`–`§7.9.10`, `§7.10.2`, `§7.11`, `§7.12`, `§7.14`): los RF/RN/E citados por la matriz siguen correspondiendo a T-6.1…T-6.8 y no hay requisitos derogados. Todo lo que necesitan las tareas ya existe en el repo (`crearIntento`/`calcularResultado`, el modelo `Intento` con `indiceActual`/`terminadoEn`, `formatDuracion`, y el catálogo `src/components/ui/*`: `Button`, `Chip`, `ProgressSegments`, `OptionRow`, `Sheet`, `BottomBar`, `Icon`). Vigencia confirmada **sin cambios de tareas ni de matriz**.
+- **Precondiciones de §4 verificadas:** Planes 03, 04 y 05 ✅ en `docs/plans/README.md`; `npm run check` → 0 errores/0 avisos, `npm run build` → 157 módulos, `npm run test` → 106 pruebas en verde.
+- **Decisiones pendientes de `07 §7.16`:** #1 y #2 ya resueltas (afectaron a los Planes 04 y 05); #3 («Home» → «Inicio») afecta solo a T-7.4 (Plan 07). Ninguna condiciona este plan.
+- **Tensiones detectadas entre specs (se resolverán en la tarea correspondiente, con medición real y registro):** (a) `07 §7.9.8` describe la fila de cabecera en una sola línea, mientras el wireframe de `05 §5.4` muestra el cronómetro en una segunda línea; con los textos completos de área del deck (`07 §7.11`) la fila no cabe a 360 px. Se implementará la fila de `07 §7.9.8` con `flex-wrap` y se medirá a 360/390/430 px (T-6.2). (b) `07 §7.9.10` pide el panel de texto con `<details>/<summary>` **y** un toggle con `aria-expanded`: el `<summary>` nativo ya expone el estado expandido, así que el encabezado y el toggle serán el propio `<summary>` (T-6.3). (c) `05 §5.1` pide 1 título por pantalla y `07 §7.12` (11) foco al `<h1>` al navegar; el quiz monta un bloque a la vez, así que su `<h1>` es el título del tema del bloque actual y recibe el foco al entrar y al cambiar de bloque (T-6.1/T-6.4). (d) `07 §7.7.3` fija `--ease-inout` (cubic-bezier(0.65, 0, 0.35, 1)) para la transición de bloque: las transiciones de Svelte se ejecutan con la Web Animations API (fuera del alcance de las variables CSS), así que se usa `cubicInOut` de `svelte/easing` (misma familia, diferencia imperceptible) (T-6.4).
+- **`App.svelte`:** el plan lista los componentes a crear; el ensamblaje obliga a modificar `App.svelte` (sustituir el placeholder de quiz por `<QuizScreen />`, retirar de la navegación temporal la pantalla de quiz y conservarla solo en el placeholder de resultados hasta el Plan 07). Cambio de pegamento, sin alcance nuevo; se registra en la entrada de T-6.1/T-6.2.
+- **Verificación V2 de este plan (nota de entorno):** el ejecutor de este turno no puede recibir imágenes; toda la V2 se hará con `chrome-devtools` **por salidas de texto** (DOM, `evaluate`, `snapshot`, consola) midiendo geometría, atributos ARIA, foco y colores computados. El juicio puramente visual (p. ej. «se ve bien») queda documentado como pendiente humano en el §7 del plan si no es verificable por DOM.
