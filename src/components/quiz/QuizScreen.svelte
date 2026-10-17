@@ -2,6 +2,7 @@
   import { estado } from '../../lib/state.svelte';
   import QuestionCard from './QuestionCard.svelte';
   import QuizHeader from './QuizHeader.svelte';
+  import SharedText from './SharedText.svelte';
   import type { Letra } from '../../lib/types';
 
   /**
@@ -40,6 +41,10 @@
     <!-- Título del tema: es el `<h1>` de la pantalla y recibe el foco al
          navegar (T-6.4) y al entrar desde Home (`07 §7.12` (11)). -->
     <h1 class="quiz__tema" data-screen-title tabindex="-1">{bloque.titulo}</h1>
+
+    {#if bloque.textoComun !== null}
+      <SharedText texto={bloque.textoComun} />
+    {/if}
 
     <div class="quiz__bloque">
       {#each bloque.preguntas as pregunta (pregunta.id)}
