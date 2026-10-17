@@ -26,3 +26,23 @@ export function formatoEntero(n: number): string {
   const entero = Math.trunc(n);
   return entero < 0 ? `${MENOS}${Math.abs(entero)}` : String(entero);
 }
+
+/** Rango permitido de los puntajes configurables (`02 §RF-07`): −999…999. */
+export const LIMITE_ENTERO = 999;
+
+/**
+ * Interpreta el texto de un campo de puntaje (`02 §RF-07`, `07 §7.9.3`).
+ * Acepta un signo inicial (`-` ASCII o el menos tipográfico `−`, U+2212) y
+ * dígitos, con espacios externos recortados; rechaza vacío, no numérico
+ * (decimales, notación científica, comas, signos repetidos) y valores fuera
+ * de −999…999. Devuelve `null` cuando el texto no es un entero válido.
+ */
+export function parsearEntero(texto: string): number | null {
+  const coincidencia = /^([-−]?)(\d+)$/.exec(texto.trim());
+  if (!coincidencia) return null;
+  const magnitud = Number(coincidencia[2]);
+  if (magnitud > LIMITE_ENTERO) return null;
+  const valor = coincidencia[1] ? -magnitud : magnitud;
+  // Normaliza `-0` a `0` (E-09: el cero no lleva signo).
+  return valor === 0 ? 0 : valor;
+}

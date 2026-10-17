@@ -9,6 +9,13 @@
   import BottomBar from '../ui/BottomBar.svelte';
   import Chip from '../ui/Chip.svelte';
   import ProgressSegments from '../ui/ProgressSegments.svelte';
+  import Stepper from '../ui/Stepper.svelte';
+
+  /** Valores de demostración de los steppers (defaults de `02 §RF-07`). */
+  let correcta = $state(5);
+  let noRespondida = $state(0);
+  let incorrecta = $state(-2);
+  let puntajeEnError = $state(NaN);
 </script>
 
 <main class="gal">
@@ -154,6 +161,40 @@
     </div>
   </section>
 
+  <section class="gal__sec" id="stepper">
+    <h2 class="gal__h2">Stepper de puntajes</h2>
+    <p class="gal__src">
+      `07 §7.9.3` · etiqueta + [−] [valor] [+] (44×44, `aria-label` completos); al enfocar se selecciona
+      el texto; `inputmode="numeric"`; error inline de `07 §7.9.14` (con error, «Iniciar quiz» queda
+      deshabilitado: Plan 05).
+    </p>
+
+    <div class="gal__rows">
+      <Stepper
+        label="Correcta"
+        ariaLabel="Puntos por respuesta correcta"
+        bind:value={correcta}
+      />
+      <Stepper
+        label="No respondida"
+        ariaLabel="Puntos por pregunta no respondida"
+        bind:value={noRespondida}
+      />
+      <Stepper
+        label="Incorrecta"
+        ariaLabel="Puntos por respuesta incorrecta"
+        bind:value={incorrecta}
+      />
+      <Stepper
+        label="Con error"
+        ariaLabel="Puntos por respuesta incorrecta"
+        bind:value={puntajeEnError}
+        invalid
+        errorMessage="Escribe un número entre −999 y 999."
+      />
+    </div>
+  </section>
+
   <div class="gal__spacer" aria-hidden="true"></div>
 </main>
 
@@ -235,6 +276,13 @@
   .gal__items--stack {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .gal__rows {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 20px;
   }
 
   /* Marco que aísla una barra `position: fixed` (el `transform` la contiene) */
