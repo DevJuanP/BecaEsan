@@ -11,6 +11,7 @@
   import OptionRow from '../ui/OptionRow.svelte';
   import ProgressSegments from '../ui/ProgressSegments.svelte';
   import Slider from '../ui/Slider.svelte';
+  import Sheet from '../ui/Sheet.svelte';
   import Stepper from '../ui/Stepper.svelte';
 
   /** Valores de demostración de los steppers (defaults de `02 §RF-07`). */
@@ -34,6 +35,10 @@
   ];
   let respuesta = $state('b');
   let respuestaLarga = $state<string | null>(null);
+
+  /** Hoja modal en demo (T-4.6). */
+  let hojaDemo = $state(false);
+  let nombreDemo = $state('Juan');
 </script>
 
 <main class="gal">
@@ -304,6 +309,37 @@
     </fieldset>
   </section>
 
+  <section class="gal__sec" id="hoja">
+    <h2 class="gal__h2">Hoja modal</h2>
+    <p class="gal__src">
+      `07 §7.9.11` · `&lt;dialog&gt;` con `showModal()` (foco atrapado, `Escape` y retorno del foco), scrim,
+      scroll de fondo bloqueado, drag-to-dismiss desde el asa (umbral 96 px o velocidad &gt; 0.5 px/ms) y
+      animaciones de `07 §7.7.3`. Móvil: *bottom-sheet* radio 20; ≥768 px: diálogo centrado de 400 px.
+    </p>
+
+    <div class="gal__row">
+      <span class="gal__tag">Demo (hoja de nombre como la usará el Plan 05)</span>
+      <Button onclick={() => (hojaDemo = true)}>Abrir hoja</Button>
+    </div>
+  </section>
+
+  <Sheet bind:open={hojaDemo} title="¿Cómo te llamas?" showClose>
+    <label class="gal__field-label" for="gal-nombre">Tu nombre</label>
+    <input
+      id="gal-nombre"
+      class="gal__input"
+      type="text"
+      maxlength="30"
+      bind:value={nombreDemo}
+      autocomplete="given-name"
+    />
+    <p class="gal__help">Máx. 30 caracteres</p>
+    {#snippet actions()}
+      <Button variant="secundario" onclick={() => (hojaDemo = false)}>Cancelar</Button>
+      <Button onclick={() => (hojaDemo = false)}>Guardar</Button>
+    {/snippet}
+  </Sheet>
+
   <div class="gal__spacer" aria-hidden="true"></div>
 </main>
 
@@ -412,6 +448,33 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+  }
+
+  .gal__field-label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--color-ink-2);
+  }
+
+  .gal__input {
+    width: 100%;
+    height: 48px;
+    padding: 0 12px;
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-control);
+    background: var(--color-surface);
+    color: var(--color-ink);
+    font: inherit;
+    font-size: 1rem;
+  }
+
+  .gal__help {
+    margin-top: 6px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--color-ink-3);
   }
 
   /* Marco que aísla una barra `position: fixed` (el `transform` la contiene) */
