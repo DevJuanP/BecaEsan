@@ -46,7 +46,7 @@ Implementar el **dominio puro** de la app —sin UI— y probarlo a fondo: creac
   7. `rng: () => number` inyectable (por defecto `Math.random`) para pruebas deterministas.
 - **Criterios:** RN-01…RN-06; `03 §3.3`.
 - **Verificación:** V1 (casos en T-3.6) + V0.
-- **Estado:** [ ]
+- **Estado:** [x]
 
 ### T-3.3 — `scoring.ts` — clasificación, puntaje y porcentajes
 
@@ -128,3 +128,11 @@ Implementar el **dominio puro** de la app —sin UI— y probarlo a fondo: creac
 ### Revisión de vigencia (previa a la ejecución)
 
 Contraste del plan contra `docs/especificaciones/` (02, 03, 06 y 07 §7.11/§7.16): sin cambios que afecten al plan. Las tres decisiones abiertas de `07 §7.16` (CSS del slider, autofocus en móvil y etiqueta «Home») pertenecen a los Planes 04, 05 y 07. Precondiciones verificadas en verde antes de empezar: `npm run check` (0 errores), `npm run test` (27 pruebas) y `npm run build`; Planes 01 y 02 ✅ en `docs/plans/README.md`.
+
+### T-3.2 — interpretación de la validación y del renumerado
+
+- **Validación de entrada.** La tarea pide validar «k de cada área dentro de rango (1–17 / 1–11) y q ∈ 1–5». Se validan **ambas** áreas siempre (aunque el modo excluya una; la UI conserva sus valores ocultos, `02 §RF-03`) y, además, que k no supere los temas disponibles del **banco** en las áreas incluidas (defensa de borde del material; mensaje explícito). q se valida también como entero.
+- **Renumerado (RN-04).** La copia de cada pregunta dentro de `BloqueIntento.preguntas` lleva `numero` = posición a mostrar (1..q), como pide la regla («se renumera 1..q en el bloque»); `id` conserva el identificador estable del banco (`{temaId}#q{n}`) y es la clave de `respuestas`.
+- **Orden con q < 5.** El subconjunto aleatorio queda en el orden resultante de la mezcla Fisher–Yates (no se reordena al orden del archivo); con q = 5 se mantiene el orden 1→5 del material, como manda RN-04.
+- **`id` del intento.** `03 §3.3` sugiere «p. ej. timestamp»: se usa `String(iniciadoEn)` (no se persiste en v1).
+- **Snapshot (RN-01).** Copias profundas de la configuración (incluido `puntos`), de los bloques y de cada pregunta/opción: mutar después la configuración o el banco no altera el intento; `respuestas` arranca con `null` por `pregunta.id`.
