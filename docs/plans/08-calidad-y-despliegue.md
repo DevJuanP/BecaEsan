@@ -71,7 +71,7 @@ Cerrar la v1: auditar accesibilidad y calidad visual contra las especificaciones
   3. Si se excede cualquier métrica: optimizar (p. ej. revisar imports, dividir datos si hiciera falta) y volver a medir. Registrar los números finales.
 - **Criterios:** `06 §6.2`; RNF-05.
 - **Verificación:** números registrados y dentro de presupuesto.
-- **Estado:** [ ]
+- **Estado:** [x]
 
 ### T-8.5 — Prueba E-01…E-10 de punta a punta (emulación móvil + pase manual documentado)
 
@@ -198,3 +198,20 @@ Cerrar la v1: auditar accesibilidad y calidad visual contra las especificaciones
 - **`DESIGN.md` + `.impeccable/design.json` (cierre del ciclo de `07 §7.15`).** Los Planes 04–07 difirieron a este plan «el `impeccable` de cierre y el `DESIGN.md` de la raíz»; `07 §7.15` pide generarlo **desde el build real** al terminar la implementación. Se ejecuta el flujo `document` en modo scan: tokens reales de `app.css`, componentes reales del catálogo y la doctrina ya congelada de `07` (concepto «instrumento de medición», paleta, escala, reglas con nombre). El frontmatter YAML lleva los tokens normativos (27 colores con slug descriptivo, 9 roles tipográficos, 5 radios, 11 pasos de espacio y 10 componentes) y el cuerpo las ocho secciones canónicas del formato. El sidecar lleva lo que el esquema no admite (rampas tonales, sombras, movimiento, breakpoints, HTML/CSS de 10 componentes). **Decisión de idioma:** se conservan los encabezados canónicos en inglés que exige el formato DESIGN.md (el parseo de herramientas depende de ellos) y el contenido va en español, como el resto de la documentación (`00-contrato §10`). No se añaden requisitos: el documento describe lo construido.
 - **Sin cambios descartados:** el resto de la pasada no encontró defectos (jerarquía, ritmo 4 px, radios, sombras, iconos, estados, copy y movimiento ya conformes a `07`); no se añadió ni una animación nueva (regla del propio `polish`: no animar para que el pulido se note).
 - **V0:** `npm run check` → 0 errores/0 avisos; `npm run build` → CSS 8.16 KB gzip, JS 50.76 KB gzip; `npm run test` → 113 pruebas en verde; `svelte-autofixer` sobre `GreetingHeader.svelte`, `ResultsScreen.svelte` y `Stepper.svelte`: sin hallazgos; `.impeccable/design.json` parsea (10 componentes).
+
+### T-8.4 — Presupuesto de rendimiento
+
+- **Método (restricción de entorno):** medición sobre el build de producción servido por `npm run preview` (puerto 4175) con `chrome-devtools` por salidas de texto — tamaños reales del `dist/` (Vite + gzip byte a byte con `zlib`), inventario de archivos, peticiones y pesos de transferencia reales (`performance.getEntriesByType('resource')`), y métricas de carga con `PerformanceObserver` (`FCP`, `LCP`, `CLS`) bajo throttling de red y CPU. Lighthouse móvil se ejecutó con `lighthouse_audit` (device mobile: 1.6 Mbps, 150 ms RTT, CPU 4×) sobre `preview`; el informe no incluye la categoría de rendimiento, así que los números de carga son los medidos con el protocolo.
+- **Números finales (build `index-DVl5tlzU.js` + `index-CWpQx4L.css`):**
+  - **JS inicial:** 164 515 B → **50.76 KB gzip** (Vite; 49.20 KB medido byte a byte; **44.85 KB Brotli**) ≤ ~80 KB ✔. Desglose del bundle: **datos (`questions.json` inline) 19.70 KB gzip** · **Svelte 5 + app 29.17 KB gzip** (medido extrayendo el literal del array del bundle y comprimiendo el resto).
+  - **CSS:** 40 203 B → **8.16 KB gzip** (8.14 medido; 7.08 Brotli) ≤ ~15 KB ✔ (la estimación de `07 §7.13` era 9–12 KB).
+  - **HTML:** 545 B → 0.34 KB gzip.
+  - **Fuentes web: 0** — 0 `@font-face` en el CSS y 0 archivos de fuente en `dist/` ✔.
+  - **Imágenes raster: 0** — el único gráfico es `favicon.svg` (253 B) ✔.
+  - **Peticiones en el primer render: 3** — documento + `index-*.js` (50 682 B de transferencia gzip) + `index-*.css` (8 439 B) ✔ (el `favicon.svg` lo pide el navegador por su cuenta, fuera del camino crítico).
+  - **CLS: 0** en la corrida de Lighthouse móvil y en el observador (`layout-shift` sin entradas) ✔.
+  - **Carga < 1 s en 4G:** con **Fast 4G + CPU 4×** (4 Mbps, 20 ms RTT): **FCP = LCP = 464 ms** ✔; con el perfil móvil de Lighthouse (1.6 Mbps, 150 ms RTT, CPU 4×): FCP = LCP = 1552 ms — la red más lenta que el «4G desde Lima» del presupuesto, registrada como cota inferior conservadora. Transferencia crítica total ≈ 59.7 KB gzip (44.8 KB si Cloudflare sirve Brotli), así que en 4G real la descarga ronda los 120 ms.
+  - **RNF-05 (navegación sin esperas):** «Iniciar quiz» monta el primer bloque en 35 ms y «Continuar» cambia de bloque en 24 ms (2 frames, CPU 4×); durante el ciclo completo no se hace **ninguna** petición nueva (el banco se carga una sola vez).
+- **Sin optimizaciones necesarias:** ninguna métrica excede el presupuesto, así que no se tocó código en esta tarea (el desglose Svelte+app ≈ 29 KB gzip confirma que el margen restante es amplio).
+- **Hallazgo de Lighthouse móvil (no aplicable / registrado):** `label-content-name-mismatch` (WCAG 2.5.3, *peso 0* en la categoría de accesibilidad, que puntúa **100**) en el botón del saludo: su texto visible «Hola» no está contenido en el `aria-label` «Pon aquí tu nombre». El `aria-label` es **microcopy congelado** de `07 §7.9.1`/`§7.11`; cambiarlo exige revisar la especificación (contrato §9), así que se mantiene y queda documentado como excepción deliberada con recomendación para una revisión futura de `07` (p. ej. nombre accesible «Hola, {nombre}. Pon aquí tu nombre»). Los otros fallos del informe son de SEO (`meta-description`, `robots.txt`) y de agentes (`llms.txt`): fuera de alcance por diseño — `06 §6.1`/`01 §1.5` declaran que la app no tiene URLs que compartir ni SEO que cuidar. Accesibilidad y buenas prácticas: **100/100**.
+- **V0:** `npm run check` → 0 errores/0 avisos; `npm run build` → CSS 8.16 KB gzip, JS 50.76 KB gzip; `npm run test` → 113 pruebas en verde; `npm run preview` sirviendo `dist/` con las tres pantallas.
