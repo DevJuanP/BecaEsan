@@ -33,13 +33,20 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    height: 28px;
-    padding: 0 10px;
+    min-height: 28px;
+    padding: 2px 10px;
     border-radius: var(--radius-pill);
     font-size: 0.8125rem;
     font-weight: 600;
     line-height: 1;
-    white-space: nowrap;
+  }
+
+  .chip__text {
+    min-width: 0;
+    /* Sin `nowrap`: en tamaño normal la píldora no cambia (siempre cabe en su
+       línea) y con el texto del sistema al 200 % crece en alto en vez de
+       desbordar la columna (`07 §7.14`). */
+    overflow-wrap: anywhere;
   }
 
   .chip[data-variant='area'] {

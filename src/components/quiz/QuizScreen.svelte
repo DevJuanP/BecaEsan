@@ -230,12 +230,14 @@
     width: 100%;
     max-width: 640px;
     margin: 0 auto;
-    padding: 0 20px;
+    /* Solo padding lateral: el inferior lo aporta `.app-reserve`
+       (reserva de la barra fija, `07 §7.5.3`) */
+    padding-inline: 20px;
   }
 
   @media (min-width: 430px) {
     .quiz {
-      padding: 0 24px;
+      padding-inline: 24px;
     }
   }
 

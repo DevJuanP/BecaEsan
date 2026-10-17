@@ -108,7 +108,7 @@ La pantalla de quiz completa: bloques por temática con sus preguntas y alternat
 - **Pasos:** checklist `07 §7.14` aplicada al quiz; casos: **E-01** (RM 17/17 → 17+ bloques, barra densa), **E-02** (q = 5), **E-03** (k = 1, q = 1: bloque único con «Ver resultados» en el primer bloque), **E-06** (texto común con q < 5), **E-07** (atrás + editar respuestas y que el cálculo final las refleje — con resultados del Plan 07 o inspección del intento). Teclado: radios con flechas, botones de barra, límites del foco. Reduced-motion en la transición de bloque. Sin scroll horizontal a 360 px. Auditoría `web-design-guidelines` + pasada `impeccable` de cierre.
 - **Criterios:** `07 §7.10.2`, `§7.14`; E-01/02/03/06/07; RNF-01/02/05/06.
 - **Verificación:** checklist marcada + hallazgos corregidos o registrados.
-- **Estado:** [ ]
+- **Estado:** [x]
 
 ## 6. Matriz de trazabilidad del plan
 
@@ -186,3 +186,44 @@ _(append-only; las entradas de ejecución se añaden al final)_
 - **T-6.7 · el bloque saliente deja de recibir toques:** durante el cruce de 260 ms el bloque que se va convive con el entrante en la celda del escenario; sin nada más, un toque en la zona expuesta del saliente caería en el bloque anterior. La transición de salida (`salirBloque`) aplica `pointer-events: none` al nodo en el primer frame y delega en `fly` para el movimiento. Cambio mínimo, sin efecto visual.
 - **T-6.7 · V0 ejecutada:** `npm run check` → 0 errores/0 avisos; `npm run build` → 157 módulos, CSS 7.57 kB gzip + JS 49.77 kB gzip; `npm run test` → 106 pruebas en verde; `svelte-autofixer` sobre `QuizScreen.svelte` → sin incidencias.
 - **T-6.7 · V2 ejecutada (por DOM, 360 con emulación móvil+táctil):** evento `beforeunload` sintético (cancelable): **Home** → no cancelado; **quiz en curso** → cancelado (aviso activo); **resultados** → no cancelado; **vuelta a Home** → no cancelado. Prueba real con el navegador: recargar con el quiz en curso dispara el diálogo nativo (`handleBeforeUnload: dismiss` → «Dismissed a beforeunload dialog» y la recarga se cancela, la pantalla sigue en el quiz); recargar en Home recarga sin diálogo. En el cruce de bloques, `elementFromPoint` sobre una alternativa del bloque saliente devuelve un elemento fuera de ese bloque (`pointer-events: none`), así que un toque real no cae en el bloque que se va.
+- **T-6.8 · hallazgo 1 (corregido): la reserva de la barra fija no se aplicaba en el quiz.** La regla `.quiz { padding: 0 20px }` (especificidad `0,2,0` por el hash de Svelte) anulaba el `padding-bottom` de `.app-reserve` (`0,1,0`): medido a 360 px con la página al final, la última alternativa quedaba **73 px por debajo** de la barra. Se cambia a `padding-inline` (20/24 px) y el reservado inferior vuelve a `89 px`; verificado: al final del scroll la última alternativa termina en 711 px y la barra empieza en 727 px (16 px de holgura, `07 §7.5.3`).
+- **T-6.8 · hallazgo 2 (corregido): con el texto del sistema al 200 % la cabecera desbordaba la columna.** El chip de área (`height: 28px` + `white-space: nowrap`) no podía encogerse: el documento medía 373 px en un viewport de 360 (13 px de scroll horizontal). En `Chip.svelte` se pasa a `min-height` + `padding: 2px 10px` y el texto puede envolver (`min-width: 0` + `overflow-wrap: anywhere`). En tamaño normal la píldora mide igual (28 px de alto, 193/78 px de ancho, cabecera de 95 px); al 200 % la píldora crece en alto (58 px), la cabecera pasa a 133 px y **no hay scroll horizontal** (360/360) ni desbordes en cabecera ni contenido.
+- **T-6.8 · hallazgo 3 (endurecido): el foco de teclado nunca debe quedar bajo la cabecera sticky** (`07 §7.14`, «barras fijas no tapan contenido ni el foco»). Con `Tab`/`Shift+Tab` reales el navegador ya dejaba la fila visible (medido: nunca por debajo de los 95 px de cabecera), pero se añade `scroll-margin-top: 104px` al radio oculto de `OptionRow` como garantía entre navegadores (solo afecta al desplazamiento automático del foco; no cambia el scroll manual ni el aspecto).
+- **T-6.8 · checklist `07 §7.14` (por DOM a 360 y 430 px, emulación móvil+táctil):** *Composición*: la pantalla responde «dónde estoy / qué sigue / cómo salgo» (cabecera con área + «Bloque X de Y» + progreso + cronómetro; barra inferior con la acción siguiente); una sola columna sin scroll horizontal (360/360 y 430/430), padding lateral 20/24 px, enunciados con salto normal y medida ≤75ch en el texto común; jerarquía por tamaño/peso/espacio, sin mini-etiquetas en mayúsculas ni tarjetas anidadas, una sola elevación por elemento (panel de texto con borde sin sombra; cabecera y barras con borde+sombra solo como superficies fijas, `07 §7.3.4`). *Interacción y estados*: alternativas con reposo/pressed/focus/seleccionada y sin dependencia de hover; filas de 56 px, botones de barra de 48 px, separaciones de 12 px (alternativas y botones) y 32 px (preguntas), ningún control visible por debajo de 44×44; la barra no tapa contenido (711 vs 727 px al final) ni el foco, y respeta `env(safe-area-inset-*)`. *Accesibilidad*: colores medidos iguales a los tokens con contraste AA/AAA de la tabla `07 §7.3.5`; anillo `:focus-visible` de 2 px con 2 px de offset en filas y botones; recorrido de teclado completo (radios con flechas —la selección por teclado se escribe en el intento—, `Tab` por grupos de pregunta, `[Atrás]`/`[Continuar]`, salida y reentrada al inicio de la pantalla, `Shift+Tab` inverso); radios y `<dialog>` nativos, `Escape` cierra la hoja y el foco vuelve al disparador «Ver resultados»; con texto al 200 % el layout no se rompe. *Movimiento*: solo `transform`/`opacity`, sin `transition: all`, transición de bloque de 260 ms y salida igual de rápida, un único momento orquestado (el cambio de bloque). *Contenido y copy*: cadenas exactas del deck (`07 §7.11`) en cabecera, botonera, panel de texto y confirmación, sentence case y «−»/«·» correctos, numerales tabulares en tiempo y progreso; casos extremos probados con contenido real (17 bloques, texto de comprensión con 2 y con 5 preguntas, puntaje negativo en resultados). *Superficies del navegador*: `touch-action: manipulation` en el body, `overscroll-behavior: contain` y scroll de fondo bloqueado en la hoja, selección de texto y caret dentro de la paleta, sin zoom por doble toque. **Pendiente humano:** prueba en dispositivo real (iOS Safari y Android Chrome, 360–430 px, con rotación) y la emulación real de `prefers-reduced-motion`/`prefers-reduced-transparency` desde DevTools (el automatismo de este turno no las emula; ver T-6.4).
+- **T-6.8 · casos borde (por DOM):** **E-01** — RM con los 17 temas y q = 5: 17 bloques, «Bloque 1 de 17», barra de 17 segmentos finos (16 px de ancho, gap 3 px, actual a 6 px) sin scroll horizontal. **E-02** — q = 5: 5 preguntas por bloque, 5 alternativas cada una, 32 px entre preguntas. **E-03** — k = 1, q = 1: bloque único con **solo** «Ver resultados» (primario, ancho completo), 1 segmento; sin responder abre «Tienes 1 pregunta sin responder» + «RM: 1», «Volver a revisar» vuelve al quiz y al responder bien el resultado es puntaje 5 (1/0/0, 100 %). **E-06** — Comprensión de lectura con q = 2 y q = 5: panel idéntico (3 párrafos, mismas medidas) y solo cambian las preguntas. **E-07** — intento de 2 bloques: RM respondida bien → RV respondida bien → «Atrás» → se cambia la de RM a una incorrecta → resultado final RM 0/1/0 y RV 1/0/0 con puntaje total 3 (5 − 2): la respuesta editada es la que se usa al final. Detalle medido de la barra de 17 segmentos: `07 §7.10.4` estima «≈13 px» para el slider dentro de la tarjeta de Home; en la cabecera del quiz (que ocupa el ancho completo de la columna) el resultado es 16 px — misma regla, más ancho disponible.
+- **T-6.8 · auditoría `web-design-guidelines` (V3, sobre los archivos UI del plan):**
+
+  ```text
+  ## src/components/quiz/QuizScreen.svelte
+  QuizScreen.svelte:66 — padding shorthand anulaba la reserva de la barra fija → padding-inline (corregido)
+  ✓ pass (resto: sin hallazgos)
+
+  ## src/components/quiz/QuizHeader.svelte
+  ✓ pass
+
+  ## src/components/quiz/QuizNav.svelte
+  ✓ pass
+
+  ## src/components/quiz/QuestionCard.svelte
+  ✓ pass
+
+  ## src/components/quiz/SharedText.svelte
+  ✓ pass (hover dentro de `@media (hover: hover) and (pointer: fine)`)
+
+  ## src/components/quiz/ConfirmModal.svelte
+  ✓ pass
+
+  ## src/components/ui/Chip.svelte
+  Chip.svelte:36 — `height` fija + `nowrap` desbordaban con texto al 200 % → min-height + envoltura (corregido)
+
+  ## src/components/ui/OptionRow.svelte
+  OptionRow.svelte:137 — `outline: none` en el radio oculto: el anillo lo pinta la fila con `:has(input:focus-visible)` (no es anti-patrón)
+  OptionRow.svelte:73 — cabecera sticky podía tapar el foco de teclado → `scroll-margin-top` (corregido)
+
+  ## src/App.svelte
+  ✓ pass
+  ```
+
+  Notas de la auditoría: no hay `transition: all`, ni `user-scalable=no`, ni `onPaste` con `preventDefault`, ni `<div>` clicables, ni imágenes; los iconos son decorativos con `aria-hidden` y los controles de solo icono llevan `aria-label`; no aplica *skip link* (la app no tiene navegación repetida antes del contenido) ni virtualización (el quiz monta un bloque de ≤5 preguntas).
+- **T-6.8 · pasada `impeccable` de cierre:** `impeccable context` cargó `PRODUCT.md` (modo *Operate*, verdad de producto y voz) y el detector mecánico `impeccable detect --json` sobre los 9 archivos del plan devolvió `[]` (sin hallazgos). `svelte-autofixer` sobre `Chip.svelte` y `OptionRow.svelte` (los dos componentes tocados en esta tarea) → sin incidencias.
+- **T-6.8 · V0 ejecutada:** `npm run check` → 0 errores/0 avisos; `npm run build` → 157 módulos, CSS 7.60 kB gzip + JS 49.77 kB gzip; `npm run test` → 106 pruebas en verde.

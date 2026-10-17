@@ -71,6 +71,10 @@
     margin: 0;
     opacity: 0;
     pointer-events: none;
+    /* Al enfocar con teclado, la fila no queda bajo la cabecera sticky del
+       quiz (hasta 95 px) ni bajo otras barras fijas (`07 §7.14`). Solo afecta
+       al desplazamiento automático del foco, no al scroll manual. */
+    scroll-margin-top: 104px;
   }
 
   .opt__bubble {
