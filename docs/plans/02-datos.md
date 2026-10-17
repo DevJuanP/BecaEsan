@@ -69,7 +69,7 @@ Construir `scripts/build-questions.mjs` (Node, **sin dependencias**) que extraig
   2. Misma entrada → mismo archivo **byte a byte** (`03 §3.6.6`).
 - **Criterios:** `03 §3.6.6`, `06 §6.4.4`.
 - **Verificación:** ejecutar dos veces y comparar hash; registrar tamaño (estimado ≈ 100 KB sin comprimir, `06 §6.4`).
-- **Estado:** [ ]
+- **Estado:** [x]
 
 ### T-2.5 — Pruebas del parser (Vitest)
 
@@ -123,6 +123,10 @@ _(vacío — se completa durante la ejecución)_
 ### T-2.2 / T-2.3 — reparto del trabajo dentro de `scripts/build-questions.mjs`
 
 El parser (T-2.2) construye el modelo y rechaza con `Error` las estructuras irrecuperables (título, secciones y bloques de preguntas/alternativas/claves). T-2.3 añade la capa de contrato: `ContratoError`, cobertura global (28 temas · 140 preguntas · 85 RM + 55 RV), verificación cruzada clave↔preguntas, mensajes con formato `{archivo}: {problema}`, `process.exitCode = 1` y escritura atómica (`questions.json.tmp` + rename). No hay cambio de comportamiento observable para material válido.
+
+### T-2.4 — determinismo y tamaño del artefacto
+
+La serialización (orden de campos fijo, indentación 2, sin metadatos volátiles) y la escritura atómica quedaron implementadas en los commits de T-2.2/T-2.3, así que T-2.4 se limita a su verificación: dos ejecuciones consecutivas producen el mismo SHA-256 (`ac9af381…`), y el artefacto mide 130 084 bytes (127.0 KB) sin comprimir y 20.9 KB gzip — dentro del presupuesto de `06 §6.2` y del orden que estima `06 §6.4`.
 
 ### T-2.3 / T-2.6 — casos negativos sin tocar `docs/preguntas/`
 
