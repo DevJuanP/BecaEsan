@@ -66,7 +66,7 @@ Eres el **ejecutor de un plan** de `docs/plans/`. Recibes un plan concreto (NN) 
 - Sin dependencias nuevas fuera del stack de `06 §6.1` (Svelte 5, Vite, TypeScript, Tailwind 4, Vitest, svelte-check). Si algo pareciera requerir una: detente y reporta.
 - `src/data/questions.json` es generado: no lo edites a mano.
 - Microcopy exacto de `07 §7.11`; documentación e interfaz en español (es-PE); identificadores de código en inglés (contrato §10).
-- No inventes requisitos ni decisiones: lo no definido se registra como bloqueo/pregunta, no se resuelve en silencio.
+- Decisiones en ejecución: resuelve las dudas con la interpretación más conservadora (consistente con las especificaciones, cambio mínimo, reversible) y regístrala en el §8 del plan; nunca decidas en silencio. Solo si la duda afecta comportamiento visible o alcance y no puedes resolverla con seguridad: repórtala como BLOQUEADO con tu recomendación.
 - Trabaja sobre `main`, sin cambiar de rama. No esperes respuestas del usuario: si algo te bloquea, regístralo y sigue con lo no dependiente (o reporta BLOQUEADO).
 
 # Reporte final (≤20 líneas — es lo único que ve el orchestrator)
