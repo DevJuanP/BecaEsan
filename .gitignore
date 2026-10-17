@@ -1,0 +1,18 @@
+# Dependencias
+node_modules/
+
+# Build
+dist/
+.vite/
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Entorno local
+*.local
+.env
+.env.*
+
+# Generado (Plan 02: docs/preguntas -> JSON validado)
+src/data/questions.json
