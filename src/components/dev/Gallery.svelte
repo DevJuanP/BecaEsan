@@ -9,6 +9,7 @@
   import BottomBar from '../ui/BottomBar.svelte';
   import Chip from '../ui/Chip.svelte';
   import ProgressSegments from '../ui/ProgressSegments.svelte';
+  import Slider from '../ui/Slider.svelte';
   import Stepper from '../ui/Stepper.svelte';
 
   /** Valores de demostración de los steppers (defaults de `02 §RF-07`). */
@@ -16,6 +17,11 @@
   let noRespondida = $state(0);
   let incorrecta = $state(-2);
   let puntajeEnError = $state(NaN);
+
+  /** Sliders de demostración: 17 (RM, azul), 11 (RV, naranja) y 5 (preguntas). */
+  let temasRM = $state(8);
+  let temasRV = $state(5);
+  let preguntas = $state(2);
 </script>
 
 <main class="gal">
@@ -191,6 +197,48 @@
         bind:value={puntajeEnError}
         invalid
         errorMessage="Escribe un número entre −999 y 999."
+      />
+    </div>
+  </section>
+
+  <section class="gal__sec" id="slider">
+    <h2 class="gal__h2">Slider segmentado</h2>
+    <p class="gal__src">
+      `07 §7.8` + Anexo B · arrastre 1:1 con captura de puntero, tap para saltar, teclado nativo
+      (flechas, `Home`/`End`, `PageUp`/`PageDown`), burbuja de valor, `touch-action: pan-y`, rueda ignorada
+      y `Escape`/`pointercancel` que revierten el gesto. 17 segmentos (RM), 11 (RV) y 5 (preguntas).
+    </p>
+
+    <div class="gal__rows">
+      <Slider
+        label="Temas de Razonamiento Matemático"
+        unidad="temas"
+        max={17}
+        bind:value={temasRM}
+        caption="Al azar, sin repetirse"
+      />
+      <Slider
+        label="Temas de Razonamiento Verbal"
+        unidad="temas"
+        max={11}
+        area="verbal"
+        bind:value={temasRV}
+        caption="Al azar, sin repetirse"
+      />
+      <Slider
+        label="Preguntas por tema"
+        unidad="preguntas"
+        max={5}
+        bind:value={preguntas}
+        caption="Al azar, dentro de cada tema"
+      />
+      <Slider
+        label="Slider deshabilitado"
+        unidad="temas"
+        max={5}
+        value={3}
+        disabled
+        caption="Estado §7.8.3 (opacidad 45 %, sin puntero, aria-disabled)"
       />
     </div>
   </section>
