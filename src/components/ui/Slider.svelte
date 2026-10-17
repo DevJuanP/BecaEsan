@@ -191,6 +191,7 @@
 
   .slider__head {
     display: flex;
+    flex-wrap: wrap;
     align-items: baseline;
     justify-content: space-between;
     gap: 12px;
@@ -204,7 +205,10 @@
     font-weight: 500;
   }
 
+  /* El valor cae a su propia línea si el texto del sistema crece
+     (`07 §7.12` (10)) y se mantiene alineado a la derecha. */
   .slider__value {
+    margin-left: auto;
     color: var(--color-ink);
     font-weight: 600;
     font-variant-numeric: tabular-nums;

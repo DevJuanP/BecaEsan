@@ -117,6 +117,7 @@
 <style>
   .stepper__row {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 12px;
   }
@@ -129,10 +130,13 @@
     color: var(--color-ink-2);
   }
 
+  /* El grupo cae a su propia línea cuando el texto del sistema crece
+     (`07 §7.12` (10)): sigue alineado a la derecha y la fila nunca desborda. */
   .stepper__group {
     display: flex;
     align-items: center;
     gap: 8px;
+    margin-left: auto;
   }
 
   .stepper__btn {

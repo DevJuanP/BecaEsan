@@ -47,7 +47,8 @@
 <style>
   .modo {
     display: flex;
-    gap: 4px;
+    /* ≥8 px entre objetivos táctiles adyacentes (`07 §7.12` (3)) */
+    gap: 8px;
     margin-top: 12px;
     padding: 4px;
     border-radius: var(--radius-control);
