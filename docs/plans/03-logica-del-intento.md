@@ -72,7 +72,7 @@ Implementar el **dominio puro** de la app —sin UI— y probarlo a fondo: creac
   4. Para poder probarlo sin navegador: aceptar un objeto `StorageLike` inyectable (por defecto `localStorage` si existe).
 - **Criterios:** RF-02, RNF-04, `03 §3.5`.
 - **Verificación:** V1 (tests con storage simulado: guardar/leer/borrar, fallo de storage) + V0.
-- **Estado:** [ ]
+- **Estado:** [x]
 
 ### T-3.5 — `config.ts` — validación y resumen
 
@@ -142,3 +142,9 @@ Contraste del plan contra `docs/especificaciones/` (02, 03, 06 y 07 §7.11/§7.1
 - **`terminadoEn` nulo.** El plan fija `duracionMs = terminadoEn − iniciadoEn`; el tipo lo admite nulo (`03 §3.3`). Interpretación conservadora: si aún es `null` (no debería ocurrir al confirmar «Ver resultados», `02 §RF-16`/`RF-19`), la duración es `0`, y se acota a `≥ 0` por si el reloj salta hacia atrás. `scoring` sigue siendo puro (no consulta `Date.now()`).
 - **Respuesta ausente.** Un `id` sin entrada en `respuestas` (objeto incompleto) se clasifica como **no respondida**, igual que `null`.
 - **Orden de las áreas.** El de su primera aparición en `bloques` (RM y luego RV, `02 §RN-03`); `puntajeTotal` es la suma de esas áreas incluidas.
+
+### T-3.4 — matices de la capa de almacenamiento
+
+- **Truncado, no rechazo.** `guardarNombre` recorta a 30 caracteres en silencio; la validación con mensaje («Máximo 30 caracteres.») es de la hoja de nombre (Plan 05). Aquí 30 es la última barrera defensiva, coherente con `maxlength` del campo.
+- **Lectura tolerante.** `leerNombre` recorta espacios y devuelve `null` si el valor está vacío (E-08 en capa lógica), aunque el valor lo haya puesto otra vía; no trunca al leer.
+- **Sin almacenamiento.** El tercer parámetro admite `StorageLike | null` explícito (`null` = sin almacenamiento) además del inyectado para pruebas; las tres funciones son no-op silenciosas si falta o si cada operación lanza.
