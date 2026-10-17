@@ -431,8 +431,11 @@
     color: var(--color-blue-700);
   }
 
-  .gal__nav a:hover {
-    text-decoration: underline;
+  /* Hover solo con puntero fino (`07 §7.5.4`); en táctil no queda pegado */
+  @media (hover: hover) and (pointer: fine) {
+    .gal__nav a:hover {
+      text-decoration: underline;
+    }
   }
 
   .gal__how {
