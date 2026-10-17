@@ -8,6 +8,7 @@
   import Button from '../ui/Button.svelte';
   import BottomBar from '../ui/BottomBar.svelte';
   import Chip from '../ui/Chip.svelte';
+  import OptionRow from '../ui/OptionRow.svelte';
   import ProgressSegments from '../ui/ProgressSegments.svelte';
   import Slider from '../ui/Slider.svelte';
   import Stepper from '../ui/Stepper.svelte';
@@ -22,6 +23,17 @@
   let temasRM = $state(8);
   let temasRV = $state(5);
   let preguntas = $state(2);
+
+  /** Demo de alternativas A–E: una sola selección por pregunta. */
+  const alternativas = [
+    { id: 'a', letra: 'A', texto: '4' },
+    { id: 'b', letra: 'B', texto: '6' },
+    { id: 'c', letra: 'C', texto: '8' },
+    { id: 'd', letra: 'D', texto: '9' },
+    { id: 'e', letra: 'E', texto: '12' },
+  ];
+  let respuesta = $state('b');
+  let respuestaLarga = $state<string | null>(null);
 </script>
 
 <main class="gal">
@@ -243,6 +255,55 @@
     </div>
   </section>
 
+  <section class="gal__sec" id="opciones">
+    <h2 class="gal__h2">Opciones de respuesta (A–E)</h2>
+    <p class="gal__src">
+      `07 §7.9.7` · radio nativo oculto + burbuja A–E; alto mínimo 56, padding 12 14, radio 12;
+      selección con forma + color + peso; pressed `surface-2`; focus en la fila; sin feedback de corrección.
+      La separación de 12 px entre alternativas la pone la pantalla (aquí, el marco).
+    </p>
+
+    <fieldset class="gal__field">
+      <legend class="gal__legend">Una sola selección, cambiable (flechas entre radios)</legend>
+      <div class="gal__opts">
+        {#each alternativas as opcion (opcion.id)}
+          <OptionRow
+            name="demo-p1"
+            value={opcion.id}
+            letter={opcion.letra}
+            text={opcion.texto}
+            selected={respuesta === opcion.id}
+            onselect={() => (respuesta = opcion.id)}
+          />
+        {/each}
+      </div>
+    </fieldset>
+
+    <fieldset class="gal__field">
+      <legend class="gal__legend">Sin seleccionar y con texto largo (envoltura)</legend>
+      <div class="gal__opts">
+        {#each alternativas as opcion (opcion.id)}
+          <OptionRow
+            name="demo-p2"
+            value={opcion.id}
+            letter={opcion.letra}
+            text={opcion.texto}
+            selected={respuestaLarga === opcion.id}
+            onselect={() => (respuestaLarga = opcion.id)}
+          />
+        {/each}
+        <OptionRow
+          name="demo-p2"
+          value="f"
+          letter="F"
+          text="Una alternativa larga que ocupa varias líneas para comprobar la envoltura del texto dentro de la fila sin romper la burbuja."
+          selected={respuestaLarga === 'f'}
+          onselect={() => (respuestaLarga = 'f')}
+        />
+      </div>
+    </fieldset>
+  </section>
+
   <div class="gal__spacer" aria-hidden="true"></div>
 </main>
 
@@ -331,6 +392,26 @@
     flex-direction: column;
     gap: 20px;
     margin-top: 20px;
+  }
+
+  .gal__field {
+    margin-top: 20px;
+    border: 0;
+  }
+
+  .gal__legend {
+    padding: 0;
+    margin-bottom: 12px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--color-ink-3);
+  }
+
+  .gal__opts {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
   }
 
   /* Marco que aísla una barra `position: fixed` (el `transform` la contiene) */
