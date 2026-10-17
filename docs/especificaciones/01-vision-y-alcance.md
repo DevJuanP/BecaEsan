@@ -49,12 +49,12 @@ Principios del producto:
 3. **Generación aleatoria del intento:** temas al azar sin repetición y en orden barajado; preguntas al azar por tema; primero todos los bloques de RM y después los de RV.
 4. **Quiz por bloques:** una pantalla por temática con su título, sus preguntas del intento, alternativas A–E, cronómetro informativo y navegación «Atrás» / «Continuar» («Ver resultados» en el último bloque).
 5. **Resultados:** puntaje con la escala configurada, porcentajes por área (% de aciertos, % de erróneas, % de no respondidas) y botón **«Home»** para volver a configurar otro quiz.
+6. **Revisión de respuestas:** desde resultados, el botón **«Mostrar respuestas correctas»** despliega la revisión del intento —por área y tema— con el estado de cada pregunta, la alternativa correcta, la marcada por el usuario (si hubo) y la explicación de la clave.
 
 ## 1.5 Fuera de alcance de la v1 (out of scope)
 
 - Backend, cuentas de usuario o sincronización entre dispositivos.
 - Historial persistente de intentos y estadísticas de progreso (candidato a fase 2).
-- **Pantalla de revisión con clave y explicación por pregunta** (el material las tiene; candidato fuerte a fase 2).
 - Temporizador con límite de tiempo o entrega automática (la v1 solo tiene cronómetro informativo).
 - Edición del banco de preguntas desde la app.
 - Multijugador, rankings o compartir resultados.

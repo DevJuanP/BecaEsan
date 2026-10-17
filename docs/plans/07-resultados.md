@@ -173,3 +173,7 @@ _(append-only; las entradas de ejecución se añaden al final)_
 - **V3 — pasada `impeccable` de cierre:** `scripts/impeccable.cmd detect --json --target src/components/results` → `[]` (sin hallazgos mecánicos). La crítica visual fina (capturas) queda como pendiente humano por la restricción de imágenes del ejecutor.
 - **V0:** `npm run check` → 0 errores/0 avisos; `npm run build` → CSS 8.11 KB gzip, JS 50.76 KB gzip; `npm run test` → 113 pruebas en verde; `svelte-autofixer` sobre los cuatro componentes de resultados: sin hallazgos. Consola limpia en todas las corridas de V2.
 - **Pendientes humanos:** prueba en móvil real (iOS Safari / Android Chrome con rotación, `07 §7.14`) y el juicio visual por capturas (paleta, jerarquía, aire) que este ejecutor no puede evaluar por imágenes.
+
+### Revisión de vigencia (2026-10-17, Plan 09)
+
+- **Alcance ampliado:** la «pantalla de revisión con explicaciones» que este plan dejó como fase 2 (`§2`) se aprobó e implementó dentro de Resultados en el **Plan 09** (`02 §RF-22`, `07 §7.9.16`). La revisión se añade **después** del recordatorio y **antes** del botón «Home», por lo que el orden original de §7.10.3 se conserva con un elemento intermedio; no se reabren tareas de este plan.

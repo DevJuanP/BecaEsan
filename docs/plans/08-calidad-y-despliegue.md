@@ -117,7 +117,7 @@ Cerrar la v1: auditar accesibilidad y calidad visual contra las especificaciones
 - **Pasos:**
   1. Marcar los 8 planes ✅ en `README.md` y añadir la entrada de cierre al changelog.
   2. Actualizar el README de especificaciones (v1 implementada y desplegada, con la URL).
-  3. Listar candidatos de fase 2 **sin implementar** (`01 §1.5`, `06 §6.7`, `07 §7.16`): revisión con explicaciones, PWA/ofﬂine, persistencia de configuración (RF-11), tema oscuro, dominio propio.
+  3. Listar candidatos de fase 2 **sin implementar** (`01 §1.5`, `06 §6.7`, `07 §7.16`): PWA/ofﬂine, persistencia de configuración (RF-11), tema oscuro, dominio propio.
 - **Criterios:** `00-contrato §6` (DoD del proyecto).
 - **Verificación:** matrices sin filas rojas; `01 §1.7` con sus 5 criterios marcados.
 - **Estado:** [x]
@@ -285,7 +285,7 @@ _(Cierre del plan, `08 T-8.5.3` y `T-8.7.4`.)_
 
 | Candidato | Fuente | Nota |
 |---|---|---|
-| Pantalla de revisión con clave y explicación por pregunta | `01 §1.5`, `06 §6.7`, `07 §7.16` #7 | La explicación ya se extrae en `questions.json`; reutilizará los tokens semánticos ya definidos. |
+| ~~Pantalla de revisión con clave y explicación por pregunta~~ | `01 §1.5`, `06 §6.7`, `07 §7.16` #7 | **Implementada en el Plan 09** (`02 §RF-22`); deja de ser candidata. |
 | PWA instalable + offline (service worker) | `01 §1.5`, `06 §6.7` | No cambia el stack; pospuesto por decisión de producto. |
 | Persistencia de la configuración entre recargas (RF-11) | `01 §1.5`, `03 §3.5`, `06 §6.7` | La clave `beca-esan.config` está prevista desde `03 §3.5`. |
 | Tema oscuro | `01 §1.5`, `07 §3.6`, `§7.16` #5 | Los tokens son semánticos: basta un bloque `[data-theme="dark"]`; exige revalidar todos los contrastes. |

@@ -27,6 +27,8 @@ colors:
   result-bad: "#B91C1C"
   result-bad-fill: "#DC2626"
   result-neutral: "#64748B"
+  result-ok-soft: "#ECFDF5"
+  result-bad-soft: "#FEF2F2"
   focus: "#0063BD"
   scrim: "rgba(15, 23, 42, 0.48)"
 typography:
@@ -148,6 +150,20 @@ components:
     textColor: "{colors.ink}"
     rounded: "{rounded.control}"
     padding: "12px 14px"
+  review-toggle:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.control}"
+    padding: "0 20px"
+    height: "48px"
+  review-option-correct:
+    backgroundColor: "{colors.result-ok-soft}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.control}"
+  review-option-wrong:
+    backgroundColor: "{colors.result-bad-soft}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.control}"
   slider-segment:
     backgroundColor: "{colors.segment-empty}"
     rounded: "{rounded.segment}"
@@ -197,7 +213,7 @@ Paleta restringida con identidad dual: neutros fríos como base, un azul institu
 - **Superficie hundida** (#F1F5F9): chips, filas presionadas y el panel de texto común.
 - **Línea** (#E2E8F0) y **línea fuerte** (#CBD5E1): bordes de 1 px de tarjetas y de controles de entrada.
 - **Segmento vacío** (#8494A9): segmento «apagado» de la regla del slider (3.09:1 sobre blanco, gráfico de UI).
-- **Semánticos de resultados**: aciertos #047857 (texto, 5.48:1) y #059669 (relleno de barra, 3.77:1); errores #B91C1C (texto, 6.47:1) y #DC2626 (relleno, 4.83:1); no respondidas #64748B (4.76:1).
+- **Semánticos de resultados**: aciertos #047857 (texto, 5.48:1) y #059669 (relleno de barra, 3.77:1); errores #B91C1C (texto, 6.47:1) y #DC2626 (relleno, 4.83:1); no respondidas #64748B (4.76:1). **Tintes de la revisión** (`07 §7.9.16`): aciertos #ECFDF5 y errores #FEF2F2, siempre con texto + icono además del color.
 - **Velo** (`rgba(15, 23, 42, 0.48)`): scrim detrás de las hojas modales.
 
 ### Named Rules
@@ -286,6 +302,9 @@ Un track de 44 px de alto con N segmentos (uno por tema o pregunta) que se relle
 
 ### Opción de respuesta (A–E)
 Fila de 56 px con radio 12 px, burbuja circular de 28 px con la letra y el texto de la alternativa; la selección añade borde + relleno tintado + peso 600 (nunca solo color) y la burbuja hace un `scale(0.92→1)` de 120 ms. Radios nativos ocultos dentro de `<fieldset>` con el enunciado en `<legend>`: el teclado y los lectores de pantalla funcionan gratis.
+
+### Revisión de respuestas (resultados, RF-22)
+Botón secundario de ancho completo que despliega el bloque «Revisión de respuestas»; cada pregunta es un `<details>` nativo cerrado por defecto con píldora de estado (icono + palabra), enunciado, línea de clave («Correcta: B» / «Tu respuesta: D · Correcta: B») y chevron que rota al abrir. Al desplegarla, las alternativas se leen como filas no interactivas: la clave con borde/fondo `ok` + etiqueta «Correcta»; la elegida errónea con borde/fondo `bad` + «Tu respuesta»; debajo, la explicación en un panel `surface-2`. Ningún estado depende del color: siempre hay texto e icono.
 
 ## Do's and Don'ts
 

@@ -2,7 +2,7 @@
 
 Esta carpeta contiene los **planes de ejecución** que construyen la app definida en [`docs/especificaciones/`](../especificaciones/README.md) (01–07), en el orden `01 → 08`.
 
-> **Estado global:** 8 / 8 planes completados · **fase actual: proyecto v1 implementado y verificado; deploy manual pendiente del usuario** · Los planes se generaron el 2026-10-16; el Plan 01 se ejecutó y cerró el 2026-10-16; el Plan 02 se ejecutó y cerró el 2026-10-16; el Plan 03 se ejecutó y cerró el 2026-10-16; el Plan 04 se ejecutó y cerró el 2026-10-16; el Plan 05 se ejecutó y cerró el 2026-10-17; el Plan 06 se ejecutó y cerró el 2026-10-17; el Plan 07 se ejecutó y cerró el 2026-10-17; el Plan 08 se ejecutó y cerró el 2026-10-17. Pendientes manuales del usuario (informe de cierre en `08 §8`): deploy en Cloudflare Pages y pase en dispositivos reales.
+> **Estado global:** 9 / 9 planes completados · **fase actual: proyecto v1 implementado y verificado (incluida la revisión de respuestas, Plan 09); deploy manual pendiente del usuario** · Los planes se generaron el 2026-10-16; el Plan 01 se ejecutó y cerró el 2026-10-16; el Plan 02 se ejecutó y cerró el 2026-10-16; el Plan 03 se ejecutó y cerró el 2026-10-16; el Plan 04 se ejecutó y cerró el 2026-10-16; el Plan 05 se ejecutó y cerró el 2026-10-17; el Plan 06 se ejecutó y cerró el 2026-10-17; el Plan 07 se ejecutó y cerró el 2026-10-17; el Plan 08 se ejecutó y cerró el 2026-10-17; el Plan 09 se ejecutó y cerró el 2026-10-17. Pendientes manuales del usuario (informe de cierre en `08 §8`): deploy en Cloudflare Pages y pase en dispositivos reales.
 
 ## Cómo se usa esta carpeta
 
@@ -22,8 +22,9 @@ Esta carpeta contiene los **planes de ejecución** que construyen la app definid
 | 06 | [Quiz](06-quiz.md) | Cabecera, bloques, navegación, texto común, confirmación, cronómetro | 03, 04, 05 | L | ✅ |
 | 07 | [Resultados](07-resultados.md) | Héroe, tarjetas por área, barras, recordatorio, Home | 03, 04, 06 | M | ✅ |
 | 08 | [Calidad y despliegue](08-calidad-y-despliegue.md) | Auditorías de skills, presupuesto, E2E, GitHub + preparación del deploy manual | 01–07 | M | ✅ |
+| 09 | [Revisión de respuestas](09-revision-de-respuestas.md) | Revisión por pregunta con clave y explicación dentro de Resultados (RF-22) | 03, 04, 06, 07 | M | ✅ |
 
-Orden de ejecución: `01 → 02 → 03 → 04 → 05 → 06 → 07 → 08`. Independencia declarada: el Plan 04 solo requiere el 01 (se ejecuta en su turno).
+Orden de ejecución: `01 → 02 → 03 → 04 → 05 → 06 → 07 → 08 → 09`. Independencia declarada: el Plan 04 solo requiere el 01 (se ejecuta en su turno); el Plan 09 es una extensión acotada de la fase 2 sobre Resultados.
 
 ## Cobertura global (trazabilidad)
 
@@ -53,7 +54,8 @@ Obligatorio (`00-contrato §2.1`). «Fuera de v1» = candidato de fase 2 según 
 | RF-18 (aviso al salir) | 06 · T-6.7 |
 | RF-19 (cálculo al ver resultados) | 03 · T-3.3 + 07 · T-7.1 (disparo: 06 · T-6.6) |
 | RF-20 (pantalla de resultados) | 07 · T-7.1–T-7.4 |
-| RF-21 (botón «Home») | 07 · T-7.4 |
+| RF-21 (botón «Home») | 07 · T-7.4 + 09 · T-9.4 |
+| RF-22 (revisión de respuestas) | 09 · T-9.1–T-9.6 |
 
 ### Reglas de negocio (RN)
 
@@ -94,15 +96,15 @@ En cada caso: capa lógica (Vitest, Plan 03) + capa UI (plan de la pantalla) + p
 | E-01 | RM con 17 temas | 03 · T-3.6 + 06 · T-6.8 + 08 · T-8.5 |
 | E-02 | q = 5 | 03 · T-3.6 + 06 · T-6.8 + 08 · T-8.5 |
 | E-03 | Configuración mínima | 03 · T-3.6 + 06 · T-6.8 + 07 · T-7.5 + 08 · T-8.5 |
-| E-04 | Quiz en blanco | 03 · T-3.6 + 07 · T-7.5 + 08 · T-8.5 |
+| E-04 | Quiz en blanco | 03 · T-3.6 + 07 · T-7.5 + 08 · T-8.5 + 09 · T-9.3, T-9.6 |
 | E-05 | Escala 0/0/0 | 03 · T-3.6 + 07 · T-7.5 + 08 · T-8.5 |
-| E-06 | Comprensión de lectura con q < 5 | 03 · T-3.6 + 06 · T-6.3, T-6.8 + 08 · T-8.5 |
+| E-06 | Comprensión de lectura con q < 5 | 03 · T-3.6 + 06 · T-6.3, T-6.8 + 08 · T-8.5 + 09 · T-9.4, T-9.6 |
 | E-07 | Atrás + editar respuestas | 03 · T-3.6 + 06 · T-6.4, T-6.8 + 08 · T-8.5 |
 | E-08 | Nombre vacío/espacios | 05 · T-5.3 + 08 · T-8.5 |
 | E-09 | Puntajes negativos | 01 · T-1.6 + 03 · T-3.6 + 05 · T-5.6 + 07 · T-7.5 + 08 · T-8.5 |
 | E-10 | Símbolos matemáticos | 02 · T-2.2, T-2.5 + 07 · T-7.5 + 08 · T-8.5 |
 
-**Resumen de cobertura:** RF 20/20 activos (+ RF-11 fuera de v1) · RN 11/11 · RNF 9/9 · E 10/10.
+**Resumen de cobertura:** RF 21/21 activos (RF-22 incluido en el Plan 09; + RF-11 fuera de v1) · RN 11/11 · RNF 9/9 · E 10/10.
 
 ## Decisiones pendientes que afectan la ejecución (`07 §7.16`)
 
@@ -134,3 +136,4 @@ Se resuelven en la **revisión de vigencia** previa a la ejecución de su plan (
 | 2026-10-17 | Se inicia el Plan 08 con su revisión de vigencia (contrato §7): vigencia confirmada contra `01 §1.7`–`§1.8`, `06 §6.2`/`§6.6`/`§6.7`, `07 §7.12`–`§7.16`, `02 §M6` y `03 §3.6`, sin cambios de tareas ni de matriz; decisiones `07 §7.16 (#1)–(#3)` resueltas (tabla de arriba) y precondiciones verificadas (Planes 01–07 ✅; `check`/`build`/`test` en verde: 183 módulos, CSS 8.11 KB gzip, JS 50.76 KB gzip, 113 pruebas). Ajustes de vigencia registrados: T-8.6 se limita a verificar el remoto y el README raíz (el repositorio ya existe y el push lo gestiona el orquestador); T-8.4/T-8.5 miden por DOM/red y tamaños de build (sin capturas ni Lighthouse), con el juicio visual y los dispositivos reales como pendientes humanos. Estado del plan: 🔄. |
 | 2026-10-17 | Se ejecuta y cierra el Plan 08 (T-8.1–T-8.8, un commit por tarea): **auditoría de accesibilidad** por DOM en las tres pantallas y hojas (recorrido de teclado completo, hojas con foco atrapado/`Escape`/retorno, 0 fallos AA en los 76 pares de contraste computados, 200 % de texto sin desbordes, reduced-motion/transparency verificados, 0 objetivos < 44×44) con 2 hallazgos corregidos (desborde horizontal del stepper y del encabezado del slider al 200 %; separación táctil del selector de modo de 4 → 8 px); **checklist `07 §7.14` + auditoría `web-design-guidelines`** sobre todo el código UI (sin hallazgos críticos; corregido un `:hover` fuera de `(hover: hover)` en la galería de desarrollo); **pulido final `impeccable`** (detector `[]`, 3 defectos de contenido largo/200 % corregidos, `DESIGN.md` + `.impeccable/design.json` generados desde el build real, cerrando `07 §7.15`); **presupuesto `06 §6.2` medido y cumplido** (JS 50.76 KB gzip —datos 19.70 + Svelte/app 29.17—, CSS 8.16 KB gzip, 0 fuentes, 0 raster, 3 peticiones, CLS 0, FCP/LCP 464 ms en Fast 4G + CPU 4×; Lighthouse móvil con accesibilidad y buenas prácticas 100/100); **E-01…E-10 verificados de punta a punta** en emulación móvil 360 px sobre el build de producción (17 temas/85 preguntas distintas, q=5, mínimo, en blanco, 0/0/0, comprensión de lectura con q<5, atrás+editar, nombre vacío, negativos, 665 textos matemáticos sin diferencias) con la guía del pase manual en dispositivos reales documentada; **GitHub verificado** (remoto accesible, historial de 81 commits) y **README raíz completado** con el runbook de deploy manual verificado desde un clon limpio (`npm ci` + `npm run build` reproducen `dist/` sin pasos manuales). El deploy y el pase en dispositivos reales quedan como **pendientes manuales del usuario** (informe de cierre en `08 §8`). Estado del plan: ✅. |
 | 2026-10-17 | **Cierre del proyecto (v1):** los 8 planes ✅; matriz global sin filas rojas (RF 20/20 activos + RF-11 fuera de v1 · RN 11/11 · RNF 9/9 · E 10/10); `01 §1.7` con sus 5 criterios de éxito marcados; README de especificaciones actualizado (v1 implementada y verificada; deploy manual pendiente, URL por anotar) y mapa de candidatos de fase 2 publicado en `08 §8`. Pendientes manuales del usuario: **deploy en Cloudflare Pages** y **pase en iOS Safari/Android Chrome** con la guía documentada. |
+| 2026-10-17 | Se aprueba y ejecuta el **Plan 09 — Revisión de respuestas** (T-9.1–T-9.6, un commit por tarea): la revisión con clave y explicación que estaba en fase 2 pasa a `01 §1.4` y `02 §RF-22` (M). Dentro de Resultados, un botón secundario despliega **todas** las preguntas del intento agrupadas por área y tema; cada una es un acordeón nativo con estado (Correcta / Incorrecta / No respondida), clave, elección del usuario, alternativas marcadas y explicación. `check`, `build` y `test` en verde (118 pruebas; +5); V2 por DOM en navegador real (26 acordeones con 3/21/2 estados y las 26 explicaciones idénticas a `questions.json`; Solo Verbal con el texto de Comprensión de lectura cerrado a 360 px sin desbordes; E-04 en blanco con RN-11; teclado en botón y `<summary>`; consola limpia); `web-design-guidelines` sin hallazgos tras corregir el contraste de «No respondida» (`ink-2`, 6.92:1). Cobertura global: RF 21/21 activos · RN 11/11 · RNF 9/9 · E 10/10. El detector `impeccable` ya no está en el repo: quedan como pendientes humanos el juicio visual por capturas y el pase en móvil real. |

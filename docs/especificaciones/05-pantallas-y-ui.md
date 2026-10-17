@@ -156,6 +156,15 @@ Reglas del bloque:
 │  Completo · 13 temas · 2 preg. / tema│  ← recordatorio config (S)
 │                                      │
 │  ┌────────────────────────────────┐  │
+│  │ Mostrar respuestas correctas   │  │  ← revisión opcional (RF-22)
+│  └────────────────────────────────┘  │
+│  ┌ Revisión de respuestas ────────┐  │  ← solo si se pidió
+│  │ ▸ [Correcta] Pregunta 1 …      │  │
+│  │ ▸ [Incorrecta] Pregunta 2 …    │  │  ← acordeón por pregunta
+│  │ ▸ [No respondida] Pregunta 3 … │  │
+│  └────────────────────────────────┘  │
+│                                      │
+│  ┌────────────────────────────────┐  │
 │  │             Home               │  │  ← RF-21
 │  └────────────────────────────────┘  │
 └──────────────────────────────────────┘
@@ -167,6 +176,7 @@ Reglas:
 - Cada tarjeta muestra siempre: puntaje del área, % de aciertos, % de erróneas y % de no respondidas, más conteos de apoyo (RF-20).
 - Los porcentajes son enteros y suman 100 % (RN-09).
 - «Home» conserva nombre y configuración (RF-10) y descarta el intento mostrado.
+- La revisión de respuestas (RF-22) empieza **cerrada**, se agrupa por área y tema, cubre todas las preguntas del intento y cada una se despliega de forma individual con su clave y su explicación. Es solo lectura y no altera el puntaje.
 
 ---
 
@@ -181,7 +191,7 @@ Reglas:
 | Alternativa de respuesta | no seleccionada / seleccionada | Cambiable; sin feedback de corrección. |
 | Botonera quiz | primer bloque / intermedio / último bloque | «Atrás» ausente en el primero; «Ver resultados» en el último. |
 | Modal sin responder | visible / oculta | Solo si hay preguntas en blanco. |
-| Resultados | por áreas incluidas | La escala usada siempre visible. |
+| Resultados | por áreas incluidas · revisión cerrada / abierta · pregunta cerrada / abierta | La escala usada siempre visible; la revisión es de solo lectura. |
 
 ## 5.8 Cubierto por `07-design.md`
 

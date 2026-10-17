@@ -50,10 +50,11 @@ Verificación realizada sobre los 28 archivos (formato 100 % consistente):
 - El texto puede contener saltos de línea internos (párrafos).
 - Espacios sobrantes al final de línea: se recortan.
 
-### Fuera del contrato (la app no lo usa en v1)
+### Fuera del contrato (la app no lo usa)
 
-- La **explicación** de la clave se extrae (es parte del material y se necesitará para la futura revisión), pero la v1 no la muestra.
 - Metadatos de nivel/sugerencias: no se usan ni se muestran.
+
+> La **explicación** de la clave se extrae y se muestra en la revisión de resultados (`02 §RF-22`).
 
 ---
 
@@ -76,7 +77,7 @@ interface Pregunta {
   enunciado: string;
   opciones: Opcion[];     // exactamente 5, en orden A..E
   correcta: Letra;        // clave del material
-  explicacion: string;    // se extrae aunque v1 no la muestre
+  explicacion: string;    // texto de la clave; visible en la revisión (RF-22)
 }
 
 interface Tema {
@@ -194,6 +195,10 @@ interface Resultado {
 ```
 
 El resultado se calcula al vuelo (RF-19) y se descarta al iniciar un nuevo intento (fuera de alcance el historial, ver `01`, §1.5).
+
+### Revisión de respuestas (derivada, no persistida)
+
+La revisión de `02 §RF-22` no añade campos al modelo: se deriva del `Intento` visualizado (`bloques[].preguntas`, `bloques[].respuestas`, `textoComun`) y de la clave (`correcta` + `explicacion`) que ya viaja en cada `Pregunta`. Vive solo en la pantalla de resultados y se descarta con el intento (RN-05).
 
 ---
 

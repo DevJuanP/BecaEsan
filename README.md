@@ -4,7 +4,7 @@ App web estática mobile-first que genera ensayos de opción múltiple (A–E) d
 
 - **Home:** saludo editable (nombre persistente), modo del quiz (solo RM / solo RV / completo), sliders de temas (RM 1–17, RV 1–11) y de preguntas por tema (1–5), puntajes configurables (+5 / 0 / −2 por defecto) y «Iniciar quiz».
 - **Quiz:** un bloque por temática con sus preguntas del intento, alternativas A–E, cronómetro informativo, progreso y navegación «Atrás» / «Continuar» / «Ver resultados».
-- **Resultados:** puntaje total con la escala usada y el tiempo, tarjeta por área con % de aciertos, erróneas y no respondidas (suman 100 %) y botón «Home» para repetir con preguntas nuevas.
+- **Resultados:** puntaje total con la escala usada y el tiempo, tarjeta por área con % de aciertos, erróneas y no respondidas (suman 100 %), revisión opcional de cada pregunta con la clave y su explicación, y botón «Home» para repetir con preguntas nuevas.
 
 Sin backend, sin cuentas y sin historial: todo el estado vive en el navegador (v1, ver [`docs/especificaciones/01`](docs/especificaciones/01-vision-y-alcance.md) §1.5).
 

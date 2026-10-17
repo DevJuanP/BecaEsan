@@ -206,7 +206,7 @@ Reglas:
 | Dependencias | Solo las del stack: Svelte 5, Vite, TypeScript, Tailwind 4, Vitest, svelte-check (Node LTS ≥ 22). Cualquier otra requiere aprobación explícita | `06 §6.1`, `06 §6.3` |
 | Diseño | Tokens del Anexo C (`07 §7.19`); vetos de craft (`07 §7.1`, `§7.2.1`): sin kickers, sin gradientes decorativos, una sola elevación por elemento, sentence case, sin emojis como iconos; tema claro | `07` |
 | Contenido | `docs/preguntas/` es fuente única y **no se edita**; `src/data/questions.json` es generado y **no se edita a mano** (no se versiona) | `01 §1.2`, `03 §3.6`, `06 §6.4` |
-| Alcance | Solo `01 §1.4`; lo de `01 §1.5` (revisión con explicaciones, PWA, historial, etc.) está fuera de v1 | `01 §1.5` |
+| Alcance | Solo `01 §1.4` (incluye la revisión de respuestas, RF-22, añadida en el Plan 09); lo de `01 §1.5` (PWA, historial, etc.) está fuera de v1 | `01 §1.4`, `01 §1.5` |
 | Idioma | Documentación en español; interfaz es-PE; identificadores de código en inglés | `01 §RNF-07` |
 | Navegadores | Evergreen (Safari 16.4+ / Chrome 111+); móvil primero | `06 §6.3` |
 | Skills | Obligatorias según tipo de archivo/pantalla (ver §5, V3) | `07 §7.15` |

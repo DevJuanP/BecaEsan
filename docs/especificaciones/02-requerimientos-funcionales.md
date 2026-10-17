@@ -257,6 +257,28 @@ La pantalla muestra:
 - Al final de los resultados, un botón **«Home»** vuelve al panel de configuración.
 - Se conservan el nombre y la configuración usada (RF-10). El intento visualizado se descarta; el próximo «Iniciar quiz» genera un intento **nuevo** (RN-05).
 
+### RF-22 — Revisión de respuestas (M)
+
+- En Resultados, un botón **«Mostrar respuestas correctas»** despliega la revisión del intento; el mismo botón cambia a **«Ocultar respuestas correctas»** y la revisión empieza cerrada.
+- La revisión cubre **todas** las preguntas del intento y las agrupa por área y por tema, en el orden del quiz. Solo aparecen las áreas incluidas (RN-11).
+- Si el tema tiene texto común (Comprensión de lectura), se ofrece un desplegable **«Texto»** dentro de su bloque.
+- Cada pregunta muestra:
+  - su estado: **«Correcta»**, **«Incorrecta»** o **«No respondida»**;
+  - el enunciado y, si hubo respuesta, la letra marcada y la clave;
+  - las cinco alternativas A–E, con la correcta señalada y, cuando corresponde, la elegida por el usuario;
+  - la **explicación** de la clave.
+- Cada pregunta se despliega y se pliega de forma individual (acordeón); el botón general muestra u oculta la revisión completa.
+- La revisión es **solo lectura**: no altera respuestas, puntaje ni configuración, y no cambia RF-14 (el quiz sigue sin retroalimentación).
+- Al volver a Home, el intento y su revisión se descartan (RF-21, RN-05).
+- El estado se comunica con texto e icono, nunca solo con color; el botón y cada acordeón se operan con teclado y exponen su estado expandido.
+
+**CA:**
+- Acertar la pregunta 1 y fallar la 2: la 1 aparece «Correcta» con su clave; la 2, «Incorrecta» con la elegida y la correcta.
+- Dejar una pregunta en blanco: aparece «No respondida» y muestra la alternativa correcta y la explicación.
+- Abrir el acordeón de una pregunta muestra sus cinco alternativas con la correcta marcada y la explicación; las demás siguen cerradas.
+- Volver a Home y generar un intento nuevo: no queda rastro de la revisión anterior.
+- Comprensión de lectura: el desplegable «Texto» del tema está disponible dentro de la revisión.
+
 ---
 
 ## M6. Casos borde y reglas transversales

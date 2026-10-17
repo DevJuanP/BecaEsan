@@ -123,7 +123,6 @@ Notas:
 ## 6.7 Fuera del stack de v1 (pospuesto)
 
 - PWA instalable + offline (service worker) — fase 2.
-- Pantalla de revisión con clave y explicación — fase 2 (la explicación ya se extrae en el JSON).
 - Persistencia de la configuración entre recargas — candidato (C, RF-11).
 - Dominio propio — cuando se quiera.
 

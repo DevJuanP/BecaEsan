@@ -539,6 +539,18 @@ En barras inferiores: primario `flex: 2`, secundario `flex: 1`; en Home/resultad
 
 - Chip oscuro descrito en §7.9.1; `aria-hidden` (el `aria-label` del botón ya existe); aparece tras 300 ms, se va en 120 ms; nunca en táctil; nunca en elementos sin equivalente accesible.
 
+### 7.9.16 Revisión de respuestas (resultados, RF-22)
+
+- **Botón de despliegue:** secundario, ancho completo, `bar` (48); alterna «Mostrar respuestas correctas» / «Ocultar respuestas correctas» con `aria-expanded` y `aria-controls`; el bloque nace cerrado.
+- **Contenedor:** título «Revisión de respuestas» (`title-2`) + ayuda «Consulta la alternativa correcta y la explicación de cada pregunta.» (`body` `ink-2`). Se agrupa por área (`title-3` con punto de 8 px del acento) y por tema (`label` 600 `ink-2`).
+- **Texto común:** el panel de §7.9.10 se reutiliza cerrado por defecto dentro del bloque del tema (RF-13.2, E-06).
+- **Pregunta (acordeón nativo `<details>`/`<summary>`):** cerrado por defecto; el resumen muestra una píldora de estado (icono 16 + palabra), «Pregunta {n}» `caption` 600 `ink-3`, el enunciado en `statement` y la línea de clave `caption` `ink-2` («Correcta: B» o «Tu respuesta: D · Correcta: B»); chevron 20 `ink-3` que rota 180° al abrir (`--dur-3`; con reduced-motion, sin transición).
+- **Estados:** «Correcta» `ok` sobre `ok-soft` (5.21:1) · «Incorrecta» `bad` sobre `bad-soft` (5.91:1) · «No respondida» `ink-2` sobre `surface-2` (6.92:1). Color + icono + palabra (nunca solo color); se usan los tokens de texto (`ok`/`bad`/`ink-2`), no los `*-fill`, por contraste AA.
+- **Alternativas (solo lectura):** filas con burbuja A–E, texto y marcas; la clave lleva borde/fondo `ok` + etiqueta «Correcta» (check 16); la elegida que no era la clave lleva borde/fondo `bad` + «Tu respuesta». Sin radios: no se puede cambiar la respuesta. Texto de las alternativas en `body`; las marcas en `micro` 600 con `radius-pill`.
+- **Explicación:** panel `surface-2` con borde `line`, radio 12 y padding 12/14; etiqueta «Explicación» `caption` 600 `ink-3` y texto `body` 16/400, interlineado 1.6.
+- **Pregunta en blanco:** se añade «No marcaste ninguna alternativa.» (`caption` `ink-3`) y se destaca la clave.
+- **Accesibilidad:** `<summary>` con altura ≥44 px y foco visible; el nombre accesible es su contenido; los iconos son decorativos; el foco vuelve al botón al ocultar la revisión.
+
 ---
 
 ## 7.10 Pantallas — especificación visual
@@ -587,12 +599,13 @@ Composición vertical (móvil, base 360–429 px; entre paréntesis la separaci�
 | 2 | **Puntaje héroe** (32) | Centrado (§7.9.13): etiqueta caption + número `display` + fila escala/tiempo |
 | 3 | **Tarjeta por área incluida** (16) | Solo áreas del intento (RN-11). Fila superior: punto de 8 px del acento del área + nombre (`title-3`) + «Puntaje del área» + **puntaje** (`title-1` 700 tabular, alineado a la derecha). Luego: barra de composición (12) + 3 filas de métrica (§7.9.12) |
 | 4 | **Recordatorio de configuración** (24) | `caption` `ink-3`: «Completo · 13 temas · 2 preguntas por tema» (RF-20.4) |
-| 5 | **Botón «Home»** | Primario azul, ancho completo, icono `house` (RF-21) |
+| 5 | **Revisión de respuestas (opcional)** (20) | Botón secundario ancho completo (RF-22); al desplegarlo, el bloque de §7.9.16. Cerrado por defecto |
+| 6 | **Botón «Home»** (20) | Primario azul, ancho completo, icono `house` (RF-21), al final del flujo |
 | — | Reserva final | 48 px + safe-area |
 
-- **Aparición (una sola vez):** barras de composición crecen (500 ms, escalonadas 70 ms), héroe con fade+rise 260 ms; con reduced-motion todo aparece en su valor final (§7.7.4).
+- **Aparición (una sola vez):** barras de composición crecen (500 ms, escalonadas 70 ms), héroe con fade+rise 260 ms; con reduced-motion todo aparece en su valor final (§7.7.4). La revisión no anima su entrada: aparece al instante bajo su botón.
 - Escritorio (≥768): las dos tarjetas de área en **dos columnas** (`grid`, gap 20); el resto igual.
-- Casos extremos: puntaje 0 («0», E-05) · negativo («−12», E-09) · área con 100 % en una métrica (una sola barra de color, E-03/E-04).
+- Casos extremos: puntaje 0 («0», E-05) · negativo («−12», E-09) · área con 100 % en una métrica (una sola barra de color, E-03/E-04) · intento en blanco con la revisión mostrando las cinco «No respondida» (E-04) · símbolos matemáticos intactos en alternativas y explicaciones (E-10).
 
 ### 7.10.4 Mapa de casos borde (E-01…E-10) → tratamiento visual
 
@@ -673,6 +686,13 @@ Tono: español es-PE, segunda persona, sentence case, sin emojis, sin signos de 
 | Tarjeta de área | Nombre del área · «Puntaje del área: {56}» |
 | Métricas | «Correctas» · «Incorrectas» · «No respondidas» (con conteo «{12} de {15}» y porcentaje «{80} %») |
 | Recordatorio | «{Modo} · {k} temas · {q} preguntas por tema» |
+| Revisión (botón) | «Mostrar respuestas correctas» / «Ocultar respuestas correctas» |
+| Revisión (título y ayuda) | «Revisión de respuestas» · «Consulta la alternativa correcta y la explicación de cada pregunta.» |
+| Revisión (estado de la pregunta) | «Correcta» · «Incorrecta» · «No respondida» |
+| Revisión (clave) | «Correcta: {B}» · «Tu respuesta: {D} · Correcta: {B}» |
+| Revisión (marcas de alternativa) | «Correcta» · «Tu respuesta» |
+| Revisión (en blanco) | «No marcaste ninguna alternativa.» |
+| Revisión (explicación) | «Explicación» |
 | Botón final | «Home» |
 
 Reglas de escritura: los botones nombran su acción («Ver resultados igualmente», no «OK»); los errores dicen qué hacer («Escribe un número entre −999 y 999»), no solo qué pasó; se dice «tú», nunca «usted»; los números siempre con dígitos («3 temas», no «tres temas»).
@@ -688,6 +708,7 @@ Reglas de escritura: los botones nombran su acción («Ver resultados igualmente
 5. **Teclado (recorrido):**
    - Home: saludo → radios de modo (flechas) → sliders (flechas, Home/End) → steppers (Tab entre botones y campo) → CTA.
    - Quiz: alternativas (flechas entre radios) → [Atrás] → [Continuar].
+   - Resultados: revisión → acordeones de pregunta → [Home]; el botón de revisión expone `aria-expanded` y cada `<summary>` se abre con Enter/Espacio.
    - Hojas: foco atrapado; `Escape` cancela; al cerrar, el foco **regresa al disparador**.
    - `Enter`/`Espacio` operan todo botón (nativos).
 6. **Semántica primero que ARIA:** `<button>`, `<input type="radio">`, `<input type="range">`, `<fieldset>/<legend>` por pregunta, `<dialog>` para hojas; los divs no son controles.
@@ -767,7 +788,7 @@ Además:
 | 4 | **Fuente display opcional** | Fuera de v1 (Anexo A, §7.17); su adopción exige actualizar el presupuesto de `06`. |
 | 5 | **Tema oscuro** | Fase 2 (§7.3.6); tokens listos para un bloque `[data-theme="dark"]`. |
 | 6 | **GSAP del pen de referencia** | Descartado como dependencia (~40 KB para un control); el snap se replica con Pointer Events (§7.8.7). |
-| 7 | **Pantalla de revisión con explicaciones** (fase 2) | Reutilizará los tokens semánticos ya definidos; se diseñará en su propio ciclo. |
+| 7 | **Pantalla de revisión con explicaciones** | **Resuelta (2026-10-17, Plan 09):** se implementa dentro de Resultados (RF-22, §7.9.16), reutilizando los tokens semánticos y los tintes `ok-soft`/`bad-soft`. |
 | 8 | **Detector mecánico de impeccable** | Al construir: `scripts/impeccable.cmd detect --json` sobre los archivos cambiados, una vez por ronda (§7.15). |
 
 ---
@@ -864,6 +885,8 @@ function bindSlider(track, { max, value, onChange }) {
   --color-ok: #047857;        --color-ok-fill: #059669;
   --color-bad: #B91C1C;       --color-bad-fill: #DC2626;
   --color-neutral: #64748B;   --color-focus: #0063BD;
+  /* Tintes suaves de la revisión de respuestas (§7.9.16) */
+  --color-ok-soft: #ECFDF5;   --color-bad-soft: #FEF2F2;
 
   /* Tipografía */
   --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
