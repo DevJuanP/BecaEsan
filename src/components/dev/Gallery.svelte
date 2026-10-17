@@ -6,6 +6,9 @@
    * de los componentes de `src/components/ui/*` mientras no viven en pantallas.
    */
   import Button from '../ui/Button.svelte';
+  import BottomBar from '../ui/BottomBar.svelte';
+  import Chip from '../ui/Chip.svelte';
+  import ProgressSegments from '../ui/ProgressSegments.svelte';
 </script>
 
 <main class="gal">
@@ -78,6 +81,75 @@
       <div class="gal__items" data-area="verbal">
         <Button icon="arrow-right">Ver resultados</Button>
         <Button variant="secundario">Atrás</Button>
+      </div>
+    </div>
+  </section>
+
+  <section class="gal__sec" id="chips">
+    <h2 class="gal__h2">Chips</h2>
+    <p class="gal__src">`07 §7.9.8` · chip de área (RM azul, RV naranja) y chip de cronómetro (tabular, ancho estable, sin `aria-live`).</p>
+
+    <div class="gal__row">
+      <span class="gal__tag">Área y cronómetro</span>
+      <div class="gal__items">
+        <Chip label="Razonamiento Matemático" />
+        <Chip label="Razonamiento Verbal y Comunicación" area="verbal" />
+        <Chip variant="time" label="04:32" ariaLabel="Tiempo transcurrido" />
+        <Chip variant="time" label="1:02:03" ariaLabel="Tiempo transcurrido" />
+      </div>
+    </div>
+  </section>
+
+  <section class="gal__sec" id="progreso">
+    <h2 class="gal__h2">Progreso de bloques</h2>
+    <p class="gal__src">`07 §7.9.9` · pendiente `line`; completado y actual con el acento (el actual a 6 px). `aria-hidden`.</p>
+
+    <div class="gal__row">
+      <span class="gal__tag">N = 1 · bloque 1 (E-03)</span>
+      <ProgressSegments total={1} current={1} />
+    </div>
+
+    <div class="gal__row">
+      <span class="gal__tag">N = 13 · bloque 1</span>
+      <ProgressSegments total={13} current={1} />
+    </div>
+
+    <div class="gal__row">
+      <span class="gal__tag">N = 13 · bloque 5</span>
+      <ProgressSegments total={13} current={5} />
+    </div>
+
+    <div class="gal__row">
+      <span class="gal__tag">N = 17 · bloque 17 (E-01)</span>
+      <ProgressSegments total={17} current={17} />
+    </div>
+  </section>
+
+  <section class="gal__sec" id="barra">
+    <h2 class="gal__h2">Barra inferior fija</h2>
+    <p class="gal__src">
+      `07 §7.9.6` · translúcida + `blur(12px)` con fallback sólido; borde + sombra solo en
+      `.is-scrolled` (al hacer scroll en la galería). Aquí va enmarcada; en las pantallas vive fija al fondo.
+    </p>
+
+    <div class="gal__row">
+      <span class="gal__tag">Un botón (ancho completo)</span>
+      <div class="gal__frame">
+        <p class="gal__frame-text">Contenido de ejemplo bajo la barra.</p>
+        <BottomBar>
+          <Button size="bar" full icon="arrow-right">Iniciar quiz</Button>
+        </BottomBar>
+      </div>
+    </div>
+
+    <div class="gal__row">
+      <span class="gal__tag">Dos botones (1:2)</span>
+      <div class="gal__frame">
+        <p class="gal__frame-text">Contenido de ejemplo bajo la barra.</p>
+        <BottomBar>
+          <Button size="bar" variant="secundario" icon="chevron-left" iconPos="start">Atrás</Button>
+          <Button size="bar" icon="arrow-right">Continuar</Button>
+        </BottomBar>
       </div>
     </div>
   </section>
@@ -163,6 +235,23 @@
   .gal__items--stack {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  /* Marco que aísla una barra `position: fixed` (el `transform` la contiene) */
+  .gal__frame {
+    position: relative;
+    height: 156px;
+    overflow: hidden;
+    transform: translateZ(0);
+    border: 1px dashed var(--color-line-strong);
+    border-radius: var(--radius-control);
+    background: var(--color-bg);
+  }
+
+  .gal__frame-text {
+    padding: 12px 16px;
+    font-size: 0.8125rem;
+    color: var(--color-ink-3);
   }
 
   .gal__spacer {

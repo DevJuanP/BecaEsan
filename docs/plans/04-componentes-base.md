@@ -43,7 +43,7 @@ Construir el catálogo de componentes reutilizables fiel al sistema visual de `0
   3. `BottomBar`: barra fija traducida de `07 §7.9.6`: translúcida + blur 12 con fallback sólido (`@supports`), borde + sombra solo en estado `is-scrolled` (transición 160 ms), padding con `env(safe-area-inset-bottom)`; variantes 1 botón / 2 botones (1:2).
 - **Criterios:** `07 §7.9.6`, `§7.9.8`, `§7.9.9`, `§7.3.4`.
 - **Verificación:** V0 + V2 (galería: estados de scroll de la barra) + V3.
-- **Estado:** [ ]
+- **Estado:** [x]
 
 ### T-4.3 — Stepper numérico
 
@@ -157,5 +157,6 @@ _(append-only; las entradas de ejecución se añaden al final)_
 - **Orden de la galería (T-4.8):** para que cada tarea pueda correr su V2 declarada («V2 (galería)») antes de marcarse ✅, la galería se crea **incrementalmente**: T-4.1 aporta el armazón (`src/components/dev/Gallery.svelte` + hook con import dinámico en `App.svelte`) con la sección de botones, y T-4.8 la completa (cobertura de todos los estados, hoja abierta en demo, slider 5/11/17, error del stepper, exclusión de producción). No cambia el alcance ni la verificación de T-4.8.
 - **`src/app.css` (tokens):** se añaden `--radius-pill: 999px` (token de `07 §7.5.2` que faltaba en el Anexo C) y `--accent-deep` en los bloques `[data-area]` (alias del «pressed profundo» azul/naranja 800 de `07 §7.3.2`), para que los componentes consuman el acento contextual sin duplicar hex.
 - **T-4.1 · V2 ejecutada (galería, `#dev`):** 360 y 430 px sin scroll horizontal (`scrollWidth == innerWidth`); todos los botones ≥44×44 (mínimo medido 44×44 en la variante icono) con ≥8 px de separación; consola sin errores. Hover verificado con `(hover: hover) and (pointer: fine)`: primario azul `#004E96` y naranja del área `#C2410C`; en emulación táctil la media query no aplica. Focus por teclado (`Tab`): anillo 2 px `--color-focus` + offset 2 px. Pressed `scale(0.97)` presente en la hoja de estilos (100 ms `--ease-out`); disabled con fondo `line` + `ink-disabled` y sin cambio en hover. Auditoría `web-design-guidelines` de los archivos UI: se ejecuta en el cierre del plan (V3 declarada «al cierre del plan»).
+- **T-4.2 · V2 ejecutada (galería, `#dev`):** chip de área RM `#EAF3FB`/`#063E77` y RV `#FFF3EA`/`#9A3412` (tinte, borde y punto del acento); chip de cronómetro `surface-2`, 28 px de alto, texto tabular con `min-width: 5ch` (36 px) para no reflowear. Progreso con N = 1, 13 y 17 (`E-01`, `E-03`): pendiente `line`, completado y actual con el acento, actual a 6 px y el resto a 4 px. Barra: `rgba(255,255,255,0.85)` + `blur(12px)`, sin borde ni sombra en reposo y con `.is-scrolled` (sombra `0 -6px 16px rgba(15,23,42,0.06)` + borde `line`) al hacer scroll; un botón 236 px de ancho (completo) y dos botones 89/135 px (1:2). Consola sin errores; 360 px sin scroll horizontal.
 
 
