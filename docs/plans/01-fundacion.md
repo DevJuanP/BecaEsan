@@ -83,7 +83,7 @@ Dejar el repositorio y el proyecto listos para construir: control de versiones, 
   3. Sin scroll horizontal a 360 px.
 - **Criterios:** RNF-01, `06 §6.2` (pantallas como estados), `07 §7.5.3`, `§7.13`.
 - **Verificación:** V0 + V2 mínimo: a 360 px sin scroll horizontal; columna centrada a ≥768 px; `theme-color` aplicado.
-- **Estado:** [ ]
+- **Estado:** [x]
 
 ### T-1.6 — Vitest y utilidades de formato
 
