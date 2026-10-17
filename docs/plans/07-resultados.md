@@ -1,6 +1,6 @@
 # Plan 07 — Resultados
 
-> Estado: ⬜ Pendiente · Depende de: Planes 03, 04, 06 · Cubre: RF-19, RF-20, RF-21, RN-08…RN-11 (lectura), RF-16 (tiempo total), RF-10 (cierre completo), E-03, E-04, E-05, E-09, E-10, `05 §5.6`, `07 §7.9.12`, `§7.9.13`, `§7.10.3` · Estimación: M
+> Estado: 🔄 En curso · Depende de: Planes 03, 04, 06 · Cubre: RF-19, RF-20, RF-21, RN-08…RN-11 (lectura), RF-16 (tiempo total), RF-10 (cierre completo), E-03, E-04, E-05, E-09, E-10, `05 §5.6`, `07 §7.9.12`, `§7.9.13`, `§7.10.3` · Estimación: M
 
 ## 1. Objetivo
 
@@ -108,4 +108,14 @@ La pantalla de resultados completa: puntaje total héroe con la escala usada y e
 
 ## 8. Registro de desvíos y decisiones
 
-_(vacío — se completa durante la ejecución)_
+_(append-only; las entradas de ejecución se añaden al final)_
+
+### Revisión de vigencia (2026-10-17, previa a la ejecución)
+
+- **Confrontación con las especificaciones** (`02 §RF-19`–`§RF-21`, `§RN-08`–`§RN-11`, `§M6` (E-03, E-04, E-05, E-09, E-10); `03 §3.3` (Resultado/ResultadoArea); `04 §4.6` (cálculo al ver resultados); `05 §5.6`, `§5.7`; `07 §7.7.3`, `§7.9.12`, `§7.9.13`, `§7.10.3`, `§7.11`, `§7.12`, `§7.14`, `§7.16`, `§7.19`): los RF/RN/E citados por la matriz siguen correspondiendo a T-7.1…T-7.5 y no hay requisitos derogados. Todo lo necesario ya existe en el repo (`calcularResultado` invocado en `T-6.6`, el modelo `Resultado` con `escala`/`duracionMs`, `formatoEntero`/`formatDuracion` y el catálogo `src/components/ui/*`: `Button`, `Icon` con `house`/`clock`). Vigencia confirmada **sin cambios de tareas ni de matriz**.
+- **Precondiciones de §4 verificadas:** Planes 03, 04 y 06 ✅ en `docs/plans/README.md`; `npm run check` → 0 errores/0 avisos, `npm run build` → 175 módulos (CSS 7.60 KB gzip, JS 49.77 KB gzip), `npm run test` → 106 pruebas en verde.
+- **Decisión pendiente `07 §7.16` (#3) — resuelta por el orquestador:** «Home» → «Inicio» **se mantiene «Home»**, tal como en `02`/`05` y `07 §7.11`; no se renombra (T-7.4 sin condicional). La tabla de decisiones de `README.md` ya lo refleja.
+- **Tensiones detectadas entre specs (se resuelven en la tarea correspondiente y se registran aquí):** (a) `07 §7.3.2` define `--color-neutral-fill` (segmento de barra «no respondidas»), pero el Anexo C (`§7.19`) y `app.css` no lo incluyen; se añadirá el token a `app.css` (T-7.3). (b) `07 §7.11` da para la tarjeta de área solo «Nombre del área», y el wireframe de `05 §5.6` usa el nombre corto («Razonamiento Verbal») mientras el chip del quiz usa el nombre completo del deck: se reutilizan las cadenas ya congeladas del deck (`§7.11` Quiz) para no inventar microcopy (T-7.3). (c) `07 §7.10.3` describe «Puntaje del área» + puntaje como etiqueta y número alineados a la derecha, y `07 §7.11` lo escribe como «Puntaje del área: {56}»: se implementa la estructura de `§7.10.3` (etiqueta `caption` + número `title-1` 700 tabular) manteniendo el texto exacto de la etiqueta (T-7.3). (d) `05 §5.6` muestra los conteos como «2 incorrectas»/«1 no respondida» y `07 §7.11` como «{c} de {T}»: rige el plan y el deck (T-7.3, «{c} de {T}» en las tres filas).
+- **`App.svelte` (pegamento):** el plan lista los componentes a crear; el montaje obliga a sustituir en `App.svelte` el placeholder de resultados (y su navegación temporal) por `<ResultsScreen />`. Cambio de pegamento, sin alcance nuevo; se registra en la entrada de T-7.1.
+- **Convención de identificadores:** el plan cita el contrato §10 («identificadores de código en inglés»), pero los Planes 01–06 consolidaron identificadores en español (`estado.pantalla`, `irA`, `calcularResultado`, `aplicarNombre`…). Se mantiene la convención existente del repo por consistencia (cambio mínimo, reversible).
+- **Verificación V2 de este plan (nota de entorno):** el ejecutor de este turno no puede recibir imágenes; toda la V2 se hace con `chrome-devtools` **por salidas de texto** (DOM, `evaluate`, `snapshot`, consola): dimensiones, `scrollWidth` vs `clientWidth` a 360 px, atributos ARIA, valores y foco. El juicio puramente visual queda documentado como pendiente humano en el §7 si no es verificable por DOM.
