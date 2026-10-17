@@ -1,6 +1,6 @@
 # Plan 02 — Datos
 
-> Estado: ⬜ Pendiente · Depende de: Plan 01 · Cubre: `03 §3.1`–`§3.2`, `§3.4`, `§3.6`, RNF-05, RNF-08, `06 §6.4` · Estimación: M
+> Estado: ✅ Hecho · Depende de: Plan 01 · Cubre: `03 §3.1`–`§3.2`, `§3.4`, `§3.6`, RNF-05, RNF-08, `06 §6.4` · Estimación: M
 
 ## 1. Objetivo
 
@@ -111,10 +111,11 @@ Construir `scripts/build-questions.mjs` (Node, **sin dependencias**) que extraig
 
 ## 7. Verificación final del plan
 
-- [ ] `node scripts/build-questions.mjs` corre limpio sobre los 28 archivos reales.
-- [ ] `npm run build` genera `src/data/questions.json`; dos ejecuciones producen el mismo hash.
-- [ ] `npm run test` en verde (fixtures rotos + material real + determinismo).
-- [ ] Un fixture roto provoca fallo de build con `{archivo}: {problema}` y **sin** JSON parcial.
+- [x] `node scripts/build-questions.mjs` corre limpio sobre los 28 archivos reales (`questions.json: 28 temas · 140 preguntas · 127.0 KB`).
+- [x] `npm run build` genera `src/data/questions.json`; dos ejecuciones producen el mismo hash (`sha256 ac9af381…`, 130 084 bytes).
+- [x] `npm run test` en verde (fixtures rotos + material real + determinismo): 27 pruebas · 2 archivos.
+- [x] Un fixture roto provoca fallo de build con `{archivo}: {problema}` y **sin** JSON parcial (copia aislada del material; `exit=1`, sin `questions.json` ni `.tmp`).
+- [x] `npm run check` en verde y `src/data/questions.json` ignorado por git (`.gitignore:18`).
 
 ## 8. Registro de desvíos y decisiones
 
