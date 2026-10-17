@@ -157,7 +157,9 @@
   }
 
   .stepper__input {
-    width: 64px;
+    /* Ancho de `07 §7.9.3` (64) que tolera el texto del sistema grande
+       (`07 §7.12` (10)): con la raíz al 200 % crece lo justo para «−999». */
+    width: max(64px, 5ch);
     height: 44px;
     padding: 0 4px;
     border: 1px solid var(--color-line-strong);

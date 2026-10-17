@@ -45,6 +45,7 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
+    max-width: 100%;
     min-height: 44px;
     margin-left: -12px;
     padding: 0 12px;
@@ -63,6 +64,10 @@
 
   .saludo__texto {
     min-width: 0;
+    /* Nombres largos sin espacios (RF-01, hasta 30 caracteres) parten de línea
+       en vez de empujar la columna (`07 §7.14`, contenido de usuario).
+       `anywhere` también reduce el min-content, así el botón encoge. */
+    overflow-wrap: anywhere;
     text-wrap: balance;
   }
 

@@ -101,13 +101,16 @@
     text-wrap: balance;
   }
 
-  /* Saludo (`02 §RF-20.5`, `07 §7.10.3` #1): `body` `ink-2`, solo con nombre */
+  /* Saludo (`02 §RF-20.5`, `07 §7.10.3` #1): `body` `ink-2`, solo con nombre.
+     Con nombre largo y texto del sistema grande el saludo parte de línea en
+     vez de desbordar (`07 §7.14`, contenido de usuario). */
   .res__saludo {
     margin-top: 4px;
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5;
     color: var(--color-ink-2);
+    overflow-wrap: break-word;
     text-wrap: pretty;
   }
 
