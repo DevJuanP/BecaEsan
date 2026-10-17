@@ -1,6 +1,6 @@
 # Plan 05 — Home
 
-> Estado: 🔄 En curso · Depende de: Planes 03, 04 · Cubre: RF-01…RF-10, RNF-01, RNF-02, RNF-04, RNF-06, RNF-07, E-08, E-09 (UI), `05 §5.2`–`§5.3`, `07 §7.9.1`, `§7.9.2`, `§7.10.1`, `§7.11` · Estimación: M
+> Estado: ✅ Hecho · Depende de: Planes 03, 04 · Cubre: RF-01…RF-10, RNF-01, RNF-02, RNF-04, RNF-06, RNF-07, E-08, E-09 (UI), `05 §5.2`–`§5.3`, `07 §7.9.1`, `§7.9.2`, `§7.10.1`, `§7.11` · Estimación: M
 
 ## 1. Objetivo
 
