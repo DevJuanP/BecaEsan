@@ -63,7 +63,7 @@
         onGuardar={(nombre) => estado.aplicarNombre(nombre)}
       />
       <div class="pt-6">
-        <ConfigPanel config={estado.config} onIniciar={iniciarQuiz} />
+        <ConfigPanel bind:config={estado.config} onIniciar={iniciarQuiz} />
       </div>
     {:else if estado.pantalla === 'quiz'}
       <h1 class="pt-5 text-2xl font-bold" data-screen-title tabindex="-1">Quiz</h1>

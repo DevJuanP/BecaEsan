@@ -10,11 +10,11 @@
    * mensaje y el CTA se deshabilita (T-5.7).
    */
   interface Props {
-    /** Configuración compartida (`03 §3.3`); los steppers escriben en `puntos`. */
+    /** Configuración compartida (`03 §3.3`); los steppers escriben en `puntos` (`bind:config`). */
     config: ConfigQuiz;
   }
 
-  let { config }: Props = $props();
+  let { config = $bindable() }: Props = $props();
 
   /** Mensaje del deck (`07 §7.11`), con el menos tipográfico (E-09). */
   const MENSAJE_ERROR = 'Escribe un número entre −999 y 999.';

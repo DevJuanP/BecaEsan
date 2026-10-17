@@ -19,13 +19,13 @@
    * (RF-08, RF-10).
    */
   interface Props {
-    /** Configuración del intento (`03 §3.3`); los hijos la mutan. */
+    /** Configuración del intento (`03 §3.3`); se comparte con `bind:config` desde `App.svelte`. */
     config: ConfigQuiz;
     /** Genera el intento y navega al quiz (`02 §RF-09`); lo hace `App.svelte`. */
     onIniciar: () => void;
   }
 
-  let { config, onIniciar }: Props = $props();
+  let { config = $bindable(), onIniciar }: Props = $props();
 
   const idTitulo = $props.id();
 
@@ -83,7 +83,7 @@
     />
   </div>
 
-  <ScoreInputs {config} />
+  <ScoreInputs bind:config />
 
   <p class="panel__resumen tnum">{resumen}</p>
 
