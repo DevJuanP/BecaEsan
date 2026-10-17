@@ -110,7 +110,7 @@ En cada caso: capa lógica (Vitest, Plan 03) + capa UI (plan de la pantalla) + p
 |---|---|---|---|
 | 1 | Captura/CSS del CodePen del slider | 04 · T-4.4 | **Resuelta (2026-10-16, plan 04):** no hay captura/CSS en el repo; rige `07 §7.8` + `§7.18` (Anexo B) como especificación vinculante de la capa visual |
 | 2 | Autofocus del nombre en móvil | 05 · T-5.3 | **Resuelta (2026-10-16, plan 05):** se aplica la propuesta de `07` — autofocus del campo **solo** con `(pointer: fine)` (evita el teclado emergente en móvil táctil) |
-| 3 | «Home» → «Inicio» | 07 · T-7.4 | Por defecto: «Home» como en `02`/`05` |
+| 3 | «Home» → «Inicio» | 07 · T-7.4 | **Resuelta (2026-10-16, plan 07):** se mantiene «Home» tal como en `02`/`05` y `07 §7.11` (microcopy ya congelado en pantallas previas; cambiarlo exigiría re-auditar cadenas exactas) |
 
 Se resuelven en la **revisión de vigencia** previa a la ejecución de su plan (`00-contrato §7`).
 
