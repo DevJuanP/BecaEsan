@@ -1,7 +1,8 @@
 <script lang="ts">
   import MetricRow from './MetricRow.svelte';
+  import { NOMBRE_AREA } from '../../lib/config';
   import { formatoPuntaje } from '../../lib/format';
-  import type { Area, ResultadoArea } from '../../lib/types';
+  import type { ResultadoArea } from '../../lib/types';
 
   /**
    * Tarjeta por área incluida (`02 §RF-20.2`, `§RN-11`, `07 §7.10.3` #3):
@@ -19,12 +20,6 @@
   }
 
   let { area, indice }: Props = $props();
-
-  /** Nombres del deck de microcopy (`07 §7.11`, chip de área del quiz). */
-  const NOMBRE_AREA: Record<Area, string> = {
-    matematico: 'Razonamiento Matemático',
-    verbal: 'Razonamiento Verbal y Comunicación',
-  };
 
   /** Retraso escalonado de la barra: 70 ms por tarjeta (`07 §7.7.3`). */
   const retraso = $derived(`${indice * 70}ms`);

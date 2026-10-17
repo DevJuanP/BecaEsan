@@ -1,4 +1,5 @@
 <script lang="ts">
+  import AnswerReview from './AnswerReview.svelte';
   import AreaCard from './AreaCard.svelte';
   import ScoreHero from './ScoreHero.svelte';
   import Button from '../ui/Button.svelte';
@@ -12,9 +13,17 @@
    *
    * Composición vertical de `07 §7.10.3`: título y saludo (RF-20.5), puntaje
    * héroe (RF-20.1/RF-20.3), tarjeta por área incluida (RF-20.2, RN-11),
-   * recordatorio de la configuración (RF-20.4) y botón «Home» (RF-21).
+   * recordatorio de la configuración (RF-20.4), revisión opcional de respuestas
+   * (RF-22) y botón «Home» (RF-21).
    */
   const resultado = $derived(estado.resultado);
+  const intento = $derived(estado.intento);
+
+  /** La revisión se pide explícitamente y empieza cerrada (RF-22). */
+  let mostrarRespuestas = $state(false);
+
+  /** Id estable del bloque de revisión para `aria-controls`. */
+  const idRevision = $props.id();
 
   /**
    * Recordatorio de la configuración del intento (`02 §RF-20.4`, `07 §7.11`):
@@ -57,6 +66,29 @@
 
     <!-- Recordatorio de la configuración del intento (`02 §RF-20.4`) -->
     <p class="res__recordatorio tnum">{recordatorio}</p>
+
+    <!-- Revisión opcional de respuestas (`02 §RF-22`): cerrada por defecto y
+         solo para el intento visualizado. -->
+    {#if intento !== null}
+      <div class="res__revision">
+        <Button
+          variant="secundario"
+          size="bar"
+          full
+          ariaExpanded={mostrarRespuestas}
+          ariaControls={mostrarRespuestas ? idRevision : undefined}
+          onclick={() => (mostrarRespuestas = !mostrarRespuestas)}
+        >
+          {mostrarRespuestas ? 'Ocultar respuestas correctas' : 'Mostrar respuestas correctas'}
+        </Button>
+
+        {#if mostrarRespuestas}
+          <div class="res__revision-contenido">
+            <AnswerReview bloques={intento.bloques} id={idRevision} />
+          </div>
+        {/if}
+      </div>
+    {/if}
 
     <!-- «Home» (RF-21): vuelve al panel conservando nombre y configuración -->
     <div class="res__home">
@@ -151,7 +183,17 @@
     text-wrap: pretty;
   }
 
-  /* Botón «Home»: ancho completo, al final del flujo (`07 §7.10.3` #5) */
+  /* Revisión de respuestas (`02 §RF-22`, `07 §7.10.3` #5): el botón sigue al
+     recordatorio y el contenido aparece antes del «Home» final. */
+  .res__revision {
+    margin-top: 20px;
+  }
+
+  .res__revision-contenido {
+    margin-top: 20px;
+  }
+
+  /* Botón «Home»: ancho completo, al final del flujo (`07 §7.10.3` #6) */
   .res__home {
     margin-top: 20px;
   }

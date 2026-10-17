@@ -3,7 +3,7 @@
  * estimado (`02 §RF-07`, `§RF-08`, `03 §3.3`).
  */
 
-import type { ConfigQuiz, Modo } from './types';
+import type { Area, ConfigQuiz, Modo } from './types';
 
 /** Congela en profundidad para que el default compartido nunca se mute. */
 function congelarProfundo<T extends object>(valor: T): T {
@@ -50,6 +50,12 @@ export function validarConfig(config: ConfigQuiz): ValidacionConfig {
   });
   return { valida: camposEnError.length === 0, camposEnError };
 }
+
+/** Nombres visibles de las áreas (`07 §7.11`, chip del quiz y tarjetas). */
+export const NOMBRE_AREA: Record<Area, string> = {
+  matematico: 'Razonamiento Matemático',
+  verbal: 'Razonamiento Verbal y Comunicación',
+};
 
 /** Nombres de modo del deck de microcopy (`07 §7.11`). */
 const NOMBRES_MODO: Record<Modo, string> = {
