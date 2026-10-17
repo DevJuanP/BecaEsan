@@ -21,7 +21,7 @@ Esta carpeta contiene los **planes de ejecución** que construyen la app definid
 | 05 | [Home](05-home.md) | Saludo + hoja de nombre + panel de configuración + CTA | 03, 04 | M | ⬜ |
 | 06 | [Quiz](06-quiz.md) | Cabecera, bloques, navegación, texto común, confirmación, cronómetro | 03, 04, 05 | L | ⬜ |
 | 07 | [Resultados](07-resultados.md) | Héroe, tarjetas por área, barras, recordatorio, Home | 03, 04, 06 | M | ⬜ |
-| 08 | [Calidad y despliegue](08-calidad-y-despliegue.md) | Auditorías de skills, presupuesto, E2E, GitHub + Cloudflare Pages | 01–07 | M | ⬜ |
+| 08 | [Calidad y despliegue](08-calidad-y-despliegue.md) | Auditorías de skills, presupuesto, E2E, GitHub + preparación del deploy manual | 01–07 | M | ⬜ |
 
 Orden de ejecución: `01 → 02 → 03 → 04 → 05 → 06 → 07 → 08`. Independencia declarada: el Plan 04 solo requiere el 01 (se ejecuta en su turno).
 
@@ -119,3 +119,4 @@ Se resuelven en la **revisión de vigencia** previa a la ejecución de su plan (
 | Fecha | Cambio |
 |---|---|
 | 2026-10-16 | Se crea el contrato (`00-contrato.md`) y los 8 planes de ejecución (01–08), con matriz global de trazabilidad. Estados: todos ⬜. |
+| 2026-10-16 | Control de cambios previo a la ejecución (decisión del usuario, `00-contrato §9`): el deploy a Cloudflare Pages es **manual del usuario** y queda fuera de la orquestación; T-8.7 pasa a «preparación del deploy manual», T-8.5 explicita emulación móvil + pase manual, y el DoD del contrato (`§6`) se ajusta en consecuencia. |

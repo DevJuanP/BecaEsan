@@ -131,7 +131,7 @@ Reglas:
 - [ ] Cobertura 100 % de la matriz global;
 - [ ] E-01…E-10 verificados de punta a punta;
 - [ ] Criterios de éxito de `01 §1.7` cumplidos;
-- [ ] Desplegado en Cloudflare Pages (`08 T-8.7`, `06 §6.6`).
+- [ ] Publicación: **deploy manual del usuario** en Cloudflare Pages, con la app construida, verificada y el runbook preparado por el Plan 08 (`08 T-8.7`, `06 §6.6`).
 
 ---
 
