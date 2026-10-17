@@ -37,6 +37,19 @@ export function formatoConSigno(n: number): string {
   return entero > 0 ? `+${entero}` : formatoEntero(entero);
 }
 
+/** Formato numérico es-PE (`07 §7.4.3`): separador de millares del locale. */
+const FORMATO_ES_PE = new Intl.NumberFormat('es-PE');
+
+/**
+ * Formatea un **puntaje** con el formato numérico es-PE (`07 §7.4.3`): enteros
+ * sin decimales, con el separador de millares del locale (los puntajes de
+ * resultados pueden superar 999 con configuraciones extremas) y el signo menos
+ * tipográfico U+2212 en los negativos (E-09; `Intl` emite el guion ASCII).
+ */
+export function formatoPuntaje(n: number): string {
+  return FORMATO_ES_PE.format(Math.trunc(n)).replace('-', MENOS);
+}
+
 /** Rango permitido de los puntajes configurables (`02 §RF-07`): −999…999. */
 export const LIMITE_ENTERO = 999;
 

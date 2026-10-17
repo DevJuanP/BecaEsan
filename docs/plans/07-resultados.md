@@ -76,7 +76,7 @@ La pantalla de resultados completa: puntaje total héroe con la escala usada y e
 - **Pasos:** checklist `07 §7.14` + especificaciones; casos: **E-03** (T = 1 → 100/0/0), **E-04** (todo en blanco: barra 100 % gris, puntaje = T × pnr, % no respondidas = 100), **E-05** (escala 0 → puntaje 0), **E-09** (puntaje negativo con `−`), **E-10** (preguntas con π/≈/×/² se ven idénticas durante el ciclo). Verificar la suma 100 % en pantalla con varias combinaciones. Modo «Solo Verbal»: ninguna mención a RM (RN-11). Ciclo completo «Home → config → quiz → resultados → Home» con nombre persistido. Auditoría `web-design-guidelines` + pasada `impeccable` de cierre.
 - **Criterios:** `07 §7.10.3`, `§7.14`; E-03/04/05/09/10; RN-11; RF-10.
 - **Verificación:** checklist marcada + hallazgos corregidos o registrados.
-- **Estado:** [ ]
+- **Estado:** [x]
 
 ## 6. Matriz de trazabilidad del plan
 
@@ -99,12 +99,14 @@ La pantalla de resultados completa: puntaje total héroe con la escala usada y e
 
 ## 7. Verificación final del plan
 
-- [ ] Ciclo completo real: nombre → configuración → quiz → resultados → Home → segundo intento, sin errores.
-- [ ] Porcentajes en pantalla enteros y sumando 100 % en las tarjetas mostradas.
-- [ ] Puntaje total y por área coinciden con la aritmética de la escala configurada (incluye negativos).
-- [ ] Modos de un solo área: la otra no aparece por ningún lado.
-- [ ] Aparición de barras única (sin repetición al re-render); reduced-motion muestra valores finales.
-- [ ] Auditoría `web-design-guidelines` y pasada `impeccable` de cierre sin hallazgos críticos pendientes.
+- [x] Ciclo completo real: nombre → configuración → quiz → resultados → Home → segundo intento, sin errores.
+- [x] Porcentajes en pantalla enteros y sumando 100 % en las tarjetas mostradas.
+- [x] Puntaje total y por área coinciden con la aritmética de la escala configurada (incluye negativos).
+- [x] Modos de un solo área: la otra no aparece por ningún lado.
+- [x] Aparición de barras única (sin repetición al re-render); reduced-motion muestra valores finales.
+- [x] Auditoría `web-design-guidelines` y pasada `impeccable` de cierre sin hallazgos críticos pendientes.
+
+> Evidencia de cada punto en el registro de T-7.5 (§8). La comprobación en **móvil real** (iOS Safari / Android Chrome, `07 §7.14`) y el juicio puramente visual por capturas quedan como pendientes humanos (el ejecutor de este turno no puede recibir imágenes).
 
 ## 8. Registro de desvíos y decisiones
 
@@ -151,3 +153,23 @@ _(append-only; las entradas de ejecución se añaden al final)_
 - **Microcopy del botón:** «Home», según la decisión `07 §7.16 (#3)` resuelta (no se renombra a «Inicio»). Icono `house` 20 a la izquierda del texto (convención de los botones con icono del catálogo).
 - **V0:** `npm run check` → 0 errores/0 avisos; `npm run build` → CSS 8.10 KB gzip, JS 50.69 KB gzip; `svelte-autofixer` sobre `ResultsScreen.svelte`: sin hallazgos.
 - **V2 (por DOM, viewport 360×800, ciclo completo):** con nombre «Juan», modo «Completo», RM=3/RV=2/q=2 y puntos 7/1/−3, el primer intento (todo en blanco) muestra el recordatorio «Completo · 5 temas · 2 preguntas por tema» (13 px/500/`ink-3`); el botón final es un `<button>` `data-variant="primario"` `data-size="bar"` de 48 px de alto, 320 px de ancho (= ancho completo de la columna) con fondo azul `rgb(0,99,189)`, texto «Home» e icono `house` de 20×20 `aria-hidden`. Al pulsarlo: `document.title` «Simulador · Home», saludo «Hola, Juan» (nombre conservado), foco en el `<h1>`, modo «Completo» seleccionado, sliders «3 de 17» / «2 de 11» / «2 de 5» y puntos «7» / «1» / «−3» (configuración conservada, RF-10) y resumen «Completo · 5 temas · 10 preguntas». Un segundo «Iniciar quiz» genera un intento **distinto** (ids de pregunta del primer bloque diferentes, RN-05). Sin scroll horizontal (`scrollWidth` = `clientWidth` = 360) y consola limpia.
+
+### T-7.5 — Verificación de pantalla (V2 + V3)
+
+- **Casos borde medidos por DOM (viewport 360×800; respuestas dirigidas con la clave real del banco):**
+  - **E-03** (k = 1, q = 1 → T = 1): tarjeta con 100/0/0 (o 0/100/0 con la respuesta errada), conteos «1 de 1», puntaje del área = pc (5) o pi (−2).
+  - **E-04** (quiz en blanco): barra 100 % `neutral-fill` («rgb(100,116,139)»), «No respondidas 1 de 1 = 100 %», puntaje = T × pnr (2 con pnr = +1).
+  - **E-05** (escala 0/0/0): «Escala: 0 · 0 · 0» y puntaje «0» con los porcentajes calculados igual.
+  - **E-09** (negativos): «−6», «−4», «−2», «−999» y «−1,998» con el menos tipográfico U+2212 (verificado también el `charCodeAt` en las pruebas de `formatoPuntaje`).
+  - **E-10** (π, ≈, ×, ², S/): corrida con **los 17 temas de RM y q = 5** (todo el banco de RM, 17 bloques): 527 textos de la pantalla del quiz comparados contra `questions.json` → **0 diferencias** (enunciados, alternativas y títulos se renderizan tal cual); símbolos vistos en pantalla: `S/`, `²`, `³`, `π`, `≈`, `≤`, `≥`, `°`. La pantalla de resultados no muestra texto de preguntas, así que no hay transformación posible (RNF-08).
+  - **Suma 100 %:** verificada en pantalla en cuatro combinaciones (100/0/0, 0/100/0, 0/0/100 y 80/13/7 con T = 15 y segmentos de 225.6/36.7/19.7 px sobre 286 px) y con T = 85 (17 temas × 5).
+  - **RN-11 en modos simples:** «Solo Matemático» → una sola tarjeta y `document.body.innerText` sin «Verbal»; «Solo Verbal» → una sola tarjeta y sin «Matemático», recordatorio «Solo Verbal · 2 temas · 1 preguntas por tema».
+- **Ciclo completo (RF-10, RN-05):** «Home → nombre («Ana») → modo Solo Verbal + sliders 2/1 → quiz → resultados → Home» sin errores: al volver, saludo «Hola, Ana» y configuración intacta (modo «Verbal», sliders «2 de 11» / «1 de 5», resumen «Solo Verbal · 2 temas · 2 preguntas»); el siguiente intento es nuevo. Orden vertical de `07 §7.10.3` confirmado en el DOM: título → saludo → héroe → tarjetas → recordatorio → «Home».
+- **Checklist `07 §7.14` (por DOM/CSS, sin imágenes):** padding lateral 20 px a 360 y 24 px a 430; reserva inferior 48 px + safe-area; `text-transform: none` en etiqueta del héroe, recordatorio y nombre de área (sin mini-etiquetas); tarjetas con borde 1 px, **sin** sombra, radio 16 y padding 16 (una sola elevación), 0 tarjetas anidadas; único control (el botón «Home») de 320×48 px con `:focus-visible` (outline 2 px + offset 2 px); jerarquía medida (título 20/700, héroe 46.8/800 tabular, nombre de área 16/600, puntaje 22/700, etiquetas 15, metadatos 13); `prefers-reduced-motion` en héroe y barras (valor final) y `@media (hover: hover) and (pointer: fine)` para los hover (heredados del catálogo); sin `transition: all` ni animación fuera de `transform`/`opacity`.
+- **Hallazgo 1 (V3, corregido): formato numérico `Intl`.** `07 §7.4.3` exige `Intl.NumberFormat('es-PE')` para los números y `formatoEntero` (Plan 01) usaba `String(n)`: con configuraciones extremas el héroe podía mostrar «139860» sin separador de millares. Se añade `formatoPuntaje` a `src/lib/format.ts` (usa `Intl.NumberFormat('es-PE')` y sustituye el guion ASCII de `Intl` por el menos U+2212 de E-09) y lo consumen el héroe y el puntaje del área; `formatoEntero`/`formatoConSigno` se mantienen (la escala y el stepper trabajan en ±999, sin millares). Medido en pantalla: «1,998» y «−1,998» (y 999/−999 por área). 3 pruebas nuevas.
+- **Hallazgo 2 (V3, corregido): desborde horizontal con el texto del sistema al 200 %.** Con la raíz a 32 px las tarjetas de área medían 356 px en una columna de 320 px (`scrollWidth` 376 > 360): el ítem de grid no podía encogerse por debajo del contenido. Se añade `min-width: 0` a las tarjetas (`.res__areas > *`) manteniendo la fila superior en una sola línea; medido de nuevo a 360/430/1280 px con la raíz a 32 px: `scrollWidth` = `clientWidth`, 0 elementos desbordados, cabecera de tarjeta en una sola fila y sin desborde de filas de métrica. (Se probó primero `flex-wrap` en la cabecera y se descartó: partía la fila superior también a tamaño normal.)
+- **Hallazgo 3 (V3, corregido): semántica de lista y ruido para lectores.** La barra de composición es decorativa (los datos están en las filas) → `aria-hidden="true"`; la lista de métricas lleva `role="list"` para conservar la semántica con `list-style: none` (Safari/VoiceOver).
+- **V3 — auditoría `web-design-guidelines`:** repasados `ResultsScreen.svelte`, `ScoreHero.svelte`, `AreaCard.svelte` y `MetricRow.svelte` contra las reglas de la skill (accesibilidad, foco, formularios, animación, tipografía, contenido, rendimiento, navegación, táctil, safe areas, i18n). Sin hallazgos pendientes tras los tres corregidos: no hay botones solo-icono sin `aria-label`, no hay controles sin etiqueta, no hay `<div>` clicables (el único control es un `<button>`), no hay `transition: all`, no hay animación sin `prefers-reduced-motion`, los iconos llevan `aria-hidden`, los números van con `tabular-nums` y `Intl`, y los contenedores toleran contenido largo (`min-width: 0` + `overflow-wrap`). No aplican en esta pantalla: virtualización (listas cortas), imágenes, `<video>`, deep-linking por URL (la app es un flujo de pantalla única sin router, `06 §6.3`) ni `beforeunload` (el intento ya terminó).
+- **V3 — pasada `impeccable` de cierre:** `scripts/impeccable.cmd detect --json --target src/components/results` → `[]` (sin hallazgos mecánicos). La crítica visual fina (capturas) queda como pendiente humano por la restricción de imágenes del ejecutor.
+- **V0:** `npm run check` → 0 errores/0 avisos; `npm run build` → CSS 8.11 KB gzip, JS 50.76 KB gzip; `npm run test` → 113 pruebas en verde; `svelte-autofixer` sobre los cuatro componentes de resultados: sin hallazgos. Consola limpia en todas las corridas de V2.
+- **Pendientes humanos:** prueba en móvil real (iOS Safari / Android Chrome con rotación, `07 §7.14`) y el juicio visual por capturas (paleta, jerarquía, aire) que este ejecutor no puede evaluar por imágenes.

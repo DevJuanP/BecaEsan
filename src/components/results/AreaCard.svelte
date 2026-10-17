@@ -1,6 +1,6 @@
 <script lang="ts">
   import MetricRow from './MetricRow.svelte';
-  import { formatoEntero } from '../../lib/format';
+  import { formatoPuntaje } from '../../lib/format';
   import type { Area, ResultadoArea } from '../../lib/types';
 
   /**
@@ -78,12 +78,13 @@
     <h2 class="area__nombre">{NOMBRE_AREA[area.area]}</h2>
     <p class="area__puntaje">
       <span class="area__puntaje-etiqueta">Puntaje del área</span>
-      <span class="area__puntaje-num tnum">{formatoEntero(area.puntaje)}</span>
+      <span class="area__puntaje-num tnum">{formatoPuntaje(area.puntaje)}</span>
     </p>
   </div>
 
-  <!-- Barra de composición (`07 §7.9.12`): alto 10, radio 6, gap 2 -->
-  <div class="area__barra" style:--retraso={retraso}>
+  <!-- Barra de composición (`07 §7.9.12`): alto 10, radio 6, gap 2.
+       Decorativa: los porcentajes y los conteos viven en las filas de métrica. -->
+  <div class="area__barra" style:--retraso={retraso} aria-hidden="true">
     {#each segmentos as segmento (segmento.clave)}
       <span
         class="area__seg"
@@ -93,7 +94,7 @@
     {/each}
   </div>
 
-  <ul class="area__metricas">
+  <ul class="area__metricas" role="list">
     {#each metricas as metrica (metrica.clave)}
       <MetricRow
         etiqueta={metrica.etiqueta}
@@ -106,7 +107,9 @@
 </section>
 
 <style>
-  /* Fila superior (`07 §7.10.3` #3): punto + nombre + puntaje a la derecha */
+  /* Fila superior (`07 §7.10.3` #3): punto + nombre + puntaje a la derecha.
+     Una sola fila: los textos envuelven dentro de su columna (`min-width: 0`
+     aquí y en las tarjetas de `ResultsScreen`, `07 §7.12` (10)). */
   .area__cabecera {
     display: flex;
     align-items: center;
@@ -136,6 +139,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+    min-width: 0;
     margin-left: auto;
     text-align: right;
   }

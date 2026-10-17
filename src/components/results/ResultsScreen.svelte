@@ -124,6 +124,12 @@
     margin-top: 16px;
   }
 
+  /* Las tarjetas pueden encogerse por debajo de su contenido: con el texto del
+     sistema al 200 % el interior envuelve en vez de desbordar (`07 §7.12` (10)). */
+  .res__areas > :global(*) {
+    min-width: 0;
+  }
+
   /* Escritorio: una tarjeta por área en dos columnas, gap 20 (`07 §7.10.3`) */
   @media (min-width: 768px) {
     .res__areas {

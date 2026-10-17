@@ -1,6 +1,6 @@
 <script lang="ts">
   import Icon from '../ui/Icon.svelte';
-  import { formatDuracion, formatoConSigno, formatoEntero } from '../../lib/format';
+  import { formatDuracion, formatoConSigno, formatoPuntaje } from '../../lib/format';
 
   /**
    * Puntaje héroe de resultados (`02 §RF-20.1`, `§RF-20.3`, `07 §7.9.13`):
@@ -31,7 +31,7 @@
 
 <section class="heroe">
   <p class="heroe__etiqueta">Puntaje total</p>
-  <p class="heroe__numero tnum">{formatoEntero(puntajeTotal)}</p>
+  <p class="heroe__numero tnum">{formatoPuntaje(puntajeTotal)}</p>
 
   <div class="heroe__meta">
     <span class="heroe__escala tnum">Escala: {escalaTexto}</span>

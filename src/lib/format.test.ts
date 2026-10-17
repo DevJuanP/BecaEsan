@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatDuracion, formatoConSigno, formatoEntero, parsearEntero } from './format';
+import { formatDuracion, formatoConSigno, formatoEntero, formatoPuntaje, parsearEntero } from './format';
 
 describe('formatDuracion (RF-16)', () => {
   it('0 ms → "0:00"', () => {
@@ -43,6 +43,26 @@ describe('formatoConSigno (RF-20.1, E-09)', () => {
 
   it('compone la escala visible «+5 · 0 · −2»', () => {
     expect([5, 0, -2].map(formatoConSigno).join(' · ')).toBe('+5 · 0 · −2');
+  });
+});
+
+describe('formatoPuntaje (RF-20.1, E-09, 07 §7.4.3)', () => {
+  it('enteros pequeños sin separador', () => {
+    expect(formatoPuntaje(0)).toBe('0');
+    expect(formatoPuntaje(56)).toBe('56');
+    expect(formatoPuntaje(999)).toBe('999');
+  });
+
+  it('usa el separador de millares de es-PE en puntajes grandes', () => {
+    expect(formatoPuntaje(1000)).toBe('1,000');
+    expect(formatoPuntaje(139_860)).toBe('139,860');
+  });
+
+  it('negativos con el menos tipográfico U+2212 (no el guion de Intl)', () => {
+    expect(formatoPuntaje(-2)).toBe('−2');
+    expect(formatoPuntaje(-2).charCodeAt(0)).toBe(0x2212);
+    expect(formatoPuntaje(-1234)).toBe('−1,234');
+    expect(formatoPuntaje(-1234).charCodeAt(0)).toBe(0x2212);
   });
 });
 
