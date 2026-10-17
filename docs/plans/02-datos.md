@@ -82,7 +82,7 @@ Construir `scripts/build-questions.mjs` (Node, **sin dependencias**) que extraig
   4. Glifos: el banco generado contiene π, ≈, × y «…» sin alteraciones (RNF-08).
 - **Criterios:** `03 §3.1`, `§3.6`; RNF-08; `06 §6.4.3`.
 - **Verificación:** V1: `npm run test` en verde.
-- **Estado:** [ ]
+- **Estado:** [x]
 
 ### T-2.6 — Integración con el ciclo de build
 
