@@ -2,7 +2,7 @@
 
 Esta carpeta contiene los **planes de ejecución** que construyen la app definida en [`docs/especificaciones/`](../especificaciones/README.md) (01–07), en el orden `01 → 08`.
 
-> **Estado global:** 2 / 8 planes completados · **fase actual: Plan 03 (Lógica del intento)** · Los planes se generaron el 2026-10-16; el Plan 01 se ejecutó y cerró el 2026-10-16; el Plan 02 se ejecutó y cerró el 2026-10-16.
+> **Estado global:** 3 / 8 planes completados · **fase actual: Plan 04 (Componentes base)** · Los planes se generaron el 2026-10-16; el Plan 01 se ejecutó y cerró el 2026-10-16; el Plan 02 se ejecutó y cerró el 2026-10-16; el Plan 03 se ejecutó y cerró el 2026-10-16.
 
 ## Cómo se usa esta carpeta
 
@@ -16,7 +16,7 @@ Esta carpeta contiene los **planes de ejecución** que construyen la app definid
 |---|---|---|---|---|---|
 | 01 | [Fundación](01-fundacion.md) | Git, Vite + Svelte 5 + TS + Tailwind 4, tokens, shell, Vitest | — | M | ✅ |
 | 02 | [Datos](02-datos.md) | Parser/validador `docs/preguntas/` → `questions.json`, con pruebas | 01 | M | ✅ |
-| 03 | [Lógica del intento](03-logica-del-intento.md) | Muestreo, puntaje, porcentajes, validación, persistencia (Vitest) | 01, 02 | M | ⬜ |
+| 03 | [Lógica del intento](03-logica-del-intento.md) | Muestreo, puntaje, porcentajes, validación, persistencia (Vitest) | 01, 02 | M | ✅ |
 | 04 | [Componentes base](04-componentes-base.md) | Slider segmentado, stepper, botones, chips, hojas, opción A–E + galería dev | 01 | L | ⬜ |
 | 05 | [Home](05-home.md) | Saludo + hoja de nombre + panel de configuración + CTA | 03, 04 | M | ⬜ |
 | 06 | [Quiz](06-quiz.md) | Cabecera, bloques, navegación, texto común, confirmación, cronómetro | 03, 04, 05 | L | ⬜ |
@@ -122,3 +122,4 @@ Se resuelven en la **revisión de vigencia** previa a la ejecución de su plan (
 | 2026-10-16 | Control de cambios previo a la ejecución (decisión del usuario, `00-contrato §9`): el deploy a Cloudflare Pages es **manual del usuario** y queda fuera de la orquestación; T-8.7 pasa a «preparación del deploy manual», T-8.5 explicita emulación móvil + pase manual, y el DoD del contrato (`§6`) se ajusta en consecuencia. |
 | 2026-10-16 | Se ejecuta y cierra el Plan 01 (T-1.1–T-1.6, un commit por tarea): fundación verificada (`check`, `build`, `test`, `preview` en verde; V2 mínimo con capturas a 360/1280 px; detector `impeccable` limpio). |
 | 2026-10-16 | Se ejecuta y cierra el Plan 02 (T-2.1–T-2.6, un commit por tarea): `scripts/build-questions.mjs` extrae y valida el material (28 temas · 140 preguntas · 85 RM + 55 RV) y genera `src/data/questions.json` determinista (130 084 bytes, 20.9 KB gzip), integrado en `dev`/`build`; 27 pruebas Vitest en verde. Sin desvíos funcionales: dos decisiones registradas en el §8 del plan (reparto T-2.2/T-2.3 y casos negativos verificados en copia aislada para no tocar `docs/preguntas/`). |
+| 2026-10-16 | Se ejecuta y cierra el Plan 03 (T-3.1–T-3.6, un commit por tarea): dominio puro (`types`, `generator`, `scoring`, `config`, `storage`) con 92 pruebas Vitest en verde (6 archivos), RN-01…RN-11 cubiertas por nombre de test y casos E-01…E-10 en su capa lógica. Sin desvíos funcionales: decisiones registradas en el §8 del plan (validación de k en ambas áreas + disponibilidad del banco, renumerado 1..q sobre la copia del bloque, duración 0 si `terminadoEn` es nulo, plantilla literal del resumen según `07 §7.11`, y E-10 omitible si falta el banco generado). |

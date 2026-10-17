@@ -1,6 +1,6 @@
 # Plan 03 — Lógica del intento
 
-> Estado: ⬜ Pendiente · Depende de: Planes 01, 02 · Cubre: RN-01…RN-11, RF-02, RF-07, RF-08, RF-16 (lógica), RNF-04, E-01…E-10 (capa lógica) · Estimación: M
+> Estado: ✅ Hecho · Depende de: Planes 01, 02 · Cubre: RN-01…RN-11, RF-02, RF-07, RF-08, RF-16 (lógica), RNF-04, E-01…E-10 (capa lógica) · Estimación: M
 
 ## 1. Objetivo
 
@@ -118,10 +118,10 @@ Implementar el **dominio puro** de la app —sin UI— y probarlo a fondo: creac
 
 ## 7. Verificación final del plan
 
-- [ ] `npm run test` en verde con toda la suite de dominio.
-- [ ] RN-01…RN-11 con cobertura de pruebas (al menos una prueba por regla, verificable por nombre de test).
-- [ ] `npm run check` y `npm run build` en verde; el dominio añade un peso despreciable al bundle.
-- [ ] Ninguna función del dominio depende del DOM (importable en entorno `node` de Vitest sin mocks).
+- [x] `npm run test` en verde con toda la suite de dominio: 6 archivos · 92 pruebas (`generator`, `scoring`, `config`, `storage` + formato y pipeline), incluida la integración con el banco real (E-10) tras regenerarlo con `npm run build`.
+- [x] RN-01…RN-11 con cobertura de pruebas (al menos una prueba por regla, verificable por nombre de test): RN-01…RN-06 en `generator.test.ts`; RN-07…RN-10 en `scoring.test.ts`; RN-11 en ambos (áreas excluidas).
+- [x] `npm run check` (0 errores) y `npm run build` en verde; el bundle no cambia (27.92 kB · 11.05 kB gzip de JS) porque ninguna pantalla importa aún el dominio: 0 KB añadidos.
+- [x] Ninguna función del dominio depende del DOM (importable en entorno `node` de Vitest sin mocks): toda la suite corre en el entorno `node` — `npx vitest run --environment=node` en verde.
 
 ## 8. Registro de desvíos y decisiones
 
@@ -147,7 +147,7 @@ Contraste del plan contra `docs/especificaciones/` (02, 03, 06 y 07 §7.11/§7.1
 
 - **Truncado, no rechazo.** `guardarNombre` recorta a 30 caracteres en silencio; la validación con mensaje («Máximo 30 caracteres.») es de la hoja de nombre (Plan 05). Aquí 30 es la última barrera defensiva, coherente con `maxlength` del campo.
 - **Lectura tolerante.** `leerNombre` recorta espacios y devuelve `null` si el valor está vacío (E-08 en capa lógica), aunque el valor lo haya puesto otra vía; no trunca al leer.
-- **Sin almacenamiento.** El tercer parámetro admite `StorageLike | null` explícito (`null` = sin almacenamiento) además del inyectado para pruebas; las tres funciones son no-op silenciosas si falta o si cada operación lanza.
+- **Sin almacenamiento.** El parámetro opcional `almacen` admite `StorageLike | null` explícito (`null` = sin almacenamiento) además del inyectado para pruebas; las tres funciones son no-op silenciosas si falta o si cada operación lanza.
 
 ### T-3.5 — alcance de la validación y plantilla del resumen
 
