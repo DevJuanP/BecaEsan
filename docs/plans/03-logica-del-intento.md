@@ -97,7 +97,7 @@ Implementar el **dominio puro** de la app —sin UI— y probarlo a fondo: creac
   4. Defensa: `crearIntento` lanza error con k o q fuera de rango.
 - **Criterios:** E-01…E-10 (lógica), RN-01…RN-11, `01 §1.7` (2 y 3).
 - **Verificación:** V1: `npm run test` en verde; RN-01…RN-11 con al menos una prueba cada una.
-- **Estado:** [ ]
+- **Estado:** [x]
 
 ## 6. Matriz de trazabilidad del plan
 
@@ -154,3 +154,8 @@ Contraste del plan contra `docs/especificaciones/` (02, 03, 06 y 07 §7.11/§7.1
 - **`validarConfig` valida solo puntajes**, como pide la tarea: los sliders ya acotan k y q (`02 §RF-04`–`RF-06`) y `modo` es un conjunto cerrado. Un valor `NaN` (campo vacío o no numérico en la UI) cuenta como inválido, de modo que el botón «Iniciar quiz» quede deshabilitado con cualquier entrada no resoluble.
 - **Plantilla del resumen literal** (`07 §7.11`): «{Modo} · {k} temas · {q} preguntas» siempre en plural; con k = 1 el texto es «1 temas» porque el deck no define variante singular y Plan 08 audita cadenas exactas. Si el producto quiere singularización, exige cambio de microcopy en `07 §7.11` (contrato §9).
 - **API pequeña extra:** `etiquetaModo(modo)` se exporta (mismos nombres de modo del deck) para que el recordatorio de resultados del Plan 07 no duplique el mapa; `CONFIG_INICIAL` queda congelado en profundidad para que el default compartido no se mute.
+
+### T-3.6 — E-10 y cobertura por nombre de prueba
+
+- **E-10 y el banco generado.** `src/data/questions.json` es un artefacto generado y no versionado (Plan 02, `00-contrato §10`): las pruebas de banco real (E-10 y la integración de `scoring`) cargan el JSON con `import.meta.glob` y se **omiten con aviso** si aún no existe (clone limpio sin `npm run dev`/`build`). En el flujo normal —`build`/`dev` regeneran el banco antes— corren y quedan en verde (verificado en esta ejecución: 2 pruebas de banco real ejecutadas, no omitidas).
+- **Cobertura por nombre.** Cada RN aparece citada en el nombre de su `describe`/`it`: RN-01…RN-06 en `generator.test.ts`, RN-07…RN-11 en `scoring.test.ts` (RN-11 también en generador, áreas excluidas), y E-01…E-07, E-09, E-10 en los casos indicados por la tarea (E-08 queda en `storage.test.ts`, capa lógica).
