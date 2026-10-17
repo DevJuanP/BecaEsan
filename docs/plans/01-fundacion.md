@@ -97,7 +97,7 @@ Dejar el repositorio y el proyecto listos para construir: control de versiones, 
   3. Pruebas: `0 → "0:00"`, `61_000 → "1:01"`, `3_661_000 → "1:01:01"`, `5 → "5"`, `−2 → "−2"` (U+2212).
 - **Criterios:** RF-16 (formato), E-09, `06 §6.1` (Vitest solo lógica pura).
 - **Verificación:** V0 + V1: `npm run test` en verde.
-- **Estado:** [ ]
+- **Estado:** [x]
 
 ## 6. Matriz de trazabilidad del plan
 
