@@ -1,6 +1,6 @@
 # Plan 05 — Home
 
-> Estado: ⬜ Pendiente · Depende de: Planes 03, 04 · Cubre: RF-01…RF-10, RNF-01, RNF-02, RNF-04, RNF-06, RNF-07, E-08, E-09 (UI), `05 §5.2`–`§5.3`, `07 §7.9.1`, `§7.9.2`, `§7.10.1`, `§7.11` · Estimación: M
+> Estado: 🔄 En curso · Depende de: Planes 03, 04 · Cubre: RF-01…RF-10, RNF-01, RNF-02, RNF-04, RNF-06, RNF-07, E-08, E-09 (UI), `05 §5.2`–`§5.3`, `07 §7.9.1`, `§7.9.2`, `§7.10.1`, `§7.11` · Estimación: M
 
 ## 1. Objetivo
 
@@ -18,8 +18,8 @@ La pantalla Home completa: saludo editable con su hoja de nombre, panel de confi
 
 ## 4. Precondiciones
 
-- Planes 03 y 04 ✅; Plan 02 ✅ (el banco se importa al iniciar el intento).
-- Decisión pendiente `07 §7.16 (#2)` (autofocus del nombre en móvil): resolverla en la revisión de vigencia; por defecto se implementa la **propuesta** (autofocus solo `pointer: fine`) y si se rechaza, aplicar RF-01.3 literal.
+- Planes 03 y 04 ✅ (cerrados el 2026-10-16); Plan 02 ✅ (el banco generado `src/data/questions.json` se importa al iniciar el intento).
+- Decisión `07 §7.16 (#2)` (autofocus del nombre en móvil): **resuelta** el 2026-10-17 (`f21f70b`, `docs(plans): resuelve la decision 2 …`) — se aplica la propuesta de `07`: foco automático del campo **solo** con `(pointer: fine)`; en táctil rige RF-01.3 en lo demás (sin autofocus que despliegue el teclado emergente). Detalle en §8.
 
 ## 5. Tareas
 
@@ -139,4 +139,13 @@ La pantalla Home completa: saludo editable con su hoja de nombre, panel de confi
 
 ## 8. Registro de desvíos y decisiones
 
-_(vacío — se completa durante la ejecución)_
+_(append-only; las entradas de ejecución se añaden al final)_
+
+### Revisión de vigencia (2026-10-17, previa a la ejecución)
+
+- **Decisión pendiente `07 §7.16 (#2)` — autofocus del nombre en móvil: resuelta por el orquestador** (commit `f21f70b`, ya reflejado en la tabla de decisiones de `docs/plans/README.md`): se aplica la **propuesta** de `07`. T-5.3 se implementa con foco automático del campo **solo** con `(pointer: fine)`; en móvil táctil no hay autofocus (evita el teclado emergente sobre la hoja) y el resto de RF-01.3 se cumple literal (foco contenido en la hoja; al cerrar vuelve al lápiz). Precondición de §4 actualizada en consecuencia; no cambian tareas ni matriz.
+- **Confrontación con las especificaciones (`02 §RF-01`–`§RF-10`, `§E-08`, `§E-09`; `03 §3.3`, `§3.5`; `04 §4.1`–`§4.4`; `05 §5.2`, `§5.3`, `§5.7`; `06 §6.1`–`§6.3`; `07 §7.9.1`, `§7.9.2`, `§7.9.14`, `§7.10.1`, `§7.11`, `§7.12`, `§7.14`): los RF/RN/RNF/E citados por la matriz siguen correspondiendo a T-5.1…T-5.8 y no hay requisitos derogados. Todo lo que necesitan las tareas ya existe en el repo (`CONFIG_INICIAL`/`validarConfig`/`resumenConfig` de `src/lib/config.ts`, `crearIntento` de `src/lib/generator.ts`, `leerNombre`/`guardarNombre` de `src/lib/storage.ts`, catálogo `src/components/ui/*` del Plan 04). Vigencia confirmada sin cambios de alcance.
+- **Rutas de archivos:** el plan crea `src/components/home/*.svelte` (subcarpeta, coherente con `src/components/ui/*` del Plan 04 y con `src/components/dev/Gallery.svelte`); `06 §6.3` propone un listado plano orientativo que los planes concretan — no es un desvío.
+- **Pendiente `07 §7.16 (#3)` («Home» → «Inicio»):** afecta solo a T-7.4 (Plan 07); no toca este plan.
+
+### Decisiones de ejecución
