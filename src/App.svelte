@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Component } from 'svelte';
+  import ConfigPanel from './components/home/ConfigPanel.svelte';
   import GreetingHeader from './components/home/GreetingHeader.svelte';
-  import ModeSelector from './components/home/ModeSelector.svelte';
   import NameModal from './components/home/NameModal.svelte';
   import { estado, type Pantalla } from './lib/state.svelte';
 
@@ -52,9 +52,10 @@
         bind:value={borradorNombre}
         onGuardar={(nombre) => estado.aplicarNombre(nombre)}
       />
-      <h2 class="pt-6 text-xl font-bold">Configura tu quiz</h2>
-      <ModeSelector bind:modo={estado.config.modo} />
-      <p class="pt-4 text-ink-2">Sliders y puntajes (T-5.5 a T-5.7).</p>
+      <div class="pt-6">
+        <ConfigPanel config={estado.config} />
+      </div>
+      <p class="pt-4 text-ink-2">Puntajes, resumen y CTA (T-5.6 y T-5.7).</p>
     {:else if estado.pantalla === 'quiz'}
       <h1 class="pt-5 text-2xl font-bold" data-screen-title tabindex="-1">Quiz</h1>
       <p class="text-ink-2">Bloques del intento (Plan 06).</p>
