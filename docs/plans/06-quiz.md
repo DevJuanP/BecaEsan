@@ -1,6 +1,6 @@
 # Plan 06 — Quiz
 
-> Estado: 🔄 En curso · Depende de: Planes 03, 04, 05 · Cubre: RF-12…RF-18, RN-03 (cambio visual de área), RN-06, RNF-01, RNF-02, RNF-05, RNF-06, RNF-09, E-01, E-02, E-03, E-06, E-07, `05 §5.4`–`§5.5`, `07 §7.9.8`–`§7.9.10`, `§7.10.2` · Estimación: L
+> Estado: ✅ Hecho · Depende de: Planes 03, 04, 05 · Cubre: RF-12…RF-18, RN-03 (cambio visual de área), RN-06, RNF-01, RNF-02, RNF-05, RNF-06, RNF-09, E-01, E-02, E-03, E-06, E-07, `05 §5.4`–`§5.5`, `07 §7.9.8`–`§7.9.10`, `§7.10.2` · Estimación: L
 
 ## 1. Objetivo
 
@@ -131,13 +131,13 @@ La pantalla de quiz completa: bloques por temática con sus preguntas y alternat
 
 ## 7. Verificación final del plan
 
-- [ ] Resolver un intento «Completo» con los defaults (≈ 26 preguntas) de punta a punta en 360 px, sin Zoom ni scroll horizontal.
-- [ ] «Atrás» conserva y permite editar respuestas; el cambio se refleja en el intento (E-07).
-- [ ] El cronómetro avanza entre bloques, respeta m:ss/h:mm:ss y se detiene al confirmar resultados (RF-16).
-- [ ] El acento azul→naranja ocurre exactamente una vez en modo Completo (RN-03).
-- [ ] La hoja de confirmación aparece solo con blancos y con el texto en singular/plural correcto.
-- [ ] `beforeunload` activo únicamente durante el quiz.
-- [ ] Auditoría `web-design-guidelines` y pasada `impeccable` de cierre sin hallazgos críticos pendientes.
+- [x] Resolver un intento «Completo» con los defaults (≈ 26 preguntas) de punta a punta en 360 px, sin Zoom ni scroll horizontal.
+- [x] «Atrás» conserva y permite editar respuestas; el cambio se refleja en el intento (E-07).
+- [x] El cronómetro avanza entre bloques, respeta m:ss/h:mm:ss y se detiene al confirmar resultados (RF-16).
+- [x] El acento azul→naranja ocurre exactamente una vez en modo Completo (RN-03).
+- [x] La hoja de confirmación aparece solo con blancos y con el texto en singular/plural correcto.
+- [x] `beforeunload` activo únicamente durante el quiz.
+- [x] Auditoría `web-design-guidelines` y pasada `impeccable` de cierre sin hallazgos críticos pendientes.
 
 ## 8. Registro de desvíos y decisiones
 
@@ -227,3 +227,8 @@ _(append-only; las entradas de ejecución se añaden al final)_
   Notas de la auditoría: no hay `transition: all`, ni `user-scalable=no`, ni `onPaste` con `preventDefault`, ni `<div>` clicables, ni imágenes; los iconos son decorativos con `aria-hidden` y los controles de solo icono llevan `aria-label`; no aplica *skip link* (la app no tiene navegación repetida antes del contenido) ni virtualización (el quiz monta un bloque de ≤5 preguntas).
 - **T-6.8 · pasada `impeccable` de cierre:** `impeccable context` cargó `PRODUCT.md` (modo *Operate*, verdad de producto y voz) y el detector mecánico `impeccable detect --json` sobre los 9 archivos del plan devolvió `[]` (sin hallazgos). `svelte-autofixer` sobre `Chip.svelte` y `OptionRow.svelte` (los dos componentes tocados en esta tarea) → sin incidencias.
 - **T-6.8 · V0 ejecutada:** `npm run check` → 0 errores/0 avisos; `npm run build` → 157 módulos, CSS 7.60 kB gzip + JS 49.77 kB gzip; `npm run test` → 106 pruebas en verde.
+
+### Cierre del plan (2026-10-17)
+
+- **Verificación final (§7) ejecutada de punta a punta**, con un intento «Completo» de los defaults (13 bloques · 26 preguntas) a 360×800 con emulación móvil+táctil: recorrido completo de los 13 bloques con «Continuar» sin scroll horizontal en ningún paso (`scrollWidth === clientWidth === 360`), `meta viewport` sin bloqueo de zoom (`width=device-width, initial-scale=1.0, viewport-fit=cover`); el cronómetro avanza entre bloques (0:00 → 0:06 durante el recorrido, medido 0:24 → 0:25 al final), muestra `h:mm:ss` cuando corresponde («1:01:02») y se detiene al confirmar (la cabecera y el chip desaparecen; `duracionMs === terminadoEn − iniciadoEn`); «Atrás» conserva la respuesta y su edición (A → B) es la que usa el cálculo final; el `data-area` del contenedor cambia **una sola vez** (bloques 1–8 `matematico` → bloques 9–13 `verbal`); la hoja de confirmación aparece solo con blancos y con el texto correcto («Tienes 25 preguntas sin responder» + «RM: 15 · RV: 10», acciones con el acento del área en curso); `beforeunload` cancelado únicamente durante el quiz (evento sintético y diálogo real del navegador). Resultado del intento: RM 16 preguntas (0/1/15 → 0 % · 6 % · 94 %) y RV 10 (0/0/10 → 100 %), porcentajes que suman 100 % por área (RN-09) y puntaje total −2 con la escala 5/0/−2. Consola sin errores en todo el recorrido.
+- **Pendientes humanos declarados (no bloquean el cierre):** prueba en dispositivo real (iOS Safari y Android Chrome, 360–430 px, con rotación) y la emulación real de `prefers-reduced-motion`/`prefers-reduced-transparency` desde DevTools (la rama de código está verificada; ver T-6.4/T-6.8). El juicio puramente visual («se ve bien») no es verificable por DOM en este turno: la V2 se hizo con geometría, atributos, colores computados y consola.
