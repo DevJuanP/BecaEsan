@@ -28,6 +28,7 @@
   /* Forma */
   --radius-segment: 7px;  --radius-control: 12px;
   --radius-card: 16px;    --radius-sheet-top: 20px;
+  --radius-pill: 999px;
 
   /* Sombras (solo capas flotantes) */
   --shadow-chrome: 0 -6px 16px rgba(15, 23, 42, 0.06);
@@ -54,11 +55,14 @@
   color-scheme: light;
 }
 
-/* Acento contextual por área (se aplica dentro del quiz) */
+/* Acento contextual por área (se aplica dentro del quiz).
+   `--accent-deep` es el «pressed profundo» de `07 §7.3.2` (azul/naranja 800). */
 [data-area="matematico"] { --accent: var(--color-blue-600);   --accent-strong: var(--color-blue-700);
-                           --accent-soft: var(--color-blue-50); --accent-line: var(--color-blue-100); }
+                           --accent-soft: var(--color-blue-50); --accent-line: var(--color-blue-100);
+                           --accent-deep: var(--color-blue-800); }
 [data-area="verbal"]     { --accent: var(--color-orange-600); --accent-strong: var(--color-orange-700);
-                           --accent-soft: var(--color-orange-50); --accent-line: var(--color-orange-100); }
+                           --accent-soft: var(--color-orange-50); --accent-line: var(--color-orange-100);
+                           --accent-deep: var(--color-orange-800); }
 
 .tnum { font-variant-numeric: tabular-nums; }
 

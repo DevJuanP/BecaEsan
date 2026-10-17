@@ -31,7 +31,7 @@ Construir el catálogo de componentes reutilizables fiel al sistema visual de `0
 - **Pasos:** variantes **primario / secundario / fantasma** (`07 §7.9.4`): alturas 48 (barras) y 44 (contextos), radio 12, texto 16/600; acento azul por defecto y naranja cuando el contenedor tenga `data-area="verbal"`; icono opcional 20 (gap 8); estados: hover **solo** `@media (hover:hover) and (pointer:fine)`, pressed `scale(0.97)` + tono profundo, `:focus-visible`, deshabilitado (`line` + `ink-disabled`, sin pointer). `<button>` real siempre.
 - **Criterios:** `07 §7.9.4`, `§7.5.4`, `§7.12` (foco); RNF-02.
 - **Verificación:** V0 + V2 (galería) + V3 (web-design-guidelines al cierre del plan).
-- **Estado:** [ ]
+- **Estado:** [x]
 
 ### T-4.2 — Chips, progreso y barra inferior
 
@@ -154,5 +154,8 @@ _(append-only; las entradas de ejecución se añaden al final)_
 
 ### Decisiones de ejecución
 
-_(se añaden al completar cada tarea)_
+- **Orden de la galería (T-4.8):** para que cada tarea pueda correr su V2 declarada («V2 (galería)») antes de marcarse ✅, la galería se crea **incrementalmente**: T-4.1 aporta el armazón (`src/components/dev/Gallery.svelte` + hook con import dinámico en `App.svelte`) con la sección de botones, y T-4.8 la completa (cobertura de todos los estados, hoja abierta en demo, slider 5/11/17, error del stepper, exclusión de producción). No cambia el alcance ni la verificación de T-4.8.
+- **`src/app.css` (tokens):** se añaden `--radius-pill: 999px` (token de `07 §7.5.2` que faltaba en el Anexo C) y `--accent-deep` en los bloques `[data-area]` (alias del «pressed profundo» azul/naranja 800 de `07 §7.3.2`), para que los componentes consuman el acento contextual sin duplicar hex.
+- **T-4.1 · V2 ejecutada (galería, `#dev`):** 360 y 430 px sin scroll horizontal (`scrollWidth == innerWidth`); todos los botones ≥44×44 (mínimo medido 44×44 en la variante icono) con ≥8 px de separación; consola sin errores. Hover verificado con `(hover: hover) and (pointer: fine)`: primario azul `#004E96` y naranja del área `#C2410C`; en emulación táctil la media query no aplica. Focus por teclado (`Tab`): anillo 2 px `--color-focus` + offset 2 px. Pressed `scale(0.97)` presente en la hoja de estilos (100 ms `--ease-out`); disabled con fondo `line` + `ink-disabled` y sin cambio en hover. Auditoría `web-design-guidelines` de los archivos UI: se ejecuta en el cierre del plan (V3 declarada «al cierre del plan»).
+
 
