@@ -94,7 +94,7 @@ Construir `scripts/build-questions.mjs` (Node, **sin dependencias**) que extraig
   3. Conservar `test`, `check` y `preview` del Plan 01.
 - **Criterios:** `06 §6.3`, `§6.4`.
 - **Verificación:** V0: `npm run build` en verde genera el JSON; romper temporalmente un fixture y confirmar que el build **falla** con mensaje claro (restaurar después).
-- **Estado:** [ ]
+- **Estado:** [x]
 
 ## 6. Matriz de trazabilidad del plan
 
@@ -131,3 +131,7 @@ La serialización (orden de campos fijo, indentación 2, sin metadatos volátile
 ### T-2.3 / T-2.6 — casos negativos sin tocar `docs/preguntas/`
 
 La verificación de los planes pide «romper un fixture al vuelo y restaurar». `00-contrato §10` prohíbe editar `docs/preguntas/` (fuente única), incluso de forma transitoria; se interpreta de la forma más conservadora: replicar el pipeline en un directorio aislado (copia del material + `scripts/build-questions.mjs`) y ejecutarlo ahí. Evidencia (5 casos: 4 opciones, clave con letra inválida, numeración 1-2-3-3-5, sin `## Clave de respuestas`, título vacío): todos fallan con `{archivo}: {problema}`, `exit=1`, sin `questions.json` y sin `.tmp`.
+
+### T-2.6 — `dev` y `build` regeneran y validan el banco
+
+`dev` y `build` pasan a `node scripts/build-questions.mjs && vite [build]`; el `&&` garantiza que Vite no arranca si el material incumple el contrato. Verificación ejecutada: `npm run build` en verde genera `src/data/questions.json` (130 084 bytes); con material roto en una copia aislada, el paso del parser sale con `exit=1` y aborta la cadena; `npm run dev` arranca Vite después del parser (`ready in 1004 ms`).
