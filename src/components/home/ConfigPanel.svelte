@@ -3,6 +3,7 @@
   import { fade } from 'svelte/transition';
   import Slider from '../ui/Slider.svelte';
   import ModeSelector from './ModeSelector.svelte';
+  import ScoreInputs from './ScoreInputs.svelte';
   import type { ConfigQuiz } from '../../lib/types';
 
   /**
@@ -70,6 +71,8 @@
       bind:value={config.preguntasPorTema}
     />
   </div>
+
+  <ScoreInputs {config} />
 </section>
 
 <style>
