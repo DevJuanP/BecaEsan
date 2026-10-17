@@ -47,20 +47,30 @@ docs/
 
 ## Deploy
 
-El deploy es **manual** y se hace en **Cloudflare Pages** (plan gratuito, CDN con presencia en Lima). El runbook paso a paso vive en la sección siguiente y el detalle de la decisión de stack en [`docs/especificaciones/06`](docs/especificaciones/06-stack.md) §6.6.
+El deploy es **manual** y se hace en **Cloudflare Pages** (plan gratuito, CDN con presencia en Lima). El detalle de la decisión de stack está en [`docs/especificaciones/06`](docs/especificaciones/06-stack.md) §6.6.
 
 ### Runbook (Cloudflare Pages)
 
-1. Sube el repositorio a GitHub (ya está: `origin` → `https://github.com/DevJuanP/BecaEsan.git`) y entra al panel de Cloudflare.
-2. **Workers & Pages → Create → Pages → Connect to Git** y selecciona el repositorio.
-3. Configura el proyecto:
-   - *Build command*: `npm run build`
-   - *Output directory*: `dist`
-   - *Node.js version*: LTS (≥ 22) — variable de entorno `NODE_VERSION` = `22` si el panel no la detecta.
-4. Guarda y espera el primer build: cada `push` a `main` publica automáticamente y cada rama/PR obtiene una URL de vista previa.
-5. **Smoke test** en la URL `*.pages.dev`: HTTPS, carga en menos de 1 s, las tres pantallas funcionando, assets con hash y sin fuentes web (ver la lista exacta en [`docs/plans/08-calidad-y-despliegue.md`](docs/plans/08-calidad-y-despliegue.md) §8, T-8.7).
+> Verificado en local desde un **clon limpio** (`git clone` → `npm ci` → `npm run build`): el banco de preguntas y `dist/` se regeneran solos, sin pasos manuales, y el build es reproducible (mismos hashes de assets).
 
-> Este runbook se verifica en local (build limpio + `npm run preview`) antes de entregarse; el deploy real lo ejecuta el usuario.
+1. **Repositorio:** ya está publicado en GitHub — `origin` → `https://github.com/DevJuanP/BecaEsan.git`, rama `main`.
+2. **Panel de Cloudflare:** entra a *Workers & Pages → Create → Pages → Connect to Git* y autoriza/selecciona el repositorio `DevJuanP/BecaEsan`.
+3. **Configuración del proyecto:**
+   - *Production branch*: `main`
+   - *Build command*: `npm run build`
+   - *Build output directory*: `dist`
+   - *Root directory*: `/` (por defecto)
+   - *Node.js version*: LTS ≥ 22 — añade la variable de entorno `NODE_VERSION` = `22` si el panel no la detecta.
+4. **Guardar y desplegar:** el primer build publica la URL `https://<proyecto>.pages.dev` con HTTPS. A partir de ahí, cada `push` a `main` publica automáticamente y cada rama/PR obtiene una URL de vista previa.
+5. **Smoke test en la URL publicada** (lo ejecuta quien despliega):
+   - La app carga por HTTPS en menos de 1 s y sin errores en la consola del navegador.
+   - `Home`: saludo «Hola», panel de configuración y «Iniciar quiz» operativos.
+   - `Quiz`: un bloque con sus preguntas y alternativas, cronómetro, «Atrás»/«Continuar» y el aviso al recargar a mitad del intento.
+   - `Resultados`: puntaje total, tarjetas por área con porcentajes que suman 100 % y botón «Home».
+   - En la pestaña *Network*: los assets llevan hash (`index-*.js`, `index-*.css`) y **no** hay peticiones de fuentes ni de imágenes raster.
+6. **Pendiente manual del usuario:** ejecutar este runbook y validar la URL publicada; queda registrado en el informe de cierre (`docs/plans/08-calidad-y-despliegue.md` §8).
+
+> La app es 100 % estática: si más adelante se cambia de plataforma (GitHub Pages, Vercel, Netlify), basta reconfigurar el pipeline — `npm run build` → `dist/` — sin tocar código.
 
 ## Documentación
 

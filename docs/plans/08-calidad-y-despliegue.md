@@ -108,7 +108,7 @@ Cerrar la v1: auditar accesibilidad y calidad visual contra las especificaciones
   4. Registrar en el informe de cierre el **pendiente manual del usuario**: ejecutar el runbook y validar la URL publicada.
 - **Criterios:** `06 §6.6`; RNF-03.
 - **Verificación:** build y preview locales en verde; runbook completo en el README; pendiente manual documentado en el informe.
-- **Estado:** [ ]
+- **Estado:** [x]
 
 ### T-8.8 — Cierre del proyecto
 
@@ -250,3 +250,13 @@ Cerrar la v1: auditar accesibilidad y calidad visual contra las especificaciones
 - **Historial:** 81 commits en `main`, uno por tarea con Conventional Commits en español (la verificación «historial por tarea» se cumple a nivel de repositorio local y del remoto ya publicado).
 - **README raíz completado** (`README.md`): qué es (con el resumen de las tres pantallas y el alcance v1), requisitos (Node LTS ≥ 22), los seis comandos con notas (generación validada del banco, galería `#dev` solo en desarrollo), estructura del proyecto, sección **Deploy** con el runbook de `06 §6.6` para Cloudflare Pages (a verificar y cerrar en T-8.7) y enlaces a `docs/especificaciones/`, `docs/plans/`, `docs/preguntas/` y `DESIGN.md`.
 - **V0:** sin cambios de código; `npm run check`/`build`/`test` siguen en verde.
+
+### T-8.7 — Preparación del deploy manual (Cloudflare Pages)
+
+> **Este plan no ejecuta el deploy** (ni por panel ni por CLI, ni `wrangler`): solo prepara y documenta el runbook. El deploy real lo hace el usuario.
+
+- **1 · Build de producción y preview:** `npm run build` en verde (183 módulos; `dist/index.html` 0.55 KB, `assets/index-CWpNQx4L.css` 8.16 KB gzip, `assets/index-DVl5tlzU.js` 50.76 KB gzip) y `npm run preview` sirviendo `dist/`. Smoke test de las tres pantallas sobre el build servido: Home (saludo con el nombre persistido + panel + CTA), Quiz (bloque 1 de 2, chip «Razonamiento Matemático», cronómetro 0:00) y Resultados (héroe 10, dos tarjetas de área, «Home» que vuelve al panel). Assets **con hash** (`index-*.js`/`index-*.css`), **0** peticiones de fuentes e imágenes, **0** mensajes de consola.
+- **2 · Simulación del flujo de Cloudflare desde un estado limpio:** `git clone` del repositorio local a un directorio temporal (`becaesan-clone-t87`) → el clon **no** trae `dist/`, `node_modules/` ni `src/data/questions.json` (los tres están en `.gitignore`); `npm ci` → 0 vulnerabilidades; `npm run build` → regenera el banco (28 temas · 140 preguntas · 127 KB) y `dist/` **con los mismos hashes** que el build local (build reproducible) y **sin ningún paso manual**. Conclusión: el pipeline que configurará Cloudflare funciona tal cual.
+- **3 · README raíz con el runbook manual de `06 §6.6`:** sección *Deploy* reescrita con los seis pasos listos para seguir — repositorio (`origin`), *Workers & Pages → Create → Pages → Connect to Git*, configuración exacta (rama `main`, build `npm run build`, output `dist`, `NODE_VERSION` = 22 si el panel no detecta Node ≥ 22), guardado y deploy automático por push, y la **lista de smoke test** en la URL publicada (HTTPS < 1 s, tres pantallas, aviso de recarga, assets con hash, sin fuentes ni imágenes). Se anota que el runbook quedó verificado en local desde el clon limpio.
+- **4 · Pendiente manual del usuario (informe de cierre):** ver la sección «Deploy manual (pendiente del usuario)» al final de este registro; no bloquea el cierre del plan (el DoD del proyecto, `00-contrato §6`, define la publicación como deploy manual del usuario con la app construida, verificada y el runbook preparado).
+- **V0:** `npm run check` → 0 errores/0 avisos; `npm run build` → CSS 8.16 KB gzip, JS 50.76 KB gzip; `npm run test` → 113 pruebas en verde.
