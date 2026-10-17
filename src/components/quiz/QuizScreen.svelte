@@ -75,63 +75,71 @@
 </script>
 
 {#if intento !== null && bloque !== null}
-  <!-- Cabecera sticky full-bleed (`07 §7.9.8`): fuera de la columna de 640 px -->
-  <QuizHeader
-    area={bloque.area}
-    indice={intento.indiceActual}
-    total={intento.bloques.length}
-    iniciadoEn={intento.iniciadoEn}
-  />
+  <!-- El acento contextual del quiz sigue al bloque actual (`02 §RN-03`,
+       `07 §7.3.3`): azul en RM, naranja en RV, para cabecera, botonera y
+       alternativas (todas consumen `--accent`). -->
+  <div data-area={bloque.area}>
+    <!-- Cabecera sticky full-bleed (`07 §7.9.8`): fuera de la columna de 640 px -->
+    <QuizHeader
+      area={bloque.area}
+      indice={intento.indiceActual}
+      total={intento.bloques.length}
+      iniciadoEn={intento.iniciadoEn}
+    />
 
-  <main class="quiz app-reserve">
-    <!-- El escenario apila el bloque saliente y el entrante en la misma celda
-         para que la transición no empuje el contenido (`07 §7.7.3`). -->
-    <div class="quiz__escenario">
-      {#key intento.indiceActual}
-        <div
-          class="quiz__bloque"
-          in:fly={{
-            x: desplazamientoBloque * direccion,
-            duration: duracionBloque,
-            easing: cubicInOut,
-          }}
-          out:fly={{
-            x: -desplazamientoBloque * direccion,
-            duration: duracionBloque,
-            easing: cubicInOut,
-          }}
-        >
-          <!-- Título del tema: es el `<h1>` de la pantalla y recibe el foco al
-               navegar (`07 §7.10.2`, `§7.12` (11)). -->
-          <h1 class="quiz__tema" data-screen-title tabindex="-1" {@attach alMontarTitulo}>
-            {bloque.titulo}
-          </h1>
+    <main class="quiz app-reserve">
+      <!-- El escenario apila el bloque saliente y el entrante en la misma celda
+           para que la transición no empuje el contenido (`07 §7.7.3`). -->
+      <div class="quiz__escenario">
+        {#key intento.indiceActual}
+          <!-- `data-area` propio: el bloque saliente conserva su acento durante
+               el cruce RM→RV (el bloque nuevo entra ya con el suyo). -->
+          <div
+            class="quiz__bloque"
+            data-area={bloque.area}
+            in:fly={{
+              x: desplazamientoBloque * direccion,
+              duration: duracionBloque,
+              easing: cubicInOut,
+            }}
+            out:fly={{
+              x: -desplazamientoBloque * direccion,
+              duration: duracionBloque,
+              easing: cubicInOut,
+            }}
+          >
+            <!-- Título del tema: es el `<h1>` de la pantalla y recibe el foco al
+                 navegar (`07 §7.10.2`, `§7.12` (11)). -->
+            <h1 class="quiz__tema" data-screen-title tabindex="-1" {@attach alMontarTitulo}>
+              {bloque.titulo}
+            </h1>
 
-          {#if bloque.textoComun !== null}
-            <SharedText texto={bloque.textoComun} />
-          {/if}
+            {#if bloque.textoComun !== null}
+              <SharedText texto={bloque.textoComun} />
+            {/if}
 
-          <div class="quiz__preguntas">
-            {#each bloque.preguntas as pregunta (pregunta.id)}
-              <QuestionCard
-                {pregunta}
-                respuesta={bloque.respuestas[pregunta.id] ?? null}
-                onResponder={(letra) => responder(pregunta.id, letra)}
-              />
-            {/each}
+            <div class="quiz__preguntas">
+              {#each bloque.preguntas as pregunta (pregunta.id)}
+                <QuestionCard
+                  {pregunta}
+                  respuesta={bloque.respuestas[pregunta.id] ?? null}
+                  onResponder={(letra) => responder(pregunta.id, letra)}
+                />
+              {/each}
+            </div>
           </div>
-        </div>
-      {/key}
-    </div>
-  </main>
+        {/key}
+      </div>
+    </main>
 
-  <QuizNav
-    indice={intento.indiceActual}
-    total={intento.bloques.length}
-    onAtras={() => irA(intento.indiceActual - 1)}
-    onContinuar={() => irA(intento.indiceActual + 1)}
-    onVerResultados={verResultados}
-  />
+    <QuizNav
+      indice={intento.indiceActual}
+      total={intento.bloques.length}
+      onAtras={() => irA(intento.indiceActual - 1)}
+      onContinuar={() => irA(intento.indiceActual + 1)}
+      onVerResultados={verResultados}
+    />
+  </div>
 {/if}
 
 <style>
