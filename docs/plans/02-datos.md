@@ -58,7 +58,7 @@ Construir `scripts/build-questions.mjs` (Node, **sin dependencias**) que extraig
   4. Al fallar: lanzar error con `{archivo}: {problema}`, `process.exitCode = 1` y **no** escribir el JSON (salida a `questions.json.tmp` + rename final solo si todo validó).
 - **Criterios:** `03 §3.6` (1–5).
 - **Verificación:** casos negativos en T-2.5 + prueba manual con un fixture roto al vuelo (restaurar después).
-- **Estado:** [ ]
+- **Estado:** [x]
 
 ### T-2.4 — Generación determinista de `src/data/questions.json`
 
@@ -119,3 +119,11 @@ Construir `scripts/build-questions.mjs` (Node, **sin dependencias**) que extraig
 ## 8. Registro de desvíos y decisiones
 
 _(vacío — se completa durante la ejecución)_
+
+### T-2.2 / T-2.3 — reparto del trabajo dentro de `scripts/build-questions.mjs`
+
+El parser (T-2.2) construye el modelo y rechaza con `Error` las estructuras irrecuperables (título, secciones y bloques de preguntas/alternativas/claves). T-2.3 añade la capa de contrato: `ContratoError`, cobertura global (28 temas · 140 preguntas · 85 RM + 55 RV), verificación cruzada clave↔preguntas, mensajes con formato `{archivo}: {problema}`, `process.exitCode = 1` y escritura atómica (`questions.json.tmp` + rename). No hay cambio de comportamiento observable para material válido.
+
+### T-2.3 / T-2.6 — casos negativos sin tocar `docs/preguntas/`
+
+La verificación de los planes pide «romper un fixture al vuelo y restaurar». `00-contrato §10` prohíbe editar `docs/preguntas/` (fuente única), incluso de forma transitoria; se interpreta de la forma más conservadora: replicar el pipeline en un directorio aislado (copia del material + `scripts/build-questions.mjs`) y ejecutarlo ahí. Evidencia (5 casos: 4 opciones, clave con letra inválida, numeración 1-2-3-3-5, sin `## Clave de respuestas`, título vacío): todos fallan con `{archivo}: {problema}`, `exit=1`, sin `questions.json` y sin `.tmp`.

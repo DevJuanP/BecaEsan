@@ -1,12 +1,13 @@
 /**
- * Extracción del banco de preguntas (Plan 02 · `03 §3.1`–`§3.3`, `06 §6.4`):
- * los `.md` de `docs/preguntas/` → `src/data/questions.json`.
+ * Extracción y validación del banco de preguntas (Plan 02 · `03 §3.1`–`§3.6`,
+ * `06 §6.4`): los `.md` de `docs/preguntas/` → `src/data/questions.json`.
  *
- * Sin dependencias: solo `node:*`. Al ejecutarlo directamente regenera el banco:
+ * Sin dependencias: solo `node:*`. Falla temprano, con `{archivo}: {problema}`,
+ * sin escribir un JSON parcial. Al ejecutarlo directamente regenera el banco:
  *
  *   node scripts/build-questions.mjs
  */
-import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -20,13 +21,26 @@ const AREAS = [
   { carpeta: 'razonamiento-verbal', area: 'verbal' },
 ];
 
+/** Cobertura exigida por `03 §3.6.1` (85 RM + 55 RV). */
+const COBERTURA_POR_AREA = {
+  matematico: { temas: 17, preguntas: 85 },
+  verbal: { temas: 11, preguntas: 55 },
+};
+const COBERTURA_TOTAL = { temas: 28, preguntas: 140 };
+
 const LETRAS = ['A', 'B', 'C', 'D', 'E'];
 const RE_TITULO = /^#(?!#)\s*(.*)$/;
 const RE_SECCION_TEXTO = /^##\s+Texto\s*$/;
 const RE_SECCION_CLAVE = /^##\s+Clave de respuestas\s*$/;
+const RE_OTRA_SECCION = /^##\s+/;
 const RE_PREGUNTA = /^\*\*(\d+)\.\*\*\s*(.*)$/;
 const RE_OPCION = /^([A-E])\)\s*(.*)$/;
 const RE_CLAVE = /^\*\*(\d+)\.\s*([A-E])\s*(?:\(([^()]*)\))?\*\*\s*(?:—\s*(.*))?$/;
+
+/** Incumplimiento del contrato del material (`03 §3.6`). */
+export class ContratoError extends Error {
+  name = 'ContratoError';
+}
 
 /** Recorta espacios sobrantes al final de línea (`03 §3.1`, tolerancias). */
 function recortar(linea) {
@@ -52,7 +66,7 @@ function rutaCitada(ruta) {
 function numeroDeTema(base, archivo) {
   const coincidencia = /^(\d{2})/.exec(base);
   if (!coincidencia) {
-    throw new Error(`${archivo}: el nombre del archivo no empieza con los 2 dígitos del número de tema (03 §3.4)`);
+    throw new ContratoError(`${archivo}: el nombre del archivo no empieza con los 2 dígitos del número de tema (03 §3.4)`);
   }
   return Number(coincidencia[1]);
 }
@@ -67,10 +81,15 @@ function parseClave(lineas, archivo) {
     if (linea.trim() === '') continue;
     const coincidencia = RE_CLAVE.exec(linea);
     if (!coincidencia) {
-      throw new Error(`${archivo}: no se pudo interpretar la clave «${linea}»`);
+      throw new ContratoError(
+        `${archivo}: la clave «${linea}» no respeta el formato «**{n}. {A–E} ({respuesta corta})** — {explicación}»`,
+      );
     }
     const numero = Number(coincidencia[1]);
-    claves.set(numero, { letra: coincidencia[2], explicacion: (coincidencia[4] ?? '').trim() });
+    const explicacion = (coincidencia[4] ?? '').trim();
+    if (explicacion === '') throw new ContratoError(`${archivo}: la clave de la pregunta ${numero} no tiene explicación`);
+    if (claves.has(numero)) throw new ContratoError(`${archivo}: la clave de la pregunta ${numero} está repetida`);
+    claves.set(numero, { letra: coincidencia[2], explicacion });
   }
   return claves;
 }
@@ -79,26 +98,30 @@ function parseClave(lineas, archivo) {
 function construirPregunta(segmento, claves, archivo, temaId) {
   const { numero, lineas } = segmento;
   const corte = lineas.findIndex((linea) => RE_OPCION.test(linea));
-  if (corte === -1) throw new Error(`${archivo}: la pregunta ${numero} no tiene alternativas A)–E)`);
+  if (corte === -1) throw new ContratoError(`${archivo}: la pregunta ${numero} no tiene alternativas A)–E)`);
 
   const enunciado = unirBloque(lineas.slice(0, corte));
-  if (enunciado === '') throw new Error(`${archivo}: la pregunta ${numero} no tiene enunciado`);
+  if (enunciado === '') throw new ContratoError(`${archivo}: la pregunta ${numero} no tiene enunciado`);
 
   const opciones = [];
   for (const linea of lineas.slice(corte)) {
     if (linea.trim() === '') continue;
     const coincidencia = RE_OPCION.exec(linea);
-    if (!coincidencia) throw new Error(`${archivo}: la pregunta ${numero} tiene una línea inesperada: «${linea}»`);
-    opciones.push({ letra: coincidencia[1], texto: coincidencia[2].trim() });
+    if (!coincidencia) {
+      throw new ContratoError(`${archivo}: contenido inesperado tras las alternativas de la pregunta ${numero}: «${linea}»`);
+    }
+    const texto = coincidencia[2].trim();
+    if (texto === '') throw new ContratoError(`${archivo}: la alternativa ${coincidencia[1]} de la pregunta ${numero} está vacía`);
+    opciones.push({ letra: coincidencia[1], texto });
   }
 
   const encontradas = opciones.map((opcion) => opcion.letra).join(', ');
   if (opciones.length !== LETRAS.length || opciones.some((opcion, i) => opcion.letra !== LETRAS[i])) {
-    throw new Error(`${archivo}: la pregunta ${numero} debe tener 5 alternativas A–E en orden (encontradas: ${encontradas || 'ninguna'})`);
+    throw new ContratoError(`${archivo}: la pregunta ${numero} debe tener 5 alternativas A–E en orden (encontradas: ${encontradas || 'ninguna'})`);
   }
 
   const clave = claves.get(numero);
-  if (!clave) throw new Error(`${archivo}: falta la clave de la pregunta ${numero}`);
+  if (!clave) throw new ContratoError(`${archivo}: falta la clave de la pregunta ${numero}`);
 
   return {
     id: `${temaId}#q${numero}`,
@@ -111,7 +134,7 @@ function construirPregunta(segmento, claves, archivo, temaId) {
 }
 
 /**
- * Parsea un tema completo (`03 §3.1`, `§3.2`).
+ * Parsea un tema completo y valida su contrato (`03 §3.1`, `§3.2`, `§3.6.2–3`).
  *
  * @param {string} markdown contenido del archivo
  * @param {{ id: string, area: 'matematico' | 'verbal', numero: number, archivo: string }} meta
@@ -127,12 +150,14 @@ export function parseTema(markdown, meta) {
 
   const primera = lineas.findIndex((linea) => linea.trim() !== '');
   const coincidenciaTitulo = primera === -1 ? null : RE_TITULO.exec(lineas[primera]);
-  if (!coincidenciaTitulo) throw new Error(`${archivo}: el archivo debe empezar con el título «# {título}»`);
+  if (!coincidenciaTitulo) {
+    throw new ContratoError(`${archivo}: el archivo debe empezar con el título «# {título}»`);
+  }
   const titulo = coincidenciaTitulo[1].trim();
-  if (titulo === '') throw new Error(`${archivo}: el título está vacío`);
+  if (titulo === '') throw new ContratoError(`${archivo}: el título está vacío`);
 
   const indiceClave = lineas.findIndex((linea) => RE_SECCION_CLAVE.test(linea));
-  if (indiceClave === -1) throw new Error(`${archivo}: falta la sección «## Clave de respuestas»`);
+  if (indiceClave === -1) throw new ContratoError(`${archivo}: falta la sección «## Clave de respuestas»`);
   const claves = parseClave(lineas.slice(indiceClave + 1), archivo);
 
   const segmentos = [];
@@ -150,6 +175,7 @@ export function parseTema(markdown, meta) {
       continue;
     }
     if (RE_SECCION_TEXTO.test(linea)) {
+      if (fase !== 'cabecera') throw new ContratoError(`${archivo}: la sección «## Texto» está fuera de lugar`);
       textoLineas = [];
       fase = 'texto';
       continue;
@@ -161,8 +187,14 @@ export function parseTema(markdown, meta) {
       fase = 'preguntas';
       continue;
     }
+    if (RE_OTRA_SECCION.test(linea)) {
+      throw new ContratoError(`${archivo}: sección no soportada «${linea}» (el contrato es el de 03 §3.1)`);
+    }
     if (fase === 'texto' && textoLineas) textoLineas.push(linea);
     else if (fase === 'preguntas' && actual) actual.lineas.push(linea);
+    else if (fase === 'fin' && linea.trim() !== '') {
+      throw new ContratoError(`${archivo}: contenido inesperado tras la última pregunta: «${linea}»`);
+    }
     // fase 'cabecera': metadatos informativos (`03 §3.1.2`), no se parsean.
   }
   if (actual) segmentos.push(actual);
@@ -170,7 +202,10 @@ export function parseTema(markdown, meta) {
   const numeros = segmentos.map((segmento) => segmento.numero);
   const esperados = segmentos.map((_, i) => i + 1);
   if (segmentos.length !== LETRAS.length || numeros.some((numero, i) => numero !== esperados[i])) {
-    throw new Error(`${archivo}: se esperaban 5 preguntas numeradas 1–5 sin huecos (encontradas: ${numeros.join(', ') || 'ninguna'})`);
+    throw new ContratoError(`${archivo}: se esperaban 5 preguntas numeradas 1–5 sin huecos (encontradas: ${numeros.join(', ') || 'ninguna'})`);
+  }
+  for (const numero of claves.keys()) {
+    if (!numeros.includes(numero)) throw new ContratoError(`${archivo}: la clave incluye la pregunta ${numero}, que no existe`);
   }
 
   const preguntas = segmentos.map((segmento) => construirPregunta(segmento, claves, archivo, meta.id));
@@ -187,7 +222,48 @@ export function parseTema(markdown, meta) {
 }
 
 /**
- * Parsea todo el material (`06 §6.4`).
+ * Valida la cobertura y la integridad del banco completo (`03 §3.6.1–3`).
+ * @param {object[]} temas
+ * @param {string} [origen] etiqueta de origen para los mensajes de error
+ */
+export function validateBanco(temas, origen = 'docs/preguntas') {
+  const ids = new Set();
+  const conteo = { matematico: { temas: 0, preguntas: 0 }, verbal: { temas: 0, preguntas: 0 } };
+  let preguntas = 0;
+
+  for (const tema of temas) {
+    const acumulado = conteo[tema.area];
+    if (!acumulado) throw new ContratoError(`${origen}: área desconocida «${tema.area}» en «${tema.id}»`);
+    if (!tema.id || ids.has(tema.id)) throw new ContratoError(`${origen}: el tema «${tema.id}» está repetido o sin id`);
+    ids.add(tema.id);
+    if (typeof tema.titulo !== 'string' || tema.titulo.trim() === '') {
+      throw new ContratoError(`${origen}: el tema «${tema.id}» no tiene título`);
+    }
+    if (tema.preguntas.length !== LETRAS.length) {
+      throw new ContratoError(`${origen}: el tema «${tema.id}» tiene ${tema.preguntas.length} preguntas (se esperaban 5)`);
+    }
+    acumulado.temas++;
+    acumulado.preguntas += tema.preguntas.length;
+    preguntas += tema.preguntas.length;
+  }
+
+  for (const [area, esperado] of Object.entries(COBERTURA_POR_AREA)) {
+    const real = conteo[area];
+    if (real.temas !== esperado.temas || real.preguntas !== esperado.preguntas) {
+      throw new ContratoError(
+        `${origen}: ${area} debe tener ${esperado.temas} temas y ${esperado.preguntas} preguntas (encontrado: ${real.temas} temas y ${real.preguntas} preguntas)`,
+      );
+    }
+  }
+  if (temas.length !== COBERTURA_TOTAL.temas || preguntas !== COBERTURA_TOTAL.preguntas) {
+    throw new ContratoError(
+      `${origen}: el banco debe tener ${COBERTURA_TOTAL.temas} temas y ${COBERTURA_TOTAL.preguntas} preguntas (encontrado: ${temas.length} temas y ${preguntas} preguntas)`,
+    );
+  }
+}
+
+/**
+ * Parsea y valida todo el material (`06 §6.4`).
  * @param {string} carpeta raíz del material (por defecto `docs/preguntas`)
  * @returns {object[]} temas en orden RM 01→17, luego RV 01→11
  */
@@ -199,7 +275,7 @@ export function parseBanco(carpeta = CARPETA_MATERIAL) {
     try {
       entradas = readdirSync(rutaCarpeta);
     } catch {
-      throw new Error(`${rutaCitada(rutaCarpeta)}: no se pudo leer la carpeta del material (${area})`);
+      throw new ContratoError(`${rutaCitada(rutaCarpeta)}: no se pudo leer la carpeta del material (${area})`);
     }
     const archivos = entradas.filter((nombre) => nombre.endsWith('.md')).sort();
     for (const nombre of archivos) {
@@ -210,6 +286,7 @@ export function parseBanco(carpeta = CARPETA_MATERIAL) {
       temas.push(parseTema(readFileSync(ruta, 'utf8'), meta));
     }
   }
+  validateBanco(temas, rutaCitada(carpeta));
   return temas;
 }
 
@@ -233,15 +310,32 @@ export function serializeBanco(temas) {
   return `${JSON.stringify(ordenado, null, 2)}\n`;
 }
 
+/** Escribe el artefacto: temporal + rename, solo con todo validado (`03 §3.6.5`). */
+function escribirAtomico(destino, contenido) {
+  const temporal = `${destino}.tmp`;
+  mkdirSync(dirname(destino), { recursive: true });
+  try {
+    writeFileSync(temporal, contenido, 'utf8');
+    renameSync(temporal, destino);
+  } catch (error) {
+    rmSync(temporal, { force: true });
+    throw error;
+  }
+}
+
 /** Genera `src/data/questions.json` desde el material real. */
 export function main() {
-  const temas = parseBanco();
-  const json = serializeBanco(temas);
-  mkdirSync(dirname(ARCHIVO_SALIDA), { recursive: true });
-  writeFileSync(ARCHIVO_SALIDA, json, 'utf8');
-  const preguntas = temas.reduce((total, tema) => total + tema.preguntas.length, 0);
-  const kb = (Buffer.byteLength(json, 'utf8') / 1024).toFixed(1);
-  console.log(`questions.json: ${temas.length} temas · ${preguntas} preguntas · ${kb} KB`);
+  try {
+    const temas = parseBanco();
+    const json = serializeBanco(temas);
+    escribirAtomico(ARCHIVO_SALIDA, json);
+    const preguntas = temas.reduce((total, tema) => total + tema.preguntas.length, 0);
+    const kb = (Buffer.byteLength(json, 'utf8') / 1024).toFixed(1);
+    console.log(`questions.json: ${temas.length} temas · ${preguntas} preguntas · ${kb} KB`);
+  } catch (error) {
+    console.error(`error: ${error instanceof ContratoError ? error.message : error}`);
+    process.exitCode = 1;
+  }
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) main();
