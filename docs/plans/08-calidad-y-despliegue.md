@@ -95,7 +95,7 @@ Cerrar la v1: auditar accesibilidad y calidad visual contra las especificaciones
   3. Completar en el README raíz: qué es, comandos, cómo se despliega manualmente (`06 §6.6`; se termina en T-8.7) y enlace a `docs/`.
 - **Criterios:** `06 §6.6` (paso 1).
 - **Verificación:** `git remote -v` + repositorio accesible con el historial por tarea.
-- **Estado:** [ ]
+- **Estado:** [x]
 
 ### T-8.7 — Preparación del deploy manual (Cloudflare Pages)
 
@@ -242,3 +242,11 @@ Cerrar la v1: auditar accesibilidad y calidad visual contra las especificaciones
   6. **Movimiento reducido:** Ajustes → Accesibilidad → «Reducir movimiento» y (Android) «Quitar animaciones»; comprobar que la transición de bloque queda en fundido y que las barras de resultados aparecen en su valor final.
   7. **Contraste y tacto reales:** recorrer con el dedo el panel, el quiz y los resultados comprobando legibilidad a pleno sol y que los objetivos de 44 px se sienten cómodos (juicio humano que no se puede automatizar).
 - **V0:** `npm run check` → 0 errores/0 avisos; `npm run build` → CSS 8.16 KB gzip, JS 50.76 KB gzip; `npm run test` → 113 pruebas en verde.
+
+### T-8.6 — Repositorio en GitHub
+
+- **Ajuste de vigencia (registrado en la revisión previa):** el repositorio **ya existe** y `origin` está configurado; los push los gestiona el orquestador, así que esta tarea se limita a verificar el remoto y completar el README raíz (no se ejecutó ningún push).
+- **Remoto verificado:** `git remote -v` → `origin https://github.com/DevJuanP/BecaEsan.git` (fetch y push) y `git ls-remote --heads origin` (consulta de solo lectura) responde con `refs/heads/main` → repositorio accesible ✔. El `main` remoto apunta al cierre del Plan 07 (`383b19f`); los commits del Plan 08 quedan locales a la espera del push del orquestador.
+- **Historial:** 81 commits en `main`, uno por tarea con Conventional Commits en español (la verificación «historial por tarea» se cumple a nivel de repositorio local y del remoto ya publicado).
+- **README raíz completado** (`README.md`): qué es (con el resumen de las tres pantallas y el alcance v1), requisitos (Node LTS ≥ 22), los seis comandos con notas (generación validada del banco, galería `#dev` solo en desarrollo), estructura del proyecto, sección **Deploy** con el runbook de `06 §6.6` para Cloudflare Pages (a verificar y cerrar en T-8.7) y enlaces a `docs/especificaciones/`, `docs/plans/`, `docs/preguntas/` y `DESIGN.md`.
+- **V0:** sin cambios de código; `npm run check`/`build`/`test` siguen en verde.
