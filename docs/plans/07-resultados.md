@@ -1,6 +1,6 @@
 # Plan 07 — Resultados
 
-> Estado: 🔄 En curso · Depende de: Planes 03, 04, 06 · Cubre: RF-19, RF-20, RF-21, RN-08…RN-11 (lectura), RF-16 (tiempo total), RF-10 (cierre completo), E-03, E-04, E-05, E-09, E-10, `05 §5.6`, `07 §7.9.12`, `§7.9.13`, `§7.10.3` · Estimación: M
+> Estado: ✅ Hecho · Depende de: Planes 03, 04, 06 · Cubre: RF-19, RF-20, RF-21, RN-08…RN-11 (lectura), RF-16 (tiempo total), RF-10 (cierre completo), E-03, E-04, E-05, E-09, E-10, `05 §5.6`, `07 §7.9.12`, `§7.9.13`, `§7.10.3` · Estimación: M
 
 ## 1. Objetivo
 
