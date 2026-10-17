@@ -1,12 +1,14 @@
 <script lang="ts">
   import { estado } from '../../lib/state.svelte';
   import QuestionCard from './QuestionCard.svelte';
+  import QuizHeader from './QuizHeader.svelte';
   import type { Letra } from '../../lib/types';
 
   /**
    * Pantalla del quiz (`05 §5.4`, `07 §7.10.2`): monta **un bloque a la vez**
-   * (`07 §7.13`) — título del tema, texto común si aplica (T-6.3) y las q
-   * preguntas del bloque actual con sus alternativas A–E (RF-13, RF-14).
+   * (`07 §7.13`) — cabecera sticky (RF-12), título del tema, texto común si
+   * aplica (T-6.3) y las q preguntas del bloque actual con sus alternativas
+   * A–E (RF-13, RF-14).
    *
    * El intento vive en `estado` (snapshot de `02 §RN-01`): las respuestas se
    * escriben de inmediato en `bloque.respuestas` y `indiceActual` marca el
@@ -25,7 +27,15 @@
   }
 </script>
 
-{#if bloque !== null}
+{#if intento !== null && bloque !== null}
+  <!-- Cabecera sticky full-bleed (`07 §7.9.8`): fuera de la columna de 640 px -->
+  <QuizHeader
+    area={bloque.area}
+    indice={intento.indiceActual}
+    total={intento.bloques.length}
+    iniciadoEn={intento.iniciadoEn}
+  />
+
   <main class="quiz app-reserve">
     <!-- Título del tema: es el `<h1>` de la pantalla y recibe el foco al
          navegar (T-6.4) y al entrar desde Home (`07 §7.12` (11)). -->
