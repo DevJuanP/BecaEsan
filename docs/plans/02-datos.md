@@ -45,7 +45,7 @@ Construir `scripts/build-questions.mjs` (Node, **sin dependencias**) que extraig
   5. Estructura para testear: exportar `parseTema(markdown, meta)` y `parseBanco(dir)`; dejar `main()` separado, ejecutable con `node scripts/build-questions.mjs`.
 - **Criterios:** `03 §3.1`, `§3.4`; RNF-08.
 - **Verificación:** ejecución manual sobre el material real (`node scripts/build-questions.mjs`) sin errores; pruebas formales en T-2.5.
-- **Estado:** [ ]
+- **Estado:** [x]
 
 ### T-2.3 — Validación del contrato y fallo temprano
 
