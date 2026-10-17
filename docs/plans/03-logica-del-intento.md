@@ -30,7 +30,7 @@ Implementar el **dominio puro** de la app —sin UI— y probarlo a fondo: creac
 - **Pasos:** añadir `Modo`, `ConfigQuiz`, `BloqueIntento`, `Intento`, `ResultadoArea` y `Resultado`, **exactamente** como `03 §3.3` (misma forma y nombres).
 - **Criterios:** `03 §3.3`.
 - **Verificación:** V0 (`npm run check`).
-- **Estado:** [ ]
+- **Estado:** [x]
 
 ### T-3.2 — `generator.ts` — creación del intento
 
@@ -125,4 +125,6 @@ Implementar el **dominio puro** de la app —sin UI— y probarlo a fondo: creac
 
 ## 8. Registro de desvíos y decisiones
 
-_(vacío — se completa durante la ejecución)_
+### Revisión de vigencia (previa a la ejecución)
+
+Contraste del plan contra `docs/especificaciones/` (02, 03, 06 y 07 §7.11/§7.16): sin cambios que afecten al plan. Las tres decisiones abiertas de `07 §7.16` (CSS del slider, autofocus en móvil y etiqueta «Home») pertenecen a los Planes 04, 05 y 07. Precondiciones verificadas en verde antes de empezar: `npm run check` (0 errores), `npm run test` (27 pruebas) y `npm run build`; Planes 01 y 02 ✅ en `docs/plans/README.md`.
